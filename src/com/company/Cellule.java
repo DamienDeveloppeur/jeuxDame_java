@@ -45,9 +45,9 @@ public class Cellule extends JPanel implements MouseListener {
         initialized = true;
     }
     public void dessineToi(Graphics g, int x, int y, Dimension ech) {
-         BufferedImage PB = null;
-         BufferedImage PN = null;
-         BufferedImage VIDE = null;
+        BufferedImage PB = null;
+        BufferedImage PN = null;
+        BufferedImage VIDE = null;
         if (Cellule.index == 100){
             Cellule.index = 0;
         }
@@ -61,45 +61,45 @@ public class Cellule extends JPanel implements MouseListener {
         // on dessine les carrés
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
         // on colore les cases
-            if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
-                if(initialized){
-                  String value = verifCaseValide(x,y);
-                  if(value == "PB"){
-                      g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                  } else if (value == "PN"){
-                      g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                  } else if(value == "VIDE") {
-                      g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                  }
-                }else {
-                    g.setColor(Color.RED);
-                    g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
-                    if(caseValide.size() < 50){
-                        caseValide.add(new ArrayList<Integer>());
-                        caseValide.get(Cellule.index).add(0, x);
-                        caseValide.get(Cellule.index).add(1, y);
-                    }
-                    if (y >= 6 ){
-                        if(Cellule.pionBlancIndex < 20){
-                            pionBlanc.add(new ArrayList<Integer>());
-                            pionBlanc.get(Cellule.pionBlancIndex).add(0, x);
-                            pionBlanc.get(Cellule.pionBlancIndex).add(1, y);
-                            Cellule.pionBlancIndex++;
-                        }
-                        g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }
-                    else if(y <= 3){
-                        if(Cellule.pionNoirIndex < 20){
-                            pionNoir.add(new ArrayList<Integer>());
-                            pionNoir.get(Cellule.pionNoirIndex).add(0, x);
-                            pionNoir.get(Cellule.pionNoirIndex).add(1, y);
-                            Cellule.pionNoirIndex++;
-                        }
-                        g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }
-                    Cellule.index ++;
+        if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
+            if(initialized){
+                String value = verifCaseValide(x,y);
+                if(value == "PB"){
+                    g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                } else if (value == "PN"){
+                    g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                } else if(value == "VIDE") {
+                    g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
+            }else {
+                g.setColor(Color.RED);
+                g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
+                if(caseValide.size() < 50){
+                    caseValide.add(new ArrayList<Integer>());
+                    caseValide.get(Cellule.index).add(0, x);
+                    caseValide.get(Cellule.index).add(1, y);
+                }
+                if (y >= 6 ){
+                    if(Cellule.pionBlancIndex < 20){
+                        pionBlanc.add(new ArrayList<Integer>());
+                        pionBlanc.get(Cellule.pionBlancIndex).add(0, x);
+                        pionBlanc.get(Cellule.pionBlancIndex).add(1, y);
+                        Cellule.pionBlancIndex++;
+                    }
+                    g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                }
+                else if(y <= 3){
+                    if(Cellule.pionNoirIndex < 20){
+                        pionNoir.add(new ArrayList<Integer>());
+                        pionNoir.get(Cellule.pionNoirIndex).add(0, x);
+                        pionNoir.get(Cellule.pionNoirIndex).add(1, y);
+                        Cellule.pionNoirIndex++;
+                    }
+                    g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                }
+                Cellule.index ++;
             }
+        }
     }
     public void calculerEchelle() {
         ech.width = getWidth()/grille.length;
@@ -124,7 +124,6 @@ public class Cellule extends JPanel implements MouseListener {
 
         System.out.println("121 pos"+pionBlanc);
         System.out.println("122 pos"+pos);
-
         frame.repaint();
         plateau plateau = new plateau();
         setGrabbed("");
@@ -137,22 +136,30 @@ public class Cellule extends JPanel implements MouseListener {
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
-        System.out.println("X :"+pt.x);
-        System.out.println("Y :"+pt.y);
-
+        System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
+       /* System.out.println("grabed " +grabbed);
+        System.out.println("case : " + verifCaseValide(pt.x,pt.y));*/
         if(verifCaseValide(pt.x,pt.y) == "PB" ||verifCaseValide(pt.x,pt.y) == "PN"){
-            if(grabbed != ""){
-                return;
-            } else {
+            if(grabbed == "" && verifCaseValide(pt.x,pt.y) == getTurn()){
                 grabbed = verifCaseValide(pt.x,pt.y);
                 pionCourant.add(new ArrayList<Integer>());
                 pionCourant.get(0).add(0, pt.x);
                 pionCourant.get(0).add(1, pt.y);
             }
-            //System.out.println(caseValide);
         } else if(verifCaseValide(pt.x,pt.y) == "VIDE" && grabbed != ""){
             System.out.println("Pion courant y :"+pionCourant.get(0).get(1));
-            //pionCourant.get(0).get(1)
+            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
+        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PB_G"){
+            prise(pt.x + 1, pt.y + 1);
+            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
+        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PB_D"){
+            prise(pt.x - 1, pt.y + 1);
+            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
+        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PN_G"){
+            prise(pt.x + 1, pt.y - 1);
+            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
+        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PN_D"){
+            prise(pt.x - 1, pt.y - 1);
             grille[pt.x][pt.y].deplacement(pt.x,pt.y);
         }
     }
@@ -182,25 +189,60 @@ public class Cellule extends JPanel implements MouseListener {
                 if(pionCourant.get(0).get(1) == y + 1 || Math.abs(pionCourant.get(0).get(0) - x) == 1  ) {
                     valueReturn = "VIDE";
                 } else if (pionCourant.get(0).get(1) == y + 2 || Math.abs(pionCourant.get(0).get(0) - x) == 2) {
-                    if((pionCourant.get(0).get(0) - x) == 2 && verifCaseValide(pionCourant.get(0).get(0)+1,pionCourant.get(0).get(1) + 1) == "PN"){
-                        System.out.println("PRISE");
+                    // manger à gauche
+                    if((pionCourant.get(0).get(0) - x) == 2 && verifCaseValide(pionCourant.get(0).get(0)-1,pionCourant.get(0).get(1) - 1) == "PN") {
+                        valueReturn = "PRISE_PB_G";
+                        //
+                    }else if (pionCourant.get(0).get(0) - x == -2 && verifCaseValide(pionCourant.get(0).get(0)+1,pionCourant.get(0).get(1) - 1) == "PN") {
+                        valueReturn = "PRISE_PB_D";
+                    } else {
+                        valueReturn = "erreur";
                     }
                 } else {
                     valueReturn = "erreur";
                 }
             } else if (grabbed == "PN"){
-
+                if(pionCourant.get(0).get(1) == y - 1 || Math.abs(pionCourant.get(0).get(0) + x) == 1  ) {
+                    valueReturn = "VIDE";
+                } else if (pionCourant.get(0).get(1) == y - 2 || Math.abs(pionCourant.get(0).get(0) + x) == 2) {
+                    System.out.println("HERE");
+                    // manger à gauche
+                    if((pionCourant.get(0).get(0) - x) == 2 && verifCaseValide(pionCourant.get(0).get(0)+1,pionCourant.get(0).get(1) - 1) == "PN") {
+                        valueReturn = "PRISE_PN_G";
+                    // manger à droite
+                    }else if (pionCourant.get(0).get(0) - x == -2 && verifCaseValide(pionCourant.get(0).get(0)-1,pionCourant.get(0).get(1) - 1) == "PN") {
+                        System.out.println("HERE2");
+                        valueReturn = "PRISE_PN_D";
+                    } else {
+                        valueReturn = "erreur";
+                    }
+                } else {
+                    valueReturn = "erreur";
+                }
+            } else {
+                valueReturn = "VIDE";
             }
-
         } else{
             valueReturn = "erreur";
         }
         return valueReturn;
     }
 
-    public String prise(int x, int y){
-
-       return "erreur";
+    public void prise(int x, int y){
+        System.out.println("PRISE X : "+x+ "Y : "+ y);
+        int pos = 0;
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
+        temp.add(new ArrayList<Integer>());
+        temp.get(0).add(0, x);
+        temp.get(0).add(1, y);
+        if(grabbed == "PN"){
+            pos=pionBlanc.indexOf(temp.get(0));
+            pionBlanc.remove(pos);
+        }else if (grabbed == "PB"){
+            System.out.println("pos : " +pionNoir.indexOf(temp.get(0)));
+            pos=pionNoir.indexOf(temp.get(0));
+            pionNoir.remove(pos);
+        }
     }
     public void setGrabbed (String grabbed) {
         this.grabbed = grabbed;
@@ -221,5 +263,4 @@ public class Cellule extends JPanel implements MouseListener {
     public static void clearPionCourant(){
         pionCourant.clear();
     }
-
 }
