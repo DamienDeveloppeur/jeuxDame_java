@@ -11,8 +11,8 @@ public class plateau extends JFrame  {
         Cellule Cellule = new Cellule(frame);
         Cellule.validate();
         frame.add(Cellule);
-        frame.getContentPane().validate();
-        frame.getContentPane().repaint();
+       // frame.getContentPane().validate();
+        //frame.getContentPane().repaint();
         this.setTitle("Jeux de dame");
         this.setSize(1000, 1000);
         this.setLocationRelativeTo(null);
@@ -20,9 +20,6 @@ public class plateau extends JFrame  {
         this.setContentPane(Cellule);
         SwingUtilities.updateComponentTreeUI(frame);
         this.setVisible(true);
-
-    }
-    public void repainttest(){
-        repaint();
+        System.out.println("plateau");
     }
 }

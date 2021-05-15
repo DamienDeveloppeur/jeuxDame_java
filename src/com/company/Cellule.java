@@ -14,14 +14,16 @@ import java.util.ArrayList;
 public class Cellule extends JPanel implements MouseListener {
     Cellule[][] grille = new Cellule [10][10];
     Dimension ech = new Dimension();
-
+    // Array list des pions et des cases
     public static ArrayList<ArrayList<Integer>> pionBlanc = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> pionNoir = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> caseValide = new ArrayList<ArrayList<Integer> >();
     static int index = 0;
     static int pionBlancIndex = 0;
     static int pionNoirIndex = 0;
-    static boolean grabbed;
+    static String grabbed = "";
+    static String turn = "PB";
+    public static ArrayList<ArrayList<Integer>> pionCourant = new ArrayList<ArrayList<Integer> >();
     static boolean initialized;
     public JFrame frame;
 
@@ -40,7 +42,6 @@ public class Cellule extends JPanel implements MouseListener {
                 grille[x][y].dessineToi(g,x,y, ech);
             }
         }
-        System.out.println(initialized);
         initialized = true;
     }
     public void dessineToi(Graphics g, int x, int y, Dimension ech) {
@@ -67,11 +68,10 @@ public class Cellule extends JPanel implements MouseListener {
                       g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
                   } else if (value == "PN"){
                       g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                  } else if(value == "vide") {
+                  } else if(value == "VIDE") {
                       g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                   }
                 }else {
-
                     g.setColor(Color.RED);
                     g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                     if(caseValide.size() < 50){
@@ -105,26 +105,68 @@ public class Cellule extends JPanel implements MouseListener {
         ech.width = getWidth()/grille.length;
         ech.height=getHeight()/grille[0].length;
     }
-    public void click(int x, int y) {
-        //System.out.println(this);
-        ArrayList<ArrayList<Integer>> checkPion = new ArrayList<ArrayList<Integer> >();
-        checkPion.add(new ArrayList<Integer>());
-        checkPion.get(0).add(0, x);
-        checkPion.get(0).add(1, y);
-        //System.out.println(pionBlanc.indexOf(checkPion));
-        pionBlanc.contains(checkPion.get(0));
-        pionBlanc.remove(2);
-        removeAll();
-        SwingUtilities.updateComponentTreeUI(frame);
-        frame.invalidate();
-        frame.validate();
+
+    public void deplacement(int x, int y) {
+        int pos = 0;
+        if(grabbed == "PB"){
+            pionBlanc.add(new ArrayList<Integer>());
+            pionBlanc.get(pionBlanc.size()-1).add(0, x);
+            pionBlanc.get(pionBlanc.size()-1).add(1, y);
+            pos=pionBlanc.indexOf(pionCourant.get(0));
+            pionBlanc.remove(pos);
+        }else if (grabbed == "PN"){
+            pionNoir.add(new ArrayList<Integer>());
+            pionNoir.get(pionNoir.size()-1).add(0, x);
+            pionNoir.get(pionNoir.size()-1).add(1, y);
+            pos=pionNoir.indexOf(pionCourant.get(0));
+            pionNoir.remove(pos);
+        }
+
+        System.out.println("121 pos"+pionBlanc);
+        System.out.println("122 pos"+pos);
+
         frame.repaint();
-        frame.dispose();
-        frame.repainttest();
-        //plateau test = new plateau();
-        //System.out.println(initialized);
-        System.out.println(pionBlanc);
+        plateau plateau = new plateau();
+        setGrabbed("");
+        swapTurn();
+        clearPionCourant();
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Point pt = e.getPoint();
+        pt.x/=ech.width;
+        pt.y/=ech.height;
+        System.out.println("X :"+pt.x);
+        System.out.println("Y :"+pt.y);
+
+        if(verifCaseValide(pt.x,pt.y) == "PB" ||verifCaseValide(pt.x,pt.y) == "PN"){
+            if(grabbed != ""){
+                return;
+            } else {
+                grabbed = verifCaseValide(pt.x,pt.y);
+                pionCourant.add(new ArrayList<Integer>());
+                pionCourant.get(0).add(0, pt.x);
+                pionCourant.get(0).add(1, pt.y);
+            }
+            //System.out.println(caseValide);
+        } else if(verifCaseValide(pt.x,pt.y) == "VIDE" && grabbed != ""){
+            System.out.println("Pion courant y :"+pionCourant.get(0).get(1));
+            //pionCourant.get(0).get(1)
+            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) { }
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+    @Override
+    public void mouseExited(MouseEvent e) { }
+
+
     public String verifCaseValide(int x, int y){
         String valueReturn = "";
         ArrayList<ArrayList<Integer>> verif = new ArrayList<ArrayList<Integer> >();
@@ -136,34 +178,48 @@ public class Cellule extends JPanel implements MouseListener {
         }else if(pionNoir.contains(verif.get(0))){
             valueReturn = "PN";
         }else if(caseValide.contains(verif.get(0))){
-            valueReturn = "vide";
+            if(grabbed == "PB"){
+                if(pionCourant.get(0).get(1) == y + 1 || Math.abs(pionCourant.get(0).get(0) - x) == 1  ) {
+                    valueReturn = "VIDE";
+                } else if (pionCourant.get(0).get(1) == y + 2 || Math.abs(pionCourant.get(0).get(0) - x) == 2) {
+                    if((pionCourant.get(0).get(0) - x) == 2 && verifCaseValide(pionCourant.get(0).get(0)+1,pionCourant.get(0).get(1) + 1) == "PN"){
+                        System.out.println("PRISE");
+                    }
+                } else {
+                    valueReturn = "erreur";
+                }
+            } else if (grabbed == "PN"){
+
+            }
+
         } else{
             valueReturn = "erreur";
         }
         return valueReturn;
     }
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        Point pt = e.getPoint();
-        pt.x/=ech.width;
-        pt.y/=ech.height;
-        if(verifCaseValide(pt.x,pt.y) == "PB" ||verifCaseValide(pt.x,pt.y) == "PN" ){
-            if(grabbed){
-                grille[pt.x][pt.y].click(pt.x,pt.y);
-                // System.out.println(grabbed);
-            }
-            //System.out.println(caseValide);
-            grabbed = true;
+
+    public String prise(int x, int y){
+
+       return "erreur";
+    }
+    public void setGrabbed (String grabbed) {
+        this.grabbed = grabbed;
+    }
+
+    public static String getTurn() {
+        return turn;
+    }
+
+    public static void swapTurn() {
+        if(turn == "PB"){
+            Cellule.turn= "PN";
+        } else {
+            Cellule.turn = "PB";
         }
     }
-    @Override
-    public void mousePressed(MouseEvent e) { }
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-    @Override
-    public void mouseEntered(MouseEvent e) { }
-    @Override
-    public void mouseExited(MouseEvent e) { }
 
+    public static void clearPionCourant(){
+        pionCourant.clear();
+    }
 
 }
