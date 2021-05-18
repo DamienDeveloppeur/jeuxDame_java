@@ -21,11 +21,10 @@ public class Cellule extends JPanel implements MouseListener {
     static int index = 0;
     static int pionBlancIndex = 0;
     static int pionNoirIndex = 0;
-    static String grabbed = "";
     static String turn = "PB";
-    public static ArrayList<ArrayList<Integer>> pionCourant = new ArrayList<ArrayList<Integer> >();
     static boolean initialized;
     public JFrame frame;
+    public Pion currentPion;
 
     public Cellule(JFrame frame){
         addMouseListener(this);
@@ -106,61 +105,40 @@ public class Cellule extends JPanel implements MouseListener {
         ech.height=getHeight()/grille[0].length;
     }
 
-    public void deplacement(int x, int y) {
-        int pos = 0;
-        if(grabbed == "PB"){
-            pionBlanc.add(new ArrayList<Integer>());
-            pionBlanc.get(pionBlanc.size()-1).add(0, x);
-            pionBlanc.get(pionBlanc.size()-1).add(1, y);
-            pos=pionBlanc.indexOf(pionCourant.get(0));
-            pionBlanc.remove(pos);
-        }else if (grabbed == "PN"){
-            pionNoir.add(new ArrayList<Integer>());
-            pionNoir.get(pionNoir.size()-1).add(0, x);
-            pionNoir.get(pionNoir.size()-1).add(1, y);
-            pos=pionNoir.indexOf(pionCourant.get(0));
-            pionNoir.remove(pos);
-        }
-
-        System.out.println("121 pos"+pionBlanc);
-        System.out.println("122 pos"+pos);
-        frame.repaint();
-        plateau plateau = new plateau();
-        setGrabbed("");
-        swapTurn();
-        clearPionCourant();
-    }
-
     @Override
     public void mouseClicked(MouseEvent e) {
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
         System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
-       /* System.out.println("grabed " +grabbed);
-        System.out.println("case : " + verifCaseValide(pt.x,pt.y));*/
-        if(verifCaseValide(pt.x,pt.y) == "PB" ||verifCaseValide(pt.x,pt.y) == "PN"){
-            if(grabbed == "" && verifCaseValide(pt.x,pt.y) == getTurn()){
-                grabbed = verifCaseValide(pt.x,pt.y);
-                pionCourant.add(new ArrayList<Integer>());
-                pionCourant.get(0).add(0, pt.x);
-                pionCourant.get(0).add(1, pt.y);
+        String caseVerif = verifCaseValide(pt.x,pt.y);
+        if(caseVerif == "PB" || caseVerif == "PN"){
+            if(currentPion == null && caseVerif == getTurn()){
+                currentPion = new Pion(pt.x, pt.y,caseVerif);
+            } else {
+                currentPion = null;
+                swapTurn();
             }
-        } else if(verifCaseValide(pt.x,pt.y) == "VIDE" && grabbed != ""){
-            System.out.println("Pion courant y :"+pionCourant.get(0).get(1));
-            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
-        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PB_G"){
-            prise(pt.x + 1, pt.y + 1);
-            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
-        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PB_D"){
-            prise(pt.x - 1, pt.y + 1);
-            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
-        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PN_G"){
-            prise(pt.x + 1, pt.y - 1);
-            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
-        } else if (verifCaseValide(pt.x,pt.y) == "PRISE_PN_D"){
-            prise(pt.x - 1, pt.y - 1);
-            grille[pt.x][pt.y].deplacement(pt.x,pt.y);
+        } else if(caseVerif == "VIDE" &&  currentPion != null){
+          String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
+            System.out.println(verifPrise);
+            if (verifPrise == "PRISE_PB_G"){
+                currentPion.prise(pt.x + 1, pt.y + 1);
+                currentPion.deplacement(pt.x,pt.y);
+            } else if (verifPrise == "PRISE_PB_D"){
+                currentPion.prise(pt.x - 1, pt.y + 1);
+                currentPion.deplacement(pt.x,pt.y);
+            } else if (verifPrise == "PRISE_PN_G"){
+                currentPion.prise(pt.x + 1, pt.y - 1);
+                currentPion.deplacement(pt.x,pt.y);
+            } else if (verifPrise == "PRISE_PN_D"){
+                currentPion.prise(pt.x - 1, pt.y - 1);
+                currentPion.deplacement(pt.x,pt.y);
+            } else if (verifPrise == "VIDE") {
+                currentPion.deplacement(pt.x,pt.y);
+            } else {
+
+            }
         }
     }
 
@@ -173,8 +151,7 @@ public class Cellule extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) { }
 
-
-    public String verifCaseValide(int x, int y){
+    static String verifCaseValide(int x, int y){
         String valueReturn = "";
         ArrayList<ArrayList<Integer>> verif = new ArrayList<ArrayList<Integer> >();
         verif.add(new ArrayList<Integer>());
@@ -185,65 +162,13 @@ public class Cellule extends JPanel implements MouseListener {
         }else if(pionNoir.contains(verif.get(0))){
             valueReturn = "PN";
         }else if(caseValide.contains(verif.get(0))){
-            if(grabbed == "PB"){
-                if(pionCourant.get(0).get(1) == y + 1 || Math.abs(pionCourant.get(0).get(0) - x) == 1  ) {
-                    valueReturn = "VIDE";
-                } else if (pionCourant.get(0).get(1) == y + 2 || Math.abs(pionCourant.get(0).get(0) - x) == 2) {
-                    // manger à gauche
-                    if((pionCourant.get(0).get(0) - x) == 2 && verifCaseValide(pionCourant.get(0).get(0)-1,pionCourant.get(0).get(1) - 1) == "PN") {
-                        valueReturn = "PRISE_PB_G";
-                        //
-                    }else if (pionCourant.get(0).get(0) - x == -2 && verifCaseValide(pionCourant.get(0).get(0)+1,pionCourant.get(0).get(1) - 1) == "PN") {
-                        valueReturn = "PRISE_PB_D";
-                    } else {
-                        valueReturn = "erreur";
-                    }
-                } else {
-                    valueReturn = "erreur";
-                }
-            } else if (grabbed == "PN"){
-                if(pionCourant.get(0).get(1) == y - 1 || Math.abs(pionCourant.get(0).get(0) + x) == 1  ) {
-                    valueReturn = "VIDE";
-                } else if (pionCourant.get(0).get(1) == y - 2 || Math.abs(pionCourant.get(0).get(0) + x) == 2) {
-                    System.out.println("HERE");
-                    // manger à gauche
-                    if((pionCourant.get(0).get(0) - x) == 2 && verifCaseValide(pionCourant.get(0).get(0)+1,pionCourant.get(0).get(1) - 1) == "PN") {
-                        valueReturn = "PRISE_PN_G";
-                    // manger à droite
-                    }else if (pionCourant.get(0).get(0) - x == -2 && verifCaseValide(pionCourant.get(0).get(0)-1,pionCourant.get(0).get(1) - 1) == "PN") {
-                        System.out.println("HERE2");
-                        valueReturn = "PRISE_PN_D";
-                    } else {
-                        valueReturn = "erreur";
-                    }
-                } else {
-                    valueReturn = "erreur";
-                }
-            } else {
-                valueReturn = "VIDE";
-            }
+            valueReturn = "VIDE";
         } else{
             valueReturn = "erreur";
         }
         return valueReturn;
     }
 
-    public void prise(int x, int y){
-        System.out.println("PRISE X : "+x+ "Y : "+ y);
-        int pos = 0;
-        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
-        temp.add(new ArrayList<Integer>());
-        temp.get(0).add(0, x);
-        temp.get(0).add(1, y);
-        if(grabbed == "PN"){
-            pos=pionBlanc.indexOf(temp.get(0));
-            pionBlanc.remove(pos);
-        }else if (grabbed == "PB"){
-            System.out.println("pos : " +pionNoir.indexOf(temp.get(0)));
-            pos=pionNoir.indexOf(temp.get(0));
-            pionNoir.remove(pos);
-        }
-    }
     public void setGrabbed (String grabbed) {
         this.grabbed = grabbed;
     }
@@ -258,9 +183,5 @@ public class Cellule extends JPanel implements MouseListener {
         } else {
             Cellule.turn = "PB";
         }
-    }
-
-    public static void clearPionCourant(){
-        pionCourant.clear();
     }
 }
