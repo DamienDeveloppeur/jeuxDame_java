@@ -1,11 +1,10 @@
 package com.company;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
-public class Pion {
-    public int x;
-    public int y;
-    public String couleur = "";
+public class Pion extends Piece{
+
 
     public Pion(int x, int y, String couleur){
         this.x = x;
@@ -34,7 +33,6 @@ public class Pion {
             Cellule.pionNoir.remove(pos);
         }
         System.out.println("121 pos"+Cellule.pionBlanc);
-        plateau plateau = new plateau();
         Cellule.swapTurn();
         setCouleur("");
     }

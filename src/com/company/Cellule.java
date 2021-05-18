@@ -140,6 +140,7 @@ public class Cellule extends JPanel implements MouseListener {
 
             }
         }
+        repaint();
     }
 
     @Override
@@ -167,10 +168,6 @@ public class Cellule extends JPanel implements MouseListener {
             valueReturn = "erreur";
         }
         return valueReturn;
-    }
-
-    public void setGrabbed (String grabbed) {
-        this.grabbed = grabbed;
     }
 
     public static String getTurn() {
