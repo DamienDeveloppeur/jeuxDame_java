@@ -1,11 +1,11 @@
 package com.company;
 
 public class Piece {
-    public String couleur = "";
-    public int x;
-    public int y;
+    protected String couleur = "";
+    protected int x;
+    protected int y;
 
-    public void deplacement(){
+    protected void deplacement(){
 
     }
 }

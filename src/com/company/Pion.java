@@ -5,12 +5,10 @@ import java.util.ArrayList;
 
 public class Pion extends Piece{
 
-
     public Pion(int x, int y, String couleur){
         this.x = x;
         this.y = y;
         this.couleur = couleur;
-
     }
     public void deplacement(int x, int y) {
         int pos = 0;
@@ -18,14 +16,23 @@ public class Pion extends Piece{
         pionCourant.add(new ArrayList<Integer>());
         pionCourant.get(0).add(0, getX());
         pionCourant.get(0).add(1, getY());
-
         if(this.couleur == "PB"){
-            Cellule.pionBlanc.add(new ArrayList<Integer>());
-            Cellule.pionBlanc.get(Cellule.pionBlanc.size()-1).add(0, x);
-            Cellule.pionBlanc.get(Cellule.pionBlanc.size()-1).add(1, y);
+            if(y == 0){
+
+            }else {
+                Cellule.pionBlanc.add(new ArrayList<Integer>());
+                Cellule.pionBlanc.get(Cellule.pionBlanc.size()-1).add(0, x);
+                Cellule.pionBlanc.get(Cellule.pionBlanc.size()-1).add(1, y);
+            }
             pos=Cellule.pionBlanc.indexOf(pionCourant.get(0));
             Cellule.pionBlanc.remove(pos);
+
         }else if (this.couleur== "PN"){
+            if(y == 9){
+
+            }else {
+
+            }
             Cellule.pionNoir.add(new ArrayList<Integer>());
             Cellule.pionNoir.get(Cellule.pionNoir.size()-1).add(0, x);
             Cellule.pionNoir.get(Cellule.pionNoir.size()-1).add(1, y);
@@ -35,6 +42,7 @@ public class Pion extends Piece{
         System.out.println("121 pos"+Cellule.pionBlanc);
         Cellule.swapTurn();
         setCouleur("");
+        Cellule.currentPion = null;
     }
 
     public void prise(int x, int y){
@@ -78,10 +86,10 @@ public class Pion extends Piece{
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
                 System.out.println("HERE");
                 // manger à gauche
-                if((getX() - x) == 2 && Cellule.verifCaseValide(getX()+1,getY()- 1) == "PN") {
+                if(getX() - x == 2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB") {
                     valueReturn = "PRISE_PN_G";
                     // manger à droite
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX()-1,getY()- 1) == "PN") {
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB") {
                     System.out.println("HERE2");
                     valueReturn = "PRISE_PN_D";
                 } else {

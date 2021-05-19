@@ -10,13 +10,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class Cellule extends JPanel implements MouseListener {
     Cellule[][] grille = new Cellule [10][10];
     Dimension ech = new Dimension();
     // Array list des pions et des cases
     public static ArrayList<ArrayList<Integer>> pionBlanc = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> pionNoir = new ArrayList<ArrayList<Integer> >();
+    public static ArrayList<ArrayList<Integer>> dameBlanc = new ArrayList<ArrayList<Integer> >();
+    public static ArrayList<ArrayList<Integer>> dameNoir = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> caseValide = new ArrayList<ArrayList<Integer> >();
     static int index = 0;
     static int pionBlancIndex = 0;
@@ -24,7 +25,7 @@ public class Cellule extends JPanel implements MouseListener {
     static String turn = "PB";
     static boolean initialized;
     public JFrame frame;
-    public Pion currentPion;
+    static Pion currentPion;
 
     public Cellule(JFrame frame){
         addMouseListener(this);
@@ -45,14 +46,19 @@ public class Cellule extends JPanel implements MouseListener {
     }
     public void dessineToi(Graphics g, int x, int y, Dimension ech) {
         BufferedImage PB = null;
+        BufferedImage PBSELECT = null;
         BufferedImage PN = null;
+        BufferedImage PNSELECT = null;
         BufferedImage VIDE = null;
+
         if (Cellule.index == 100){
             Cellule.index = 0;
         }
         try {
             PB = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10.png"));
+            PBSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10Select.png"));
             PN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10.png"));
+            PNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10Select.png"));
             VIDE = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseVide10.png"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,9 +70,17 @@ public class Cellule extends JPanel implements MouseListener {
             if(initialized){
                 String value = verifCaseValide(x,y);
                 if(value == "PB"){
-                    g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
+                        g.drawImage(PBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    }else {
+                        g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    }
                 } else if (value == "PN"){
-                    g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
+                        g.drawImage(PNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    }else {
+                        g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    }
                 } else if(value == "VIDE") {
                     g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
@@ -117,7 +131,6 @@ public class Cellule extends JPanel implements MouseListener {
                 currentPion = new Pion(pt.x, pt.y,caseVerif);
             } else {
                 currentPion = null;
-                swapTurn();
             }
         } else if(caseVerif == "VIDE" &&  currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
@@ -141,16 +154,8 @@ public class Cellule extends JPanel implements MouseListener {
             }
         }
         repaint();
-    }
 
-    @Override
-    public void mousePressed(MouseEvent e) { }
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-    @Override
-    public void mouseEntered(MouseEvent e) { }
-    @Override
-    public void mouseExited(MouseEvent e) { }
+    }
 
     static String verifCaseValide(int x, int y){
         String valueReturn = "";
@@ -176,9 +181,18 @@ public class Cellule extends JPanel implements MouseListener {
 
     public static void swapTurn() {
         if(turn == "PB"){
-            Cellule.turn= "PN";
+            Cellule.turn = "PN";
         } else {
             Cellule.turn = "PB";
         }
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) { }
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+    @Override
+    public void mouseExited(MouseEvent e) { }
 }
