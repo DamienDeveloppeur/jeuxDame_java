@@ -172,13 +172,12 @@ public class Cellule extends JPanel implements MouseListener {
             }else if (verifPrise == "PRISE_D"){
                 currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
                 currentPion.deplacement(pt.x,pt.y);
-                Piece.pieceTaked = null;
+                Piece.pieceTaked.clear();
             } else if (verifPrise == "VIDE") {
                 currentPion.deplacement(pt.x,pt.y);
-            } else {
-
             }
         }
+        Piece.pieceTaked.clear();
         repaint();
     }
 

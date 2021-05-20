@@ -124,38 +124,51 @@ public class Piece {
         } else if (this.couleur == "DB" || this.couleur == "DN"){
             // le pion se trouve sur la diagonale
             if(Math.abs(getY() - y) == Math.abs(getX() - x)){
-                String caseSelected = "";
                 int tempX = 0;
                 int tempY = 0;
 
                 System.out.println("math abs" + Math.abs(getY() - y));
                 for (int i=1; i<Math.abs(getY() - y); i++) {
-                    // déterminer l'orientation de la piéce
+                    String caseSelected = "erreur";
+                    // haut - gauche
                     if(getX() > x && getY() > y){
-                        caseSelected =  Cellule.verifCaseValide(getX() - i,getY() - i);
-                        tempX = getX() - i;
-                        tempY = getY() - i;
+                        if(Cellule.verifCaseValide(getX() - i,getY() - i) != "VIDE" && Cellule.verifCaseValide(getX() - i,getY() - i) != "erreur") {
+                            caseSelected =  Cellule.verifCaseValide(getX() - i,getY() - i);
+                            tempX = getX() - i;
+                            tempY = getY() - i;
+                        }
+                        //bas - droite
                     } else if(getX() > x && getY() < y) {
-                        caseSelected =  Cellule.verifCaseValide(getX() - i,getY() + i);
-                        tempX = getX() - i;
-                        tempY = getY() + i;
+                        if(Cellule.verifCaseValide(getX() - i,getY() + i) != "VIDE" && Cellule.verifCaseValide(getX() - i,getY() + i) != "erreur") {
+                            caseSelected =  Cellule.verifCaseValide(getX() - i,getY() + i);
+                            tempX = getX() - i;
+                            tempY = getY() + i;
+                        }
+                    // bas - gauche
                     } else if(getX() < x && getY() > y) {
-                        caseSelected = Cellule.verifCaseValide(getX() + i,getY() - i);
-                        tempX = getX() + i;
-                        tempY = getY() - i;
+                        if(Cellule.verifCaseValide(getX() + i,getY() - i) != "VIDE" && Cellule.verifCaseValide(getX() + i,getY() - i) != "erreur") {
+                            caseSelected = Cellule.verifCaseValide(getX() + i,getY() - i);
+                            tempX = getX() + i;
+                            tempY = getY() - i;
+                        }
+                        // bas - droite
                     } else if(getX() < x && getY() < y) {
-                        caseSelected =  Cellule.verifCaseValide(getX() + i,getY() + i);
-                        tempX = getX() + i;
-                        tempY = getY() + i;
+                        if(Cellule.verifCaseValide(getX() + i,getY() + i) != "VIDE" && Cellule.verifCaseValide(getX() + i,getY() + i) != "erreur") {
+                            caseSelected =  Cellule.verifCaseValide(getX() + i,getY() + i);
+                            tempX = getX() + i;
+                            tempY = getY() + i;
+                        }
                     }
+
                     // ajouter chaque case selectionnée dans un array list
                     if(caseSelected != "VIDE" && caseSelected != "erreur") {
                         pieceTaked.add(new ArrayList<Integer>());
                         pieceTaked.get(0).add(0, tempX);
                         pieceTaked.get(0).add(1, tempY);
                     }
+                    System.out.println("Size piece taked : " + pieceTaked.size());
                 }
-                System.out.println("Piece taked size : " + pieceTaked.size());
+                //System.out.println("Piece taked size : " + pieceTaked.size());
                 if(pieceTaked.size() > 1) {
                     valueReturn = "erreur";
                 } else if(this.couleur == "DB" && (caseSelected == "PN" || caseSelected == "DN") && pieceTaked.size() == 1){
@@ -164,6 +177,8 @@ public class Piece {
                     valueReturn = "PRISE_D";
                 } else if (pieceTaked.size() == 0) {
                     valueReturn = "VIDE";
+                } else {
+                    valueReturn = "erreur";
                 }
             } else {
                 valueReturn = "erreur";
