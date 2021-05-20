@@ -6,7 +6,8 @@ public class Piece {
     protected String couleur = "";
     protected int x;
     protected int y;
-    static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<ArrayList<Integer> >();
+    static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<ArrayList<Integer>>();
+    protected String colorPieceTaked;
 
     public Piece(int x, int y, String couleur){
         this.x = x;
@@ -124,12 +125,13 @@ public class Piece {
         } else if (this.couleur == "DB" || this.couleur == "DN"){
             // le pion se trouve sur la diagonale
             if(Math.abs(getY() - y) == Math.abs(getX() - x)){
+                String caseSelected = "erreur";
                 int tempX = 0;
                 int tempY = 0;
 
                 System.out.println("math abs" + Math.abs(getY() - y));
                 for (int i=1; i<Math.abs(getY() - y); i++) {
-                    String caseSelected = "erreur";
+                    caseSelected = "erreur";
                     // haut - gauche
                     if(getX() > x && getY() > y){
                         if(Cellule.verifCaseValide(getX() - i,getY() - i) != "VIDE" && Cellule.verifCaseValide(getX() - i,getY() - i) != "erreur") {
@@ -159,21 +161,21 @@ public class Piece {
                             tempY = getY() + i;
                         }
                     }
-
                     // ajouter chaque case selectionnée dans un array list
                     if(caseSelected != "VIDE" && caseSelected != "erreur") {
                         pieceTaked.add(new ArrayList<Integer>());
                         pieceTaked.get(0).add(0, tempX);
                         pieceTaked.get(0).add(1, tempY);
+                        colorPieceTaked = caseSelected;
                     }
                     System.out.println("Size piece taked : " + pieceTaked.size());
                 }
                 //System.out.println("Piece taked size : " + pieceTaked.size());
                 if(pieceTaked.size() > 1) {
                     valueReturn = "erreur";
-                } else if(this.couleur == "DB" && (caseSelected == "PN" || caseSelected == "DN") && pieceTaked.size() == 1){
+                } else if(this.couleur == "DB" && (colorPieceTaked == "PN" || colorPieceTaked == "DN") && pieceTaked.size() == 1){
                     valueReturn = "PRISE_D";
-                }else if(this.couleur == "DN" && (caseSelected == "PB" || caseSelected == "DB") && pieceTaked.size() == 1){
+                }else if(this.couleur == "DN" && (colorPieceTaked == "PB" || colorPieceTaked == "DB") && pieceTaked.size() == 1){
                     valueReturn = "PRISE_D";
                 } else if (pieceTaked.size() == 0) {
                     valueReturn = "VIDE";
@@ -186,6 +188,7 @@ public class Piece {
         } else {
             valueReturn = "VIDE";
         }
+        colorPieceTaked = "";
         return valueReturn;
     }
 
