@@ -1,11 +1,212 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class Piece {
     protected String couleur = "";
     protected int x;
     protected int y;
+    static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<ArrayList<Integer> >();
 
-    protected void deplacement(){
+    public Piece(int x, int y, String couleur){
+        this.x = x;
+        this.y = y;
+        this.couleur = couleur;
+    }
 
+    public void deplacement(int x, int y) {
+        int pos = 0;
+        ArrayList<ArrayList<Integer>> pionCourant = new ArrayList<ArrayList<Integer> >();
+        pionCourant.add(new ArrayList<Integer>());
+        pionCourant.get(0).add(0, getX());
+        pionCourant.get(0).add(1, getY());
+        if(this.couleur == "PB"){
+            if(y == 0){
+                Cellule.dameBlanc.add(new ArrayList<Integer>());
+                Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(0, x);
+                Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(1, y);
+            }else {
+                Cellule.pionBlanc.add(new ArrayList<Integer>());
+                Cellule.pionBlanc.get(Cellule.pionBlanc.size()-1).add(0, x);
+                Cellule.pionBlanc.get(Cellule.pionBlanc.size()-1).add(1, y);
+            }
+            pos=Cellule.pionBlanc.indexOf(pionCourant.get(0));
+            Cellule.pionBlanc.remove(pos);
+        }else if (this.couleur== "PN"){
+            if(y == 9){
+                Cellule.dameNoir.add(new ArrayList<Integer>());
+                Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(0, x);
+                Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(1, y);
+            }else {
+                Cellule.pionNoir.add(new ArrayList<Integer>());
+                Cellule.pionNoir.get(Cellule.pionNoir.size()-1).add(0, x);
+                Cellule.pionNoir.get(Cellule.pionNoir.size()-1).add(1, y);
+            }
+            pos=Cellule.pionNoir.indexOf(pionCourant.get(0));
+            Cellule.pionNoir.remove(pos);
+        } else if (this.couleur == "DB") {
+            Cellule.dameBlanc.add(new ArrayList<Integer>());
+            Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(0, x);
+            Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(1, y);
+            pos=Cellule.dameBlanc.indexOf(pionCourant.get(0));
+            Cellule.dameBlanc.remove(pos);
+        } else if (this.couleur == "DN") {
+            Cellule.dameNoir.add(new ArrayList<Integer>());
+            Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(0, x);
+            Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(1, y);
+            pos=Cellule.dameNoir.indexOf(pionCourant.get(0));
+            Cellule.dameNoir.remove(pos);
+        }
+        Cellule.swapTurn();
+        setCouleur("");
+        Cellule.currentPion = null;
+    }
+
+    public void prise(int x, int y){
+        System.out.println("PRISE X : "+x+ " Y : "+ y);
+        int pos = 0;
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
+        temp.add(new ArrayList<Integer>());
+        temp.get(0).add(0, x);
+        temp.get(0).add(1, y);
+        String checkCase = Cellule.verifCaseValide(x,y);
+        if(checkCase == "PB"){
+            pos=Cellule.pionBlanc.indexOf(temp.get(0));
+            Cellule.pionBlanc.remove(pos);
+        }else if (checkCase == "PN"){
+            pos=Cellule.pionNoir.indexOf(temp.get(0));
+            Cellule.pionNoir.remove(pos);
+        }else if (checkCase == "DB"){
+            pos=Cellule.dameBlanc.indexOf(temp.get(0));
+            Cellule.dameBlanc.remove(pos);
+        }else if (checkCase== "DN"){
+            pos=Cellule.dameNoir.indexOf(temp.get(0));
+            Cellule.dameNoir.remove(pos);
+        }
+    }
+
+    public String verifPrise(int x, int y){
+        String valueReturn = "";
+        if(this.couleur == "PB"){
+            if(getY() == y + 1 && Math.abs(getX() - x) == 1  ) {
+                valueReturn = "VIDE";
+            } else if (getY()== y + 2 || Math.abs(getX()- x) == 2) {
+                // manger à gauche
+                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN") {
+                    valueReturn = "PRISE_PB_G";
+                    //
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN") {
+                    valueReturn = "PRISE_PB_D";
+                } else {
+                    valueReturn = "erreur";
+                }
+            } else {
+                valueReturn = "erreur";
+            }
+        } else if (this.couleur == "PN"){
+            if(getY()== y - 1 && Math.abs(getX() - x) == 1  ) {
+                valueReturn = "VIDE";
+            } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
+                System.out.println("HERE");
+                // manger à gauche
+                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB") {
+                    valueReturn = "PRISE_PN_G";
+                    // manger à droite
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB") {
+                    System.out.println("HERE2");
+                    valueReturn = "PRISE_PN_D";
+                } else {
+                    valueReturn = "erreur";
+                }
+            } else {
+                valueReturn = "erreur";
+            }
+        } else if (this.couleur == "DB" || this.couleur == "DN"){
+            // le pion se trouve sur la diagonale
+            if(Math.abs(getY() - y) == Math.abs(getX() - x)){
+                String caseSelected = "";
+                int tempX = 0;
+                int tempY = 0;
+
+                System.out.println("math abs" + Math.abs(getY() - y));
+                for (int i=1; i<Math.abs(getY() - y); i++) {
+                    // déterminer l'orientation de la piéce
+                    if(getX() > x && getY() > y){
+                        caseSelected =  Cellule.verifCaseValide(getX() - i,getY() - i);
+                        tempX = getX() - i;
+                        tempY = getY() - i;
+                    } else if(getX() > x && getY() < y) {
+                        caseSelected =  Cellule.verifCaseValide(getX() - i,getY() + i);
+                        tempX = getX() - i;
+                        tempY = getY() + i;
+                    } else if(getX() < x && getY() > y) {
+                        caseSelected = Cellule.verifCaseValide(getX() + i,getY() - i);
+                        tempX = getX() + i;
+                        tempY = getY() - i;
+                    } else if(getX() < x && getY() < y) {
+                        caseSelected =  Cellule.verifCaseValide(getX() + i,getY() + i);
+                        tempX = getX() + i;
+                        tempY = getY() + i;
+                    }
+                    // ajouter chaque case selectionnée dans un array list
+                    if(caseSelected != "VIDE" && caseSelected != "erreur") {
+                        pieceTaked.add(new ArrayList<Integer>());
+                        pieceTaked.get(0).add(0, tempX);
+                        pieceTaked.get(0).add(1, tempY);
+                    }
+                }
+                System.out.println("Piece taked size : " + pieceTaked.size());
+                if(pieceTaked.size() > 1) {
+                    valueReturn = "erreur";
+                } else if(this.couleur == "DB" && (caseSelected == "PN" || caseSelected == "DN") && pieceTaked.size() == 1){
+                    valueReturn = "PRISE_D";
+                }else if(this.couleur == "DN" && (caseSelected == "PB" || caseSelected == "DB") && pieceTaked.size() == 1){
+                    valueReturn = "PRISE_D";
+                } else if (pieceTaked.size() == 0) {
+                    valueReturn = "VIDE";
+                }
+            } else {
+                valueReturn = "erreur";
+            }
+        } else {
+            valueReturn = "VIDE";
+        }
+        return valueReturn;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public String getCouleur() {
+        return couleur;
+    }
+
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
+    }
+
+    public void resetPion(){
+        setCouleur("");
+    }
+
+    public static ArrayList<ArrayList<Integer>> getPieceTaked() {
+        return pieceTaked;
+    }
+
+    public static void setPieceTaked(ArrayList<ArrayList<Integer>> pieceTaked) {
+        Piece.pieceTaked = pieceTaked;
     }
 }
