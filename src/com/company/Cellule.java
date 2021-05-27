@@ -59,15 +59,15 @@ public class Cellule extends JPanel implements MouseListener {
             Cellule.index = 0;
         }
         try {
-            PB = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10.png"));
-            PBSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10Select.png"));
-            PN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10.png"));
-            PNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10Select.png"));
-            DB = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameBlanche10.png"));
-            DBSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameBlanche10Select.png"));
-            DN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10.png"));
-            DNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10Select.png"));
-            VIDE = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseVide10.png"));
+            PB = ImageIO.read(new File("img\\pionBlanc10.png"));
+            PBSELECT = ImageIO.read(new File("img\\pionBlanc10Select.png"));
+            PN = ImageIO.read(new File("img\\pionNoir10.png"));
+            PNSELECT = ImageIO.read(new File("img\\pionNoir10Select.png"));
+            DB = ImageIO.read(new File("img\\dameBlanche10.png"));
+            DBSELECT = ImageIO.read(new File("img\\dameBlanche10Select.png"));
+            DN = ImageIO.read(new File("img\\dameNoire10.png"));
+            DNSELECT = ImageIO.read(new File("img\\dameNoire10Select.png"));
+            VIDE = ImageIO.read(new File("img\\caseVide10.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -154,7 +154,7 @@ public class Cellule extends JPanel implements MouseListener {
             } else {
                 currentPion = null;
             }
-        } else if(caseVerif == "VIDE" &&  currentPion != null){
+        } else if(caseVerif.equals("VIDE") &&  currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
             System.out.println("Verif prise : "+verifPrise);
             if (verifPrise == "PRISE_PB_G"){

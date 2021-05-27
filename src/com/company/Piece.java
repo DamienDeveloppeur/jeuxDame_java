@@ -21,7 +21,7 @@ public class Piece {
         pionCourant.add(new ArrayList<Integer>());
         pionCourant.get(0).add(0, getX());
         pionCourant.get(0).add(1, getY());
-        if(this.couleur == "PB"){
+        if(this.couleur.equals("PB")){
             if(y == 0){
                 Cellule.dameBlanc.add(new ArrayList<Integer>());
                 Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(0, x);
@@ -33,7 +33,7 @@ public class Piece {
             }
             pos=Cellule.pionBlanc.indexOf(pionCourant.get(0));
             Cellule.pionBlanc.remove(pos);
-        }else if (this.couleur== "PN"){
+        }else if (this.couleur.equals("PN")){
             if(y == 9){
                 Cellule.dameNoir.add(new ArrayList<Integer>());
                 Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(0, x);
