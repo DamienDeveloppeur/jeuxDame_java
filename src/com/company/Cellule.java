@@ -34,7 +34,6 @@ public class Cellule extends JPanel implements MouseListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println("paintComponent");
         calculerEchelle();
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
@@ -71,37 +70,37 @@ public class Cellule extends JPanel implements MouseListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // on dessine les carrés
+        //let's draw square
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
         // on colore les cases
         if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
                 String value = verifCaseValide(x,y);
-                if(value == "PB"){
+                if(value.equals("PB")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(PBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                } else if (value == "PN"){
+                } else if (value.equals("PN")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(PNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                }else if (value == "DB"){
+                }else if (value.equals("DB")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(DBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(DB,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                }else if (value == "DN"){
+                }else if (value.equals("DN")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(DNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(DN,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                } else if(value == "VIDE") {
+                } else if(value.equals("VIDE")) {
                     g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
             }else {
@@ -148,8 +147,9 @@ public class Cellule extends JPanel implements MouseListener {
 
         String caseVerif = verifCaseValide(pt.x,pt.y);
 
-        if(caseVerif == "PB" || caseVerif == "PN" || caseVerif == "DB" || caseVerif == "DN"){
+        if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
+                // verify thats any pion can eat this turn
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
             } else {
                 currentPion = null;
@@ -157,23 +157,23 @@ public class Cellule extends JPanel implements MouseListener {
         } else if(caseVerif.equals("VIDE") &&  currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
             System.out.println("Verif prise : "+verifPrise);
-            if (verifPrise == "PRISE_PB_G"){
+            if (verifPrise.equals("PRISE_PB_G")){
                 currentPion.prise(pt.x + 1, pt.y + 1);
                 currentPion.deplacement(pt.x,pt.y);
-            } else if (verifPrise == "PRISE_PB_D"){
+            } else if (verifPrise.equals("PRISE_PB_D")){
                 currentPion.prise(pt.x - 1, pt.y + 1);
                 currentPion.deplacement(pt.x,pt.y);
-            } else if (verifPrise == "PRISE_PN_G"){
+            } else if (verifPrise.equals("PRISE_PN_G")){
                 currentPion.prise(pt.x + 1, pt.y - 1);
                 currentPion.deplacement(pt.x,pt.y);
-            } else if (verifPrise == "PRISE_PN_D"){
+            } else if (verifPrise.equals("PRISE_PN_D")){
                 currentPion.prise(pt.x - 1, pt.y - 1);
                 currentPion.deplacement(pt.x,pt.y);
-            }else if (verifPrise == "PRISE_D"){
+            }else if (verifPrise.equals("PRISE_D")){
                 currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
                 currentPion.deplacement(pt.x,pt.y);
                 Piece.pieceTaked.clear();
-            } else if (verifPrise == "VIDE") {
+            } else if (verifPrise.equals("VIDE")) {
                 currentPion.deplacement(pt.x,pt.y);
             }
         }
@@ -208,7 +208,7 @@ public class Cellule extends JPanel implements MouseListener {
     }
 
     public static void swapTurn() {
-        if(turn == "B"){
+        if(turn.equals("B")){
             Cellule.turn = "N";
         } else {
             Cellule.turn = "B";

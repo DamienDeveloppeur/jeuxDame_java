@@ -45,13 +45,13 @@ public class Piece {
             }
             pos=Cellule.pionNoir.indexOf(pionCourant.get(0));
             Cellule.pionNoir.remove(pos);
-        } else if (this.couleur == "DB") {
+        } else if (this.couleur.equals("DB")) {
             Cellule.dameBlanc.add(new ArrayList<Integer>());
             Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(0, x);
             Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(1, y);
             pos=Cellule.dameBlanc.indexOf(pionCourant.get(0));
             Cellule.dameBlanc.remove(pos);
-        } else if (this.couleur == "DN") {
+        } else if (this.couleur.equals("DN")) {
             Cellule.dameNoir.add(new ArrayList<Integer>());
             Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(0, x);
             Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(1, y);
@@ -71,16 +71,16 @@ public class Piece {
         temp.get(0).add(0, x);
         temp.get(0).add(1, y);
         String checkCase = Cellule.verifCaseValide(x,y);
-        if(checkCase == "PB"){
+        if(checkCase.equals("PB")){
             pos=Cellule.pionBlanc.indexOf(temp.get(0));
             Cellule.pionBlanc.remove(pos);
-        }else if (checkCase == "PN"){
+        }else if (checkCase.equals("PN")){
             pos=Cellule.pionNoir.indexOf(temp.get(0));
             Cellule.pionNoir.remove(pos);
-        }else if (checkCase == "DB"){
+        }else if (checkCase.equals("DB")){
             pos=Cellule.dameBlanc.indexOf(temp.get(0));
             Cellule.dameBlanc.remove(pos);
-        }else if (checkCase== "DN"){
+        }else if (checkCase.equals("DN")){
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
@@ -88,7 +88,7 @@ public class Piece {
 
     public String verifPrise(int x, int y){
         String valueReturn = "";
-        if(this.couleur == "PB"){
+        if(this.couleur.equals("PB")){
             if(getY() == y + 1 && Math.abs(getX() - x) == 1  ) {
                 valueReturn = "VIDE";
             } else if (getY()== y + 2 || Math.abs(getX()- x) == 2) {
@@ -104,7 +104,7 @@ public class Piece {
             } else {
                 valueReturn = "erreur";
             }
-        } else if (this.couleur == "PN"){
+        } else if (this.couleur.equals("PN")){
             if(getY()== y - 1 && Math.abs(getX() - x) == 1  ) {
                 valueReturn = "VIDE";
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
@@ -122,7 +122,7 @@ public class Piece {
             } else {
                 valueReturn = "erreur";
             }
-        } else if (this.couleur == "DB" || this.couleur == "DN"){
+        } else if (this.couleur.equals("DB") || this.couleur.equals("DN")){
             // le pion se trouve sur la diagonale
             if(Math.abs(getY() - y) == Math.abs(getX() - x)){
                 String caseSelected = "erreur";
@@ -191,7 +191,30 @@ public class Piece {
         colorPieceTaked = "";
         return valueReturn;
     }
+    public void ifCanTake(int X, int Y, String color) {
+        ArrayList<ArrayList<Integer>> arrayPiece = new ArrayList<ArrayList<Integer> >();
+        this.couleur = color;
+        switch (color) {
+            case "PB":
+                arrayPiece = Cellule.pionBlanc;
+                break;
+            case "PN":
+                arrayPiece = Cellule.pionNoir;
+                break;
+        }
+        for (int i = 0; i < arrayPiece.size(); i++){
+            if (color.equals("PB")){
+                // get both possibility for eat
 
+                verifPrise(x,y);
+
+
+            } else if (color.equals("PN")){
+
+            }
+        }
+
+    }
     public int getX() {
         return x;
     }
