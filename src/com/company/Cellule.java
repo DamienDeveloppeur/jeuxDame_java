@@ -19,6 +19,7 @@ public class Cellule extends JPanel implements MouseListener {
     public static ArrayList<ArrayList<Integer>> dameBlanc = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> dameNoir = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> caseValide = new ArrayList<ArrayList<Integer> >();
+    public static ArrayList<ArrayList<Integer>> caseShow = new ArrayList<ArrayList<Integer> >();
     static int index = 0;
     static int pionBlancIndex = 0;
     static int pionNoirIndex = 0;
@@ -54,6 +55,7 @@ public class Cellule extends JPanel implements MouseListener {
         BufferedImage DN = null;
         BufferedImage DNSELECT = null;
         BufferedImage VIDE = null;
+        BufferedImage SHOW = null;
 
         if (Cellule.index == 100){
             Cellule.index = 0;
@@ -68,6 +70,7 @@ public class Cellule extends JPanel implements MouseListener {
             DN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10.png"));
             DNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10Select.png"));
             VIDE = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseVide10.png"));
+            SHOW = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseShown.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,6 +144,10 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        // boucler sur toutes les piéces du joueur
+        // faire une verif prise à droite et à gauche
+        // enregistrer dans un tableau les pions pouvant manger
+        // la suite est évidente
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
@@ -150,13 +157,32 @@ public class Cellule extends JPanel implements MouseListener {
 
         if(caseVerif == "PB" || caseVerif == "PN" || caseVerif == "DB" || caseVerif == "DN"){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
+                switch(caseVerif) {
+                    case "PB":
+                        // code block
+                        for(int i = 0 ; i < pionBlanc.size(); i++) {
+
+                        }
+                        break;
+                    case "PN":
+                        // code block
+                        break;
+                    case "DB":
+                        // code block
+                        break;
+                    case "DN":
+                        // code block
+                        break;
+                    default:
+                        // code block
+                }
+
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
             } else {
                 currentPion = null;
             }
         } else if(caseVerif == "VIDE" &&  currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
-            System.out.println("Verif prise : "+verifPrise);
             if (verifPrise == "PRISE_PB_G"){
                 currentPion.prise(pt.x + 1, pt.y + 1);
                 currentPion.deplacement(pt.x,pt.y);

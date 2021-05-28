@@ -64,6 +64,8 @@ public class Piece {
     }
 
     public void prise(int x, int y){
+        //En cas de prise, faire une verif prise
+
         System.out.println("PRISE X : "+x+ " Y : "+ y);
         int pos = 0;
         ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
