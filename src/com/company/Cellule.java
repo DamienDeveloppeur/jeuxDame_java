@@ -104,7 +104,6 @@ public class Cellule extends JPanel implements MouseListener {
                     g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
             }else {
-                g.setColor(Color.RED);
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                 if(caseValide.size() < 50){
                     caseValide.add(new ArrayList<Integer>());
@@ -144,19 +143,22 @@ public class Cellule extends JPanel implements MouseListener {
         pt.x/=ech.width;
         pt.y/=ech.height;
         System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
-
         String caseVerif = verifCaseValide(pt.x,pt.y);
-
         if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
                 // verify thats any pion can eat this turn
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
+                String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
+                currentPion = new Piece(pt.x, pt.y,caseVerif);
+                System.out.println("Error : " + error);
+                if(!(error.equals("erreur") || error.equals("VIDE") )){
+                    currentPion = null;
+                }
             } else {
                 currentPion = null;
             }
         } else if(caseVerif.equals("VIDE") &&  currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
-            System.out.println("Verif prise : "+verifPrise);
             if (verifPrise.equals("PRISE_PB_G")){
                 currentPion.prise(pt.x + 1, pt.y + 1);
                 currentPion.deplacement(pt.x,pt.y);

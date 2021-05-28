@@ -108,13 +108,13 @@ public class Piece {
             if(getY()== y - 1 && Math.abs(getX() - x) == 1  ) {
                 valueReturn = "VIDE";
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
-                System.out.println("HERE");
+
                 // manger à gauche
                 if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB") {
                     valueReturn = "PRISE_PN_G";
                     // manger à droite
                 }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB") {
-                    System.out.println("HERE2");
+
                     valueReturn = "PRISE_PN_D";
                 } else {
                     valueReturn = "erreur";
@@ -191,29 +191,47 @@ public class Piece {
         colorPieceTaked = "";
         return valueReturn;
     }
-    public void ifCanTake(int X, int Y, String color) {
+    public String ifCanTake(int X, int Y, String color) {
         ArrayList<ArrayList<Integer>> arrayPiece = new ArrayList<ArrayList<Integer> >();
-        this.couleur = color;
+        String error = "erreur";
         switch (color) {
             case "PB":
                 arrayPiece = Cellule.pionBlanc;
+                Y -= 2;
                 break;
             case "PN":
                 arrayPiece = Cellule.pionNoir;
+                Y += 2;
                 break;
         }
         for (int i = 0; i < arrayPiece.size(); i++){
+            this.x = arrayPiece.get(i).get(0);
+            this.y = arrayPiece.get(i).get(1);
+            // get both possibility for eat
             if (color.equals("PB")){
-                // get both possibility for eat
-
-                verifPrise(x,y);
-
-
-            } else if (color.equals("PN")){
-
+                error = verifPrise(getX() + 2,getY() - 2);
+            }else {
+                error = verifPrise(getX() + 2,getY() + 2);
             }
+            System.out.println("error1 :" + error);
+            System.out.println("X :" + getX());
+            System.out.println("Y :" + getY());
+            if(error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D")){
+                return "prise";
+            }
+            if (color.equals("PB")){
+                error = verifPrise(getX() - 2,getY() - 2);
+            }else {
+                error = verifPrise(getX() - 2,getY() + 2);
+            }
+            //error = verifPrise(getX() - 2,getY());
+            System.out.println("error2 :" + error);
+            if(error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D")){
+                return "prise";
+            }
+            System.out.println("Iteration :" + i);
         }
-
+        return error;
     }
     public int getX() {
         return x;
