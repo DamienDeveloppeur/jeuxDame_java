@@ -93,10 +93,11 @@ public class Piece {
                 valueReturn = "VIDE";
             } else if (getY()== y + 2 || Math.abs(getX()- x) == 2) {
                 // manger à gauche
-                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN") {
+                // il manque la gestion des cases vides
+                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PB_G";
                     //
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN") {
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PB_D";
                 } else {
                     valueReturn = "erreur";
@@ -110,11 +111,10 @@ public class Piece {
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
 
                 // manger à gauche
-                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB") {
+                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PN_G";
                     // manger à droite
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB") {
-
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PN_D";
                 } else {
                     valueReturn = "erreur";
@@ -205,8 +205,8 @@ public class Piece {
                 break;
         }
         for (int i = 0; i < arrayPiece.size(); i++){
-            this.x = arrayPiece.get(i).get(0);
-            this.y = arrayPiece.get(i).get(1);
+            setX(arrayPiece.get(i).get(0));
+            setY(arrayPiece.get(i).get(1));
             // get both possibility for eat
             if (color.equals("PB")){
                 error = verifPrise(getX() + 2,getY() - 2);
@@ -216,7 +216,7 @@ public class Piece {
             System.out.println("error1 :" + error);
             System.out.println("X :" + getX());
             System.out.println("Y :" + getY());
-            if(error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D")){
+            if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D")) && (arrayPiece.get(i).get(0) != X && arrayPiece.get(i).get(1) != Y)){
                 return "prise";
             }
             if (color.equals("PB")){
@@ -226,10 +226,9 @@ public class Piece {
             }
             //error = verifPrise(getX() - 2,getY());
             System.out.println("error2 :" + error);
-            if(error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D")){
+            if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D")) && (arrayPiece.get(i).get(0) != X && arrayPiece.get(i).get(1) != Y)){
                 return "prise";
             }
-            System.out.println("Iteration :" + i);
         }
         return error;
     }
