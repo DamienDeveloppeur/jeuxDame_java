@@ -63,8 +63,8 @@ public class Piece {
         Cellule.currentPion = null;
     }
 
-    public void prise(int x, int y){
-        System.out.println("PRISE X : "+x+ " Y : "+ y);
+    public boolean prise(int x, int y){
+        //System.out.println("PRISE X : "+x+ " Y : "+ y);
         int pos = 0;
         ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
         temp.add(new ArrayList<Integer>());
@@ -84,6 +84,14 @@ public class Piece {
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
+        if(ifOneCanTake(getX(), getY(), getCouleur()).equals("prise")){
+            return true;
+        } else {
+            return false;
+        }
+
+
+
     }
 
     public String verifPrise(int x, int y){
@@ -213,9 +221,9 @@ public class Piece {
                 }else {
                     error = verifPrise(getX() + 2,getY() + 2);
                 }
-                System.out.println("error1 :" + error);
-                System.out.println("X :" + getX());
-                System.out.println("Y :" + getY());
+                //System.out.println("error1 :" + error);
+                //System.out.println("X :" + getX());
+                //System.out.println("Y :" + getY());
                 if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
                     return "prise";
                 }
@@ -225,7 +233,7 @@ public class Piece {
                     error = verifPrise(getX() - 2,getY() + 2);
                 }
                 //error = verifPrise(getX() - 2,getY());
-                System.out.println("error2 :" + error);
+                //System.out.println("error2 :" + error);
                 if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
                     return "prise";
                 }
@@ -242,9 +250,9 @@ public class Piece {
         }else {
             error = verifPrise(getX() + 2,getY() + 2);
         }
-        System.out.println("error1one :" + error);
-        System.out.println("one X :" + getX());
-        System.out.println("one Y :" + getY());
+        //System.out.println("error1one :" + error);
+        //System.out.println("one X :" + getX());
+        //System.out.println("one Y :" + getY());
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";
         }
@@ -254,7 +262,7 @@ public class Piece {
             error = verifPrise(getX() - 2,getY() + 2);
         }
         //error = verifPrise(getX() - 2,getY());
-        System.out.println("one error2 :" + error);
+        //System.out.println("one error2 :" + error);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";
         }

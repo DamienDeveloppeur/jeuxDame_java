@@ -139,10 +139,11 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        boolean taked = false;
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
-        System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
+        //System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
         String caseVerif = verifCaseValide(pt.x,pt.y);
         if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
@@ -151,40 +152,47 @@ public class Cellule extends JPanel implements MouseListener {
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
                 if(!errorOne.equals("prise")){
                     String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
-                    System.out.println("Error : " + error);
+                    //System.out.println("Error : " + error);
                     if(!(error.equals("erreur") || error.equals("VIDE") )){
                         currentPion = null;
                     } else {
+                        currentPion = null;
                         currentPion = new Piece(pt.x, pt.y,caseVerif);
                     }
+                } else {
+                    currentPion = new Piece(pt.x, pt.y,caseVerif);
                 }
-
             } else {
                 currentPion = null;
             }
         } else if(caseVerif.equals("VIDE") && currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
             if (verifPrise.equals("PRISE_PB_G")){
-                currentPion.prise(pt.x + 1, pt.y + 1);
+                taked = currentPion.prise(pt.x + 1, pt.y + 1);
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PB_D")){
-                currentPion.prise(pt.x - 1, pt.y + 1);
+                taked = currentPion.prise(pt.x - 1, pt.y + 1);
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PN_G")){
-                currentPion.prise(pt.x + 1, pt.y - 1);
+                taked = currentPion.prise(pt.x + 1, pt.y - 1);
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PN_D")){
-                currentPion.prise(pt.x - 1, pt.y - 1);
+                taked = currentPion.prise(pt.x - 1, pt.y - 1);
                 currentPion.deplacement(pt.x,pt.y);
             }else if (verifPrise.equals("PRISE_D")){
-                currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
+                taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
                 currentPion.deplacement(pt.x,pt.y);
                 Piece.pieceTaked.clear();
-            } else if (verifPrise.equals("VIDE")) {
+            }
+            if (verifPrise.equals("VIDE")) {
                 currentPion.deplacement(pt.x,pt.y);
             }
         }
-        Piece.pieceTaked.clear();
+        System.out.println(taked);
+        if (!taked) {
+            Piece.pieceTaked.clear();
+            swapTurn();
+        }
         repaint();
     }
 
