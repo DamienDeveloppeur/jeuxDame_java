@@ -69,7 +69,7 @@ public class Piece {
      * @param y ordonne of piece witch be taked
      * @return if the piece who taken, can take again
      */
-    public boolean prise(int x, int y){
+    public boolean prise(int x, int y, int initX, int initY){
         //System.out.println("PRISE X : "+x+ " Y : "+ y);
         int pos = 0;
         ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
@@ -90,10 +90,10 @@ public class Piece {
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
-        System.out.println("prise getX : "+getX());
-        System.out.println("prise getY : "+ getY());
+        System.out.println("prise getX : "+initX);
+        System.out.println("prise getY : "+ initY);
         System.out.println("true or false : "+ ifOneCanTake(getX(), getY(), getCouleur()));
-        if(ifOneCanTake(getX(), getY(), getCouleur()).equals("prise")){
+        if(ifOneCanTake(initX, initY, getCouleur()).equals("prise")){
             return true;
         } else {
             return false;
@@ -246,25 +246,24 @@ public class Piece {
         }
         return error;
     }
-    public String ifOneCanTake(int x, int y, String color){
+    public String ifOneCanTake(int X, int Y, String color){
         String error = "erreur";
+        System.out.println("Debug color : "+color);
         if (color.equals("PB")){
-            error = verifPrise(getX() + 2,getY() - 2);
+            error = verifPrise(X + 2,Y - 2);
         }else {
-            error = verifPrise(getX() + 2,getY() + 2);
+            error = verifPrise(X + 2,Y + 2);
         }
-        //System.out.println("error1one :" + error);
-        //System.out.println("one X :" + getX());
-        //System.out.println("one Y :" + getY());
+        System.out.println("Debug Erreur1 : "+error);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";
         }
         if (color.equals("PB")){
-            error = verifPrise(getX() - 2,getY() - 2);
+            error = verifPrise(X - 2,Y - 2);
         }else {
-            error = verifPrise(getX() - 2,getY() + 2);
+            error = verifPrise(X - 2,Y + 2);
         }
-        //System.out.println("one error2 :" + error);
+        System.out.println("Debug Erreur2 : "+error);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";
         }

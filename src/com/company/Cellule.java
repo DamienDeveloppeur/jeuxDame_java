@@ -168,25 +168,24 @@ public class Cellule extends JPanel implements MouseListener {
         } else if(caseVerif.equals("VIDE") && currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
             if (verifPrise.equals("PRISE_PB_G")){
-                taked = currentPion.prise(pt.x + 1, pt.y + 1);
+                taked = currentPion.prise(pt.x + 1, pt.y + 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PB_D")){
-                taked = currentPion.prise(pt.x - 1, pt.y + 1);
+                taked = currentPion.prise(pt.x - 1, pt.y + 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PN_G")){
-                taked = currentPion.prise(pt.x + 1, pt.y - 1);
+                taked = currentPion.prise(pt.x + 1, pt.y - 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PN_D")){
-                taked = currentPion.prise(pt.x - 1, pt.y - 1);
-                currentPion.deplacement(pt.x,pt.y);
-            }
-            if(verifPrise.equals("PRISE_PB_G") || verifPrise.equals("PRISE_PB_D") || verifPrise.equals("PRISE_PN_G") || verifPrise.equals("PRISE_PN_D")){
-                taked = currentPion.prise(pt.x , pt.y);
+                taked = currentPion.prise(pt.x - 1, pt.y - 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
             }else if (verifPrise.equals("PRISE_D")){
-                taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
+                taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1),pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
                 Piece.pieceTaked.clear();
+            }
+            if(verifPrise.equals("PRISE_PB_G") || verifPrise.equals("PRISE_PB_D") || verifPrise.equals("PRISE_PN_G") || verifPrise.equals("PRISE_PN_D")){
+
             }
             if (verifPrise.equals("VIDE")) {
                 currentPion.deplacement(pt.x,pt.y);
