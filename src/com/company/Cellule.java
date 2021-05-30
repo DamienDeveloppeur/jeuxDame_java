@@ -148,16 +148,21 @@ public class Cellule extends JPanel implements MouseListener {
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
                 // verify thats any pion can eat this turn
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
-                String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
-                currentPion = new Piece(pt.x, pt.y,caseVerif);
-                System.out.println("Error : " + error);
-                if(!(error.equals("erreur") || error.equals("VIDE") )){
-                    currentPion = null;
+                String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
+                if(!errorOne.equals("prise")){
+                    String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
+                    System.out.println("Error : " + error);
+                    if(!(error.equals("erreur") || error.equals("VIDE") )){
+                        currentPion = null;
+                    } else {
+                        currentPion = new Piece(pt.x, pt.y,caseVerif);
+                    }
                 }
+
             } else {
                 currentPion = null;
             }
-        } else if(caseVerif.equals("VIDE") &&  currentPion != null){
+        } else if(caseVerif.equals("VIDE") && currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
             if (verifPrise.equals("PRISE_PB_G")){
                 currentPion.prise(pt.x + 1, pt.y + 1);
