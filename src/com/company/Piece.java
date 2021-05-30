@@ -63,6 +63,12 @@ public class Piece {
         Cellule.currentPion = null;
     }
 
+    /**
+     *
+     * @param x abscissa of piece witch be taked
+     * @param y ordonne of piece witch be taked
+     * @return if the piece who taken, can take again
+     */
     public boolean prise(int x, int y){
         //System.out.println("PRISE X : "+x+ " Y : "+ y);
         int pos = 0;
@@ -84,16 +90,16 @@ public class Piece {
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
+        System.out.println("prise getX : "+getX());
+        System.out.println("prise getY : "+ getY());
+        System.out.println("true or false : "+ ifOneCanTake(getX(), getY(), getCouleur()));
         if(ifOneCanTake(getX(), getY(), getCouleur()).equals("prise")){
             return true;
         } else {
             return false;
         }
 
-
-
     }
-
     public String verifPrise(int x, int y){
         String valueReturn = "";
         if(this.couleur.equals("PB")){
@@ -215,7 +221,6 @@ public class Piece {
         for (int i = 0; i < arrayPiece.size(); i++){
             setX(arrayPiece.get(i).get(0));
             setY(arrayPiece.get(i).get(1));
-
                 if (color.equals("PB")){
                     error = verifPrise(getX() + 2,getY() - 2);
                 }else {
@@ -243,8 +248,6 @@ public class Piece {
     }
     public String ifOneCanTake(int x, int y, String color){
         String error = "erreur";
-        setX(x);
-        setY(y);
         if (color.equals("PB")){
             error = verifPrise(getX() + 2,getY() - 2);
         }else {
@@ -261,7 +264,6 @@ public class Piece {
         }else {
             error = verifPrise(getX() - 2,getY() + 2);
         }
-        //error = verifPrise(getX() - 2,getY());
         //System.out.println("one error2 :" + error);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";

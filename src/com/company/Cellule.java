@@ -143,7 +143,7 @@ public class Cellule extends JPanel implements MouseListener {
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
-        //System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
+        System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
         String caseVerif = verifCaseValide(pt.x,pt.y);
         if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
@@ -179,6 +179,10 @@ public class Cellule extends JPanel implements MouseListener {
             } else if (verifPrise.equals("PRISE_PN_D")){
                 taked = currentPion.prise(pt.x - 1, pt.y - 1);
                 currentPion.deplacement(pt.x,pt.y);
+            }
+            if(verifPrise.equals("PRISE_PB_G") || verifPrise.equals("PRISE_PB_D") || verifPrise.equals("PRISE_PN_G") || verifPrise.equals("PRISE_PN_D")){
+                taked = currentPion.prise(pt.x , pt.y);
+                currentPion.deplacement(pt.x,pt.y);
             }else if (verifPrise.equals("PRISE_D")){
                 taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
                 currentPion.deplacement(pt.x,pt.y);
@@ -191,6 +195,7 @@ public class Cellule extends JPanel implements MouseListener {
         System.out.println(taked);
         if (!taked) {
             Piece.pieceTaked.clear();
+        }else {
             swapTurn();
         }
         repaint();
