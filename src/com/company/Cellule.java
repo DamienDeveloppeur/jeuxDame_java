@@ -35,7 +35,6 @@ public class Cellule extends JPanel implements MouseListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println("paintComponent");
         calculerEchelle();
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
@@ -61,6 +60,7 @@ public class Cellule extends JPanel implements MouseListener {
             Cellule.index = 0;
         }
         try {
+<<<<<<< HEAD
             PB = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10.png"));
             PBSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10Select.png"));
             PN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10.png"));
@@ -71,44 +71,54 @@ public class Cellule extends JPanel implements MouseListener {
             DNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10Select.png"));
             VIDE = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseVide10.png"));
             SHOW = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseShown.png"));
+=======
+            PB = ImageIO.read(new File("img\\pionBlanc10.png"));
+            PBSELECT = ImageIO.read(new File("img\\pionBlanc10Select.png"));
+            PN = ImageIO.read(new File("img\\pionNoir10.png"));
+            PNSELECT = ImageIO.read(new File("img\\pionNoir10Select.png"));
+            DB = ImageIO.read(new File("img\\dameBlanche10.png"));
+            DBSELECT = ImageIO.read(new File("img\\dameBlanche10Select.png"));
+            DN = ImageIO.read(new File("img\\dameNoire10.png"));
+            DNSELECT = ImageIO.read(new File("img\\dameNoire10Select.png"));
+            VIDE = ImageIO.read(new File("img\\caseVide10.png"));
+>>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // on dessine les carrés
+        //let's draw square
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
         // on colore les cases
         if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
                 String value = verifCaseValide(x,y);
-                if(value == "PB"){
+                if(value.equals("PB")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(PBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                } else if (value == "PN"){
+                } else if (value.equals("PN")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(PNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                }else if (value == "DB"){
+                }else if (value.equals("DB")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(DBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(DB,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                }else if (value == "DN"){
+                }else if (value.equals("DN")){
                     if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                         g.drawImage(DNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }else {
                         g.drawImage(DN,x*ech.width, y*ech.height, ech.width, ech.height,null );
                     }
-                } else if(value == "VIDE") {
+                } else if(value.equals("VIDE")) {
                     g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
             }else {
-                g.setColor(Color.RED);
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                 if(caseValide.size() < 50){
                     caseValide.add(new ArrayList<Integer>());
@@ -144,19 +154,22 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+<<<<<<< HEAD
         // boucler sur toutes les piéces du joueur
         // faire une verif prise à droite et à gauche
         // enregistrer dans un tableau les pions pouvant manger
         // la suite est évidente
+=======
+        boolean taked = false;
+>>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
         System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
-
         String caseVerif = verifCaseValide(pt.x,pt.y);
-
-        if(caseVerif == "PB" || caseVerif == "PN" || caseVerif == "DB" || caseVerif == "DN"){
+        if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
+<<<<<<< HEAD
                 switch(caseVerif) {
                     case "PB":
                         // code block
@@ -177,33 +190,63 @@ public class Cellule extends JPanel implements MouseListener {
                         // code block
                 }
 
+=======
+                // verify thats any pion can eat this turn
+>>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
+                String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
+                if(!errorOne.equals("prise")){
+                    String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
+                    //System.out.println("Error : " + error);
+                    if(!(error.equals("erreur") || error.equals("VIDE") )){
+                        currentPion = null;
+                    } else {
+                        currentPion = null;
+                        currentPion = new Piece(pt.x, pt.y,caseVerif);
+                    }
+                } else {
+                    currentPion = new Piece(pt.x, pt.y,caseVerif);
+                }
             } else {
                 currentPion = null;
             }
-        } else if(caseVerif == "VIDE" &&  currentPion != null){
+        } else if(caseVerif.equals("VIDE") && currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
+<<<<<<< HEAD
             if (verifPrise == "PRISE_PB_G"){
                 currentPion.prise(pt.x + 1, pt.y + 1);
+=======
+            if (verifPrise.equals("PRISE_PB_G")){
+                taked = currentPion.prise(pt.x + 1, pt.y + 1,pt.x, pt.y);
+>>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
                 currentPion.deplacement(pt.x,pt.y);
-            } else if (verifPrise == "PRISE_PB_D"){
-                currentPion.prise(pt.x - 1, pt.y + 1);
+            } else if (verifPrise.equals("PRISE_PB_D")){
+                taked = currentPion.prise(pt.x - 1, pt.y + 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
-            } else if (verifPrise == "PRISE_PN_G"){
-                currentPion.prise(pt.x + 1, pt.y - 1);
+            } else if (verifPrise.equals("PRISE_PN_G")){
+                taked = currentPion.prise(pt.x + 1, pt.y - 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
-            } else if (verifPrise == "PRISE_PN_D"){
-                currentPion.prise(pt.x - 1, pt.y - 1);
+            } else if (verifPrise.equals("PRISE_PN_D")){
+                taked = currentPion.prise(pt.x - 1, pt.y - 1,pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
-            }else if (verifPrise == "PRISE_D"){
-                currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1));
+            }else if (verifPrise.equals("PRISE_D")){
+                taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1),pt.x, pt.y);
                 currentPion.deplacement(pt.x,pt.y);
                 Piece.pieceTaked.clear();
-            } else if (verifPrise == "VIDE") {
+            }
+            if(verifPrise.equals("PRISE_PB_G") || verifPrise.equals("PRISE_PB_D") || verifPrise.equals("PRISE_PN_G") || verifPrise.equals("PRISE_PN_D")){
+
+            }
+            if (verifPrise.equals("VIDE")) {
                 currentPion.deplacement(pt.x,pt.y);
             }
         }
-        Piece.pieceTaked.clear();
+        System.out.println(taked);
+        if (!taked) {
+            Piece.pieceTaked.clear();
+        }else {
+            swapTurn();
+        }
         repaint();
     }
 
@@ -234,7 +277,7 @@ public class Cellule extends JPanel implements MouseListener {
     }
 
     public static void swapTurn() {
-        if(turn == "B"){
+        if(turn.equals("B")){
             Cellule.turn = "N";
         } else {
             Cellule.turn = "B";

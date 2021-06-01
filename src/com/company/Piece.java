@@ -21,7 +21,7 @@ public class Piece {
         pionCourant.add(new ArrayList<Integer>());
         pionCourant.get(0).add(0, getX());
         pionCourant.get(0).add(1, getY());
-        if(this.couleur == "PB"){
+        if(this.couleur.equals("PB")){
             if(y == 0){
                 Cellule.dameBlanc.add(new ArrayList<Integer>());
                 Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(0, x);
@@ -33,7 +33,7 @@ public class Piece {
             }
             pos=Cellule.pionBlanc.indexOf(pionCourant.get(0));
             Cellule.pionBlanc.remove(pos);
-        }else if (this.couleur== "PN"){
+        }else if (this.couleur.equals("PN")){
             if(y == 9){
                 Cellule.dameNoir.add(new ArrayList<Integer>());
                 Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(0, x);
@@ -45,13 +45,13 @@ public class Piece {
             }
             pos=Cellule.pionNoir.indexOf(pionCourant.get(0));
             Cellule.pionNoir.remove(pos);
-        } else if (this.couleur == "DB") {
+        } else if (this.couleur.equals("DB")) {
             Cellule.dameBlanc.add(new ArrayList<Integer>());
             Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(0, x);
             Cellule.dameBlanc.get(Cellule.dameBlanc.size()-1).add(1, y);
             pos=Cellule.dameBlanc.indexOf(pionCourant.get(0));
             Cellule.dameBlanc.remove(pos);
-        } else if (this.couleur == "DN") {
+        } else if (this.couleur.equals("DN")) {
             Cellule.dameNoir.add(new ArrayList<Integer>());
             Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(0, x);
             Cellule.dameNoir.get(Cellule.dameNoir.size()-1).add(1, y);
@@ -63,42 +63,62 @@ public class Piece {
         Cellule.currentPion = null;
     }
 
+<<<<<<< HEAD
     public void prise(int x, int y){
         //En cas de prise, faire une verif prise
 
         System.out.println("PRISE X : "+x+ " Y : "+ y);
+=======
+    /**
+     *
+     * @param x abscissa of piece witch be taked
+     * @param y ordonne of piece witch be taked
+     * @return if the piece who taken, can take again
+     */
+    public boolean prise(int x, int y, int initX, int initY){
+        //System.out.println("PRISE X : "+x+ " Y : "+ y);
+>>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
         int pos = 0;
         ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
         temp.add(new ArrayList<Integer>());
         temp.get(0).add(0, x);
         temp.get(0).add(1, y);
         String checkCase = Cellule.verifCaseValide(x,y);
-        if(checkCase == "PB"){
+        if(checkCase.equals("PB")){
             pos=Cellule.pionBlanc.indexOf(temp.get(0));
             Cellule.pionBlanc.remove(pos);
-        }else if (checkCase == "PN"){
+        }else if (checkCase.equals("PN")){
             pos=Cellule.pionNoir.indexOf(temp.get(0));
             Cellule.pionNoir.remove(pos);
-        }else if (checkCase == "DB"){
+        }else if (checkCase.equals("DB")){
             pos=Cellule.dameBlanc.indexOf(temp.get(0));
             Cellule.dameBlanc.remove(pos);
-        }else if (checkCase== "DN"){
+        }else if (checkCase.equals("DN")){
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
-    }
+        System.out.println("prise getX : "+initX);
+        System.out.println("prise getY : "+ initY);
+        System.out.println("true or false : "+ ifOneCanTake(getX(), getY(), getCouleur()));
+        if(ifOneCanTake(initX, initY, getCouleur()).equals("prise")){
+            return true;
+        } else {
+            return false;
+        }
 
+    }
     public String verifPrise(int x, int y){
         String valueReturn = "";
-        if(this.couleur == "PB"){
+        if(this.couleur.equals("PB")){
             if(getY() == y + 1 && Math.abs(getX() - x) == 1  ) {
                 valueReturn = "VIDE";
             } else if (getY()== y + 2 || Math.abs(getX()- x) == 2) {
                 // manger à gauche
-                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN") {
+                // il manque la gestion des cases vides
+                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PB_G";
                     //
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN") {
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PB_D";
                 } else {
                     valueReturn = "erreur";
@@ -106,17 +126,16 @@ public class Piece {
             } else {
                 valueReturn = "erreur";
             }
-        } else if (this.couleur == "PN"){
+        } else if (this.couleur.equals("PN")){
             if(getY()== y - 1 && Math.abs(getX() - x) == 1  ) {
                 valueReturn = "VIDE";
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
-                System.out.println("HERE");
+
                 // manger à gauche
-                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB") {
+                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PN_G";
                     // manger à droite
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB") {
-                    System.out.println("HERE2");
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PN_D";
                 } else {
                     valueReturn = "erreur";
@@ -124,7 +143,7 @@ public class Piece {
             } else {
                 valueReturn = "erreur";
             }
-        } else if (this.couleur == "DB" || this.couleur == "DN"){
+        } else if (this.couleur.equals("DB") || this.couleur.equals("DN")){
             // le pion se trouve sur la diagonale
             if(Math.abs(getY() - y) == Math.abs(getX() - x)){
                 String caseSelected = "erreur";
@@ -192,6 +211,70 @@ public class Piece {
         }
         colorPieceTaked = "";
         return valueReturn;
+    }
+    public String ifCanTake(int X, int Y, String color) {
+        ArrayList<ArrayList<Integer>> arrayPiece = new ArrayList<ArrayList<Integer> >();
+        String error = "erreur";
+        switch (color) {
+            case "PB":
+                arrayPiece = Cellule.pionBlanc;
+                //Y -= 2;
+                break;
+            case "PN":
+                arrayPiece = Cellule.pionNoir;
+                //Y += 2;
+                break;
+        }
+        for (int i = 0; i < arrayPiece.size(); i++){
+            setX(arrayPiece.get(i).get(0));
+            setY(arrayPiece.get(i).get(1));
+                if (color.equals("PB")){
+                    error = verifPrise(getX() + 2,getY() - 2);
+                }else {
+                    error = verifPrise(getX() + 2,getY() + 2);
+                }
+                //System.out.println("error1 :" + error);
+                //System.out.println("X :" + getX());
+                //System.out.println("Y :" + getY());
+                if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
+                    return "prise";
+                }
+                if (color.equals("PB")){
+                    error = verifPrise(getX() - 2,getY() - 2);
+                }else {
+                    error = verifPrise(getX() - 2,getY() + 2);
+                }
+                //error = verifPrise(getX() - 2,getY());
+                //System.out.println("error2 :" + error);
+                if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
+                    return "prise";
+                }
+
+        }
+        return error;
+    }
+    public String ifOneCanTake(int X, int Y, String color){
+        String error = "erreur";
+        System.out.println("Debug color : "+color);
+        if (color.equals("PB")){
+            error = verifPrise(X + 2,Y - 2);
+        }else {
+            error = verifPrise(X + 2,Y + 2);
+        }
+        System.out.println("Debug Erreur1 : "+error);
+        if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
+            return "prise";
+        }
+        if (color.equals("PB")){
+            error = verifPrise(X - 2,Y - 2);
+        }else {
+            error = verifPrise(X - 2,Y + 2);
+        }
+        System.out.println("Debug Erreur2 : "+error);
+        if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
+            return "prise";
+        }
+        return error;
     }
 
     public int getX() {
