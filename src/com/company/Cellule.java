@@ -60,18 +60,6 @@ public class Cellule extends JPanel implements MouseListener {
             Cellule.index = 0;
         }
         try {
-<<<<<<< HEAD
-            PB = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10.png"));
-            PBSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionBlanc10Select.png"));
-            PN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10.png"));
-            PNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\pionNoir10Select.png"));
-            DB = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameBlanche10.png"));
-            DBSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameBlanche10Select.png"));
-            DN = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10.png"));
-            DNSELECT = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\dameNoire10Select.png"));
-            VIDE = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseVide10.png"));
-            SHOW = ImageIO.read(new File("D:\\DEV_Projet_java\\jeuxDame\\img\\caseShown.png"));
-=======
             PB = ImageIO.read(new File("img\\pionBlanc10.png"));
             PBSELECT = ImageIO.read(new File("img\\pionBlanc10Select.png"));
             PN = ImageIO.read(new File("img\\pionNoir10.png"));
@@ -81,7 +69,6 @@ public class Cellule extends JPanel implements MouseListener {
             DN = ImageIO.read(new File("img\\dameNoire10.png"));
             DNSELECT = ImageIO.read(new File("img\\dameNoire10Select.png"));
             VIDE = ImageIO.read(new File("img\\caseVide10.png"));
->>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -154,14 +141,7 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-<<<<<<< HEAD
-        // boucler sur toutes les piéces du joueur
-        // faire une verif prise à droite et à gauche
-        // enregistrer dans un tableau les pions pouvant manger
-        // la suite est évidente
-=======
         boolean taked = false;
->>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
@@ -169,7 +149,6 @@ public class Cellule extends JPanel implements MouseListener {
         String caseVerif = verifCaseValide(pt.x,pt.y);
         if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
-<<<<<<< HEAD
                 switch(caseVerif) {
                     case "PB":
                         // code block
@@ -190,9 +169,6 @@ public class Cellule extends JPanel implements MouseListener {
                         // code block
                 }
 
-=======
-                // verify thats any pion can eat this turn
->>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
                 if(!errorOne.equals("prise")){
@@ -212,13 +188,8 @@ public class Cellule extends JPanel implements MouseListener {
             }
         } else if(caseVerif.equals("VIDE") && currentPion != null){
           String verifPrise =  currentPion.verifPrise(pt.x, pt.y);
-<<<<<<< HEAD
-            if (verifPrise == "PRISE_PB_G"){
-                currentPion.prise(pt.x + 1, pt.y + 1);
-=======
             if (verifPrise.equals("PRISE_PB_G")){
                 taked = currentPion.prise(pt.x + 1, pt.y + 1,pt.x, pt.y);
->>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
                 currentPion.deplacement(pt.x,pt.y);
             } else if (verifPrise.equals("PRISE_PB_D")){
                 taked = currentPion.prise(pt.x - 1, pt.y + 1,pt.x, pt.y);

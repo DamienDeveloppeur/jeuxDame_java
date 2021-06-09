@@ -63,12 +63,6 @@ public class Piece {
         Cellule.currentPion = null;
     }
 
-<<<<<<< HEAD
-    public void prise(int x, int y){
-        //En cas de prise, faire une verif prise
-
-        System.out.println("PRISE X : "+x+ " Y : "+ y);
-=======
     /**
      *
      * @param x abscissa of piece witch be taked
@@ -77,7 +71,6 @@ public class Piece {
      */
     public boolean prise(int x, int y, int initX, int initY){
         //System.out.println("PRISE X : "+x+ " Y : "+ y);
->>>>>>> 08fe51a20224eb355ca6827d424b62a52890b253
         int pos = 0;
         ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
         temp.add(new ArrayList<Integer>());
