@@ -15,6 +15,10 @@ public class Piece {
         this.couleur = couleur;
     }
 
+    /**
+     * @param x arrival abscisse of the piece
+     * @param y arrival ordonne of the piece
+     */
     public void deplacement(int x, int y) {
         int pos = 0;
         ArrayList<ArrayList<Integer>> pionCourant = new ArrayList<ArrayList<Integer> >();
@@ -111,7 +115,6 @@ public class Piece {
             return false;
         }
     }
-
     /**
      * Check if a piece is taken when a piece moove
      * @param x arrival square to test

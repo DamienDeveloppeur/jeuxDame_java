@@ -8,14 +8,9 @@ public class plateau extends JFrame  {
     private JPanel blackPan=new JPanel();
     private JPanel redPan=new JPanel();
     public JFrame frame = new JFrame();;
-
     public plateau(){
-        Dimension ech = new Dimension();
         Cellule Cellule = new Cellule(frame);
         Cellule.validate();
-        //frame.add(Cellule);
-       // frame.getContentPane().validate();
-        //frame.getContentPane().repaint();
         this.setTitle("Jeux de dame");
         this.setSize(1000, 1000);
         this.setLocationRelativeTo(null);
@@ -32,7 +27,6 @@ public class plateau extends JFrame  {
         this.setContentPane(Cellule);
         SwingUtilities.updateComponentTreeUI(frame);
         this.setVisible(true);
-        System.out.println("plateau");
     }
 
 }
