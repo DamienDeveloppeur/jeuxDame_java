@@ -152,7 +152,6 @@ public class Cellule extends JPanel implements MouseListener {
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
                 if(!errorOne.equals("prise")){
                     String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
-                    //System.out.println("Error : " + error);
                     if(!(error.equals("erreur") || error.equals("VIDE") )){
                         currentPion = null;
                     } else {
@@ -194,8 +193,9 @@ public class Cellule extends JPanel implements MouseListener {
         System.out.println(taked);
         if (!taked) {
             Piece.pieceTaked.clear();
-        }else {
             swapTurn();
+        }else {
+
         }
         repaint();
     }
