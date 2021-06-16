@@ -14,7 +14,10 @@ public class Piece {
         this.y = y;
         this.couleur = couleur;
     }
-
+    /**
+     * @param x arrival abscisse of the piece
+     * @param y arrival ordonne of the piece
+     */
     public void deplacement(int x, int y) {
         int pos = 0;
         ArrayList<ArrayList<Integer>> pionCourant = new ArrayList<ArrayList<Integer> >();
@@ -67,6 +70,8 @@ public class Piece {
      *
      * @param x abscissa of piece witch be taked
      * @param y ordonne of piece witch be taked
+     * @param initX abscisse initial of square witch piece will moove
+     * @param initY ordonne initial of square witch piece will moove
      * @return if the piece who taken, can take again
      */
     public boolean prise(int x, int y, int initX, int initY){
@@ -92,14 +97,29 @@ public class Piece {
         }
         System.out.println("prise getX : "+initX);
         System.out.println("prise getY : "+ initY);
-        System.out.println("true or false : "+ ifOneCanTake(getX(), getY(), getCouleur()));
+
+        int tempX = getX();
+        int tempY = getY();
+
+        setX(initX);
+        setY(initY);
+
         if(ifOneCanTake(initX, initY, getCouleur()).equals("prise")){
+            setX(tempX);
+            setY(tempY);
             return true;
         } else {
+            setX(tempX);
+            setY(tempY);
             return false;
         }
-
     }
+    /**
+     * Check if a piece is taken when a piece moove
+     * @param x arrival square to test
+     * @param y arrival square to test
+     * @return if a piece is taked and witch piece exactly
+     */
     public String verifPrise(int x, int y){
         String valueReturn = "";
         if(this.couleur.equals("PB")){
@@ -205,9 +225,19 @@ public class Piece {
         colorPieceTaked = "";
         return valueReturn;
     }
+
+    /**
+     *
+     * @param X arrival square to test
+     * @param Y arrival square to test
+     * @param color color of piece to test
+     * @return error if no piece can be taked, prise in contrast
+     */
     public String ifCanTake(int X, int Y, String color) {
         ArrayList<ArrayList<Integer>> arrayPiece = new ArrayList<ArrayList<Integer> >();
         String error = "erreur";
+        int tempX = getX();
+        int tempY = getY();
         switch (color) {
             case "PB":
                 arrayPiece = Cellule.pionBlanc;
@@ -242,13 +272,15 @@ public class Piece {
                 if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
                     return "prise";
                 }
-
         }
+        setX(tempX);
+        setY(tempY);
         return error;
     }
+
     public String ifOneCanTake(int X, int Y, String color){
         String error = "erreur";
-        System.out.println("Debug color : "+color);
+        System.out.println("Debug x et y : "+X + " " + Y);
         if (color.equals("PB")){
             error = verifPrise(X + 2,Y - 2);
         }else {
