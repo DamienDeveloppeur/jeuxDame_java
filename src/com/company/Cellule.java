@@ -74,7 +74,7 @@ public class Cellule extends JPanel implements MouseListener {
         }
         //let's draw square
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
-        // on colore les cases
+        // add red case
         if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
                 String value = verifCaseValide(x,y);
