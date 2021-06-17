@@ -26,6 +26,7 @@ public class Cellule extends JPanel implements MouseListener {
     static Piece currentPion;
 
     public Cellule(){
+        addMouseListener(this);
     }
 
     public void paintComponent(Graphics g) {
