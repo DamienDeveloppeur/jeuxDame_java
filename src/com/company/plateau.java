@@ -4,11 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 
 public class plateau extends JFrame  {
-    private JPanel pan=new JPanel();
-    private JPanel blackPan=new JPanel();
-    private JPanel redPan=new JPanel();
+
     public JFrame frame = new JFrame();;
     public plateau(){
+        JFrame frame = new JFrame();
+        frame.setSize(500,500);
+        JButton b1 = new JButton("Play agains't bot");
+        JButton b2 = new JButton("Play agains't human");
+        b1.setSize(100,100);
+        b1.setVisible(true);
+        frame.add(b1);
+
+        b2.setSize(100,100);
+        b2.setVisible(true);
+        frame.add(b2);
+
+        frame.setVisible(true);
+
+
+/*
         Cellule Cellule = new Cellule(frame);
         Cellule.validate();
         this.setTitle("Jeux de dame");
@@ -27,6 +41,8 @@ public class plateau extends JFrame  {
         this.setContentPane(Cellule);
         SwingUtilities.updateComponentTreeUI(frame);
         this.setVisible(true);
+        */
     }
 
 }
+
