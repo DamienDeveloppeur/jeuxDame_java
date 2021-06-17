@@ -20,17 +20,12 @@ public class Cellule extends JPanel implements MouseListener {
     public static ArrayList<ArrayList<Integer>> dameNoir = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> caseValide = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> caseShow = new ArrayList<ArrayList<Integer> >();
-    static int index = 0;
-    static int pionBlancIndex = 0;
-    static int pionNoirIndex = 0;
+    static int pionBlancIndex = 0, pionNoirIndex = 0, index = 0;
     static String turn = "B";
     static boolean initialized;
-    public JFrame frame;
     static Piece currentPion;
 
-    public Cellule(JFrame frame){
-        addMouseListener(this);
-        this.frame = frame;
+    public Cellule(){
     }
 
     public void paintComponent(Graphics g) {
@@ -38,7 +33,7 @@ public class Cellule extends JPanel implements MouseListener {
         calculerEchelle();
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
-                grille[x][y] = new Cellule(this.frame);
+                grille[x][y] = new Cellule();
                 grille[x][y].dessineToi(g,x,y, ech);
             }
         }
@@ -145,30 +140,9 @@ public class Cellule extends JPanel implements MouseListener {
         Point pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
-        System.out.println("MOUSE CLICK X :"+pt.x + " Y :"+pt.y);
         String caseVerif = verifCaseValide(pt.x,pt.y);
         if(caseVerif.equals("PB")  || caseVerif.equals("PN") || caseVerif.equals("DB") || caseVerif.equals("DN")){
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
-                switch(caseVerif) {
-                    case "PB":
-                        // code block
-                        for(int i = 0 ; i < pionBlanc.size(); i++) {
-
-                        }
-                        break;
-                    case "PN":
-                        // code block
-                        break;
-                    case "DB":
-                        // code block
-                        break;
-                    case "DN":
-                        // code block
-                        break;
-                    default:
-                        // code block
-                }
-
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
                 if(!errorOne.equals("prise")){
