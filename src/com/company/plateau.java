@@ -40,6 +40,25 @@ public class plateau extends JFrame  {
                 colorChoice.setLayout(null);
                 colorChoice.setVisible(true);
 
+                bt_white.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        Human Human = new Human();
+                        f.setVisible(false);
+                        frame.setVisible(true);
+                        frame.setContentPane(Human);
+                        SwingUtilities.updateComponentTreeUI(frame);
+                    }
+                });
+
+                bt_Black.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        Human Human = new Human();
+                        f.setVisible(false);
+                        frame.setVisible(true);
+                        frame.setContentPane(Human);
+                        SwingUtilities.updateComponentTreeUI(frame);
+                    }
+                });
 
                 Bot Bot = new Bot();
                 f.setVisible(false);
@@ -48,6 +67,10 @@ public class plateau extends JFrame  {
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
+
+
+
+
 
 
         frame.setTitle("Jeux de dame");
