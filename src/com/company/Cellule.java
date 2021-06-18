@@ -229,6 +229,9 @@ public class Cellule extends JPanel implements MouseListener {
             Cellule.turn = "B";
         }
     }
+    public static void setTurn(String turn) {
+        Cellule.turn = turn;
+    }
 
     @Override
     public void mousePressed(MouseEvent e) { }

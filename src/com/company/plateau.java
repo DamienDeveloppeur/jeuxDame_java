@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class plateau extends JFrame  {
     public JFrame frame = new JFrame();;
     public plateau(){
+        // first frame let the choice to the player
         JFrame f=new JFrame("Choix mode de jeu");
         JButton bt_human=new JButton("Play agains't human ?");
         JButton bt_bot=new JButton("Play agains't bot ?");
@@ -19,6 +20,12 @@ public class plateau extends JFrame  {
         f.setLayout(null);
         f.setVisible(true);
 
+        frame.setTitle("Jeux de dame");
+        frame.setSize(1000, 1000);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // if the player choose against human, open the good frame
         bt_human.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 Human Human = new Human();
@@ -28,55 +35,44 @@ public class plateau extends JFrame  {
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
-
+        // if player choose agains't bot
         bt_bot.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
+                f.setVisible(false);
+
                 JFrame colorChoice =new JFrame("Choix de la couleur");
                 JButton bt_white =new JButton("Black");
-                JButton bt_Black =new JButton("White");
-                bt_white.setBounds(50,100,200,30);
+                JButton bt_black =new JButton("White");
+                bt_white.setBounds(50,10,200,30);
+                bt_black.setBounds(50,100,200,30);
                 colorChoice.add(bt_white);
+                colorChoice.add(bt_black);
                 colorChoice.setSize(300,200);
                 colorChoice.setLayout(null);
                 colorChoice.setVisible(true);
 
                 bt_white.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
-                        Human Human = new Human();
+                        Bot Bot = new Bot("b");
                         f.setVisible(false);
                         frame.setVisible(true);
-                        frame.setContentPane(Human);
+                        frame.setContentPane(Bot);
                         SwingUtilities.updateComponentTreeUI(frame);
                     }
                 });
 
-                bt_Black.addActionListener(new ActionListener(){
+                bt_black.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
-                        Human Human = new Human();
+                        Bot Bot = new Bot("n");
                         f.setVisible(false);
                         frame.setVisible(true);
-                        frame.setContentPane(Human);
+                        frame.setContentPane(Bot);
                         SwingUtilities.updateComponentTreeUI(frame);
                     }
                 });
-
-                Bot Bot = new Bot();
-                f.setVisible(false);
-                frame.setVisible(true);
-                frame.setContentPane(Bot);
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
-
-
-
-
-
-
-        frame.setTitle("Jeux de dame");
-        frame.setSize(1000, 1000);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
 
