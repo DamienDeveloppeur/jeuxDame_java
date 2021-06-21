@@ -16,22 +16,24 @@ public class Bot extends Cellule implements MouseListener {
         System.out.println("color : "+ color);
         if(color.equals("N")){
             this.colorBot = "B";
-            //Bot.mooveBot();
         }else {
             this.colorBot = "N";
         }
     }
 
+    /**
+     * Main method for moove the bot
+     */
     public static void mooveBot(){
-        int mooveX;
         int mooveY;
+        String validCase;
         String actualColor = "P"+ getTurn();
         boolean taked = false;
+        String verifPrise;
         ArrayList<ArrayList<Integer>> arrayPieces = new ArrayList<ArrayList<Integer> >();
-        if(getTurn().equals("N")) {
+        if(colorBot.equals("N")) {
             arrayPieces = Cellule.pionNoir;
-
-        } else if (getTurn().equals("B")){
+        } else if (colorBot.equals("B")){
             arrayPieces = Cellule.pionBlanc;
         }
         int max = arrayPieces.size() - 1;
@@ -42,19 +44,21 @@ public class Bot extends Cellule implements MouseListener {
         System.out.println("CASEVERIF " + caseVerif);
         if(caseVerif.equals("erreur") || caseVerif.equals("vide")) {
             for (int i = arrayPieces.size() - 1; i > 1; i--){
-                System.out.println("iteration : "+i);
                 currentPion =  new Piece(arrayPieces.get(i).get(0), arrayPieces.get(i).get(1),actualColor);
-                System.out.println("COORDONNE  : "+arrayPieces.get(i).get(0) + " " + arrayPieces.get(i).get(1));
-                String validCase = verifCaseValide(arrayPieces.get(i).get(0) - 1, arrayPieces.get(i).get(1) + 1);
+                if(colorBot.equals("N")) {
+                    mooveY = getMooveBlackY(arrayPieces.get(i).get(1));
+                } else {
+                    mooveY = getMooveWhiteY(arrayPieces.get(i).get(1));
+                }
+                validCase = verifCaseValide(arrayPieces.get(i).get(0) - 1, mooveY);
                 if(validCase.equals("VIDE")) {
-                    String verifPrise = currentPion.verifPrise(arrayPieces.get(i).get(0) - 1, arrayPieces.get(i).get(1) + 1);
+                    verifPrise = currentPion.verifPrise(arrayPieces.get(i).get(0) - 1, mooveY);
                     System.out.println("verifPrise : "+verifPrise);
                     if (verifPrise.equals("VIDE")) {
-                        currentPion.deplacement(arrayPieces.get(i).get(0) - 1,arrayPieces.get(i).get(1) + 1);
+                        currentPion.deplacement(arrayPieces.get(i).get(0) - 1,mooveY);
                         break;
                     }
                 }
-
             }
         }else {
             String tempX = caseVerif.substring(0,1);
@@ -84,14 +88,19 @@ public class Bot extends Cellule implements MouseListener {
             }
             if (taked) {
                 Piece.pieceTaked.clear();
-                //swapTurn(false);
+                swapTurn(true);
             }
         }
     }
-
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public static String verifPriseBot(int x,int y){
         String verifPrise = "";
-        if(currentPion.getCouleur().equals("PN")){
+        if(colorBot.equals("N")){
             verifPrise =  currentPion.verifPrise(x + 2, y + 2);
             if(!(verifPrise.equals("erreur") || verifPrise.equals("vide"))) {
                 return verifPrise;
@@ -107,5 +116,22 @@ public class Bot extends Cellule implements MouseListener {
             }
         }
         return verifPrise;
+    }
+
+    public static int getMooveWhiteY(int y){
+        y -= 1;
+        return y;
+    }
+    public int getTakeWhiteY(int y){
+        y -= 2;
+        return y;
+    }
+    public static int getMooveBlackY(int y){
+        y += 1;
+        return y;
+    }
+    public int getTakeBlackY(int y){
+        y += 2;
+        return y;
     }
 }

@@ -23,7 +23,7 @@ public class Cellule extends JPanel implements MouseListener {
     public static ArrayList<ArrayList<Integer>> caseShow = new ArrayList<ArrayList<Integer> >();
     static int pionBlancIndex = 0, pionNoirIndex = 0, index = 0;
     static String turn = "B";
-    static boolean initialized;
+    static boolean initialized, botMooved;
     static Piece currentPion;
     public static Bot Bot;
 
@@ -102,6 +102,10 @@ public class Cellule extends JPanel implements MouseListener {
                     }
                 } else if(value.equals("VIDE")) {
                     g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                }
+                 if(Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
+                    botMooved = true;
+                    Bot.mooveBot();
                 }
             }else {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
