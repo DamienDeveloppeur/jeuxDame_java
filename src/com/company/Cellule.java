@@ -14,6 +14,7 @@ public class Cellule extends JPanel implements MouseListener {
     Cellule[][] grille = new Cellule [10][10];
     Dimension ech = new Dimension();
     // Array list des pions et des cases
+    // first number : X
     public static ArrayList<ArrayList<Integer>> pionBlanc = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> pionNoir = new ArrayList<ArrayList<Integer> >();
     public static ArrayList<ArrayList<Integer>> dameBlanc = new ArrayList<ArrayList<Integer> >();
@@ -24,6 +25,7 @@ public class Cellule extends JPanel implements MouseListener {
     static String turn = "B";
     static boolean initialized;
     static Piece currentPion;
+    public static Bot Bot;
 
     public Cellule(){
         addMouseListener(this);
@@ -137,6 +139,9 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (Bot.colorBot != "" && Bot.colorBot == getTurn()) {
+            return;
+        }
         boolean taked = false;
         Point pt = e.getPoint();
         pt.x/=ech.width;
@@ -147,8 +152,8 @@ public class Cellule extends JPanel implements MouseListener {
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
                 if(!errorOne.equals("prise")){
-                    String error = currentPion.ifCanTake(pt.x, pt.y,caseVerif);
-                    if(!(error.equals("erreur") || error.equals("VIDE") )){
+                    String error = currentPion.ifCanTake(caseVerif);
+                    if(!(error.equals("erreur") || error.equals("VIDE"))){
                         currentPion = null;
                     } else {
                         currentPion = null;
@@ -179,23 +184,22 @@ public class Cellule extends JPanel implements MouseListener {
                 currentPion.deplacement(pt.x,pt.y);
                 Piece.pieceTaked.clear();
             }
-            if(verifPrise.equals("PRISE_PB_G") || verifPrise.equals("PRISE_PB_D") || verifPrise.equals("PRISE_PN_G") || verifPrise.equals("PRISE_PN_D")){
-
-            }
             if (verifPrise.equals("VIDE")) {
                 currentPion.deplacement(pt.x,pt.y);
             }
-        }
-        System.out.println(taked);
-        if (!taked) {
-            Piece.pieceTaked.clear();
-            swapTurn();
-        }else {
-
+            if (taked) {
+                Piece.pieceTaked.clear();
+                swapTurn(false);
+            }
         }
         repaint();
     }
-
+    /**
+     * Verify what does this square contain
+     * @param x ordonne of the square to test
+     * @param y abscisse of square to test
+     * @return The type of square (white/black pion/queen, void or error)
+     */
     static String verifCaseValide(int x, int y){
         String valueReturn = "";
         ArrayList<ArrayList<Integer>> verif = new ArrayList<ArrayList<Integer> >();
@@ -222,12 +226,20 @@ public class Cellule extends JPanel implements MouseListener {
         return turn;
     }
 
-    public static void swapTurn() {
+    /**
+     *
+     * @param ifMooveBot
+     */
+    public static void swapTurn(boolean ifMooveBot) {
         if(turn.equals("B")){
             Cellule.turn = "N";
         } else {
             Cellule.turn = "B";
         }
+        if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()){
+            Bot.mooveBot();
+        }
+        
     }
     public static void setTurn(String turn) {
         Cellule.turn = turn;

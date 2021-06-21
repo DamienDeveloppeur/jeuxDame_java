@@ -20,12 +20,13 @@ public class plateau extends JFrame  {
         f.setLayout(null);
         f.setVisible(true);
 
+        // prepare the main frame
         frame.setTitle("Jeux de dame");
         frame.setSize(1000, 1000);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // if the player choose against human, open the good frame
+        // if the player choose against human, open the regular jframe
         bt_human.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 Human Human = new Human();
@@ -35,14 +36,15 @@ public class plateau extends JFrame  {
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
+
         // if player choose agains't bot
         bt_bot.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 f.setVisible(false);
 
                 JFrame colorChoice =new JFrame("Choix de la couleur");
-                JButton bt_white =new JButton("Black");
-                JButton bt_black =new JButton("White");
+                JButton bt_white =new JButton("White");
+                JButton bt_black =new JButton("Black");
                 bt_white.setBounds(50,10,200,30);
                 bt_black.setBounds(50,100,200,30);
                 colorChoice.add(bt_white);
@@ -53,8 +55,8 @@ public class plateau extends JFrame  {
 
                 bt_white.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
-                        Bot Bot = new Bot("b");
-                        f.setVisible(false);
+                        Bot Bot = new Bot("B");
+                        colorChoice.setVisible(false);
                         frame.setVisible(true);
                         frame.setContentPane(Bot);
                         SwingUtilities.updateComponentTreeUI(frame);
@@ -63,8 +65,8 @@ public class plateau extends JFrame  {
 
                 bt_black.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
-                        Bot Bot = new Bot("n");
-                        f.setVisible(false);
+                        Bot Bot = new Bot("N");
+                        colorChoice.setVisible(false);
                         frame.setVisible(true);
                         frame.setContentPane(Bot);
                         SwingUtilities.updateComponentTreeUI(frame);

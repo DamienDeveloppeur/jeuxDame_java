@@ -61,7 +61,7 @@ public class Piece {
             pos=Cellule.dameNoir.indexOf(pionCourant.get(0));
             Cellule.dameNoir.remove(pos);
         }
-        Cellule.swapTurn();
+        Cellule.swapTurn(true);
         setCouleur("");
         Cellule.currentPion = null;
     }
@@ -75,7 +75,6 @@ public class Piece {
      * @return if the piece who taken, can take again
      */
     public boolean prise(int x, int y, int initX, int initY){
-        //System.out.println("PRISE X : "+x+ " Y : "+ y);
         int pos = 0;
         ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer> >();
         temp.add(new ArrayList<Integer>());
@@ -95,8 +94,6 @@ public class Piece {
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
-        System.out.println("prise getX : "+initX);
-        System.out.println("prise getY : "+ initY);
 
         int tempX = getX();
         int tempY = getY();
@@ -140,10 +137,9 @@ public class Piece {
                 valueReturn = "erreur";
             }
         } else if (this.couleur.equals("PN")){
-            if(getY()== y - 1 && Math.abs(getX() - x) == 1  ) {
+            if(getY()== y - 1 && Math.abs(getX() - x) == 1) {
                 valueReturn = "VIDE";
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
-
                 // manger à gauche
                 if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
                     valueReturn = "PRISE_PN_G";
@@ -163,7 +159,6 @@ public class Piece {
                 int tempX = 0;
                 int tempY = 0;
 
-                System.out.println("math abs" + Math.abs(getY() - y));
                 for (int i=1; i<Math.abs(getY() - y); i++) {
                     caseSelected = "erreur";
                     // haut - gauche
@@ -202,9 +197,7 @@ public class Piece {
                         pieceTaked.get(0).add(1, tempY);
                         colorPieceTaked = caseSelected;
                     }
-                    System.out.println("Size piece taked : " + pieceTaked.size());
                 }
-                //System.out.println("Piece taked size : " + pieceTaked.size());
                 if(pieceTaked.size() > 1) {
                     valueReturn = "erreur";
                 } else if(this.couleur == "DB" && (colorPieceTaked == "PN" || colorPieceTaked == "DN") && pieceTaked.size() == 1){
@@ -228,16 +221,15 @@ public class Piece {
 
     /**
      *
-     * @param X arrival square to test
-     * @param Y arrival square to test
-     * @param color color of piece to test
+     * @param color color of array list to test (white or black)
      * @return error if no piece can be taked, prise in contrast
      */
-    public String ifCanTake(int X, int Y, String color) {
+    public String ifCanTake(String color) {
         ArrayList<ArrayList<Integer>> arrayPiece = new ArrayList<ArrayList<Integer> >();
         String error = "erreur";
         int tempX = getX();
         int tempY = getY();
+        String vallueReturn = "";
         switch (color) {
             case "PB":
                 arrayPiece = Cellule.pionBlanc;
@@ -256,21 +248,18 @@ public class Piece {
                 }else {
                     error = verifPrise(getX() + 2,getY() + 2);
                 }
-                //System.out.println("error1 :" + error);
-                //System.out.println("X :" + getX());
-                //System.out.println("Y :" + getY());
                 if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
-                    return "prise";
+                    vallueReturn = ""+ arrayPiece.get(i).get(0) + arrayPiece.get(i).get(1);
+                    return vallueReturn;
                 }
                 if (color.equals("PB")){
                     error = verifPrise(getX() - 2,getY() - 2);
                 }else {
                     error = verifPrise(getX() - 2,getY() + 2);
                 }
-                //error = verifPrise(getX() - 2,getY());
-                //System.out.println("error2 :" + error);
                 if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
-                    return "prise";
+                    vallueReturn = ""+ arrayPiece.get(i).get(0) + arrayPiece.get(i).get(1);
+                    return vallueReturn;
                 }
         }
         setX(tempX);
@@ -280,13 +269,11 @@ public class Piece {
 
     public String ifOneCanTake(int X, int Y, String color){
         String error = "erreur";
-        System.out.println("Debug x et y : "+X + " " + Y);
         if (color.equals("PB")){
             error = verifPrise(X + 2,Y - 2);
         }else {
             error = verifPrise(X + 2,Y + 2);
         }
-        System.out.println("Debug Erreur1 : "+error);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";
         }
@@ -295,7 +282,6 @@ public class Piece {
         }else {
             error = verifPrise(X - 2,Y + 2);
         }
-        System.out.println("Debug Erreur2 : "+error);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
             return "prise";
         }
