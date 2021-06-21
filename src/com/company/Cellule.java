@@ -103,7 +103,7 @@ public class Cellule extends JPanel implements MouseListener {
                 } else if(value.equals("VIDE")) {
                     g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
-                 if(Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
+                 if(Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
                     botMooved = true;
                     Bot.mooveBot();
                 }
@@ -143,9 +143,9 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (Bot.colorBot != "" && Bot.colorBot == getTurn()) {
-            return;
-        }
+//        if (Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot == getTurn()) {
+//            return;
+//        }
         boolean taked = false;
         Point pt = e.getPoint();
         pt.x/=ech.width;
@@ -155,7 +155,8 @@ public class Cellule extends JPanel implements MouseListener {
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
-                if(!errorOne.equals("prise")){
+                System.out.println(errorOne);
+                if(errorOne.equals("erreur") || errorOne.equals("VIDE")){
                     String error = currentPion.ifCanTake(caseVerif);
                     if(!(error.equals("erreur") || error.equals("VIDE"))){
                         currentPion = null;
@@ -240,7 +241,7 @@ public class Cellule extends JPanel implements MouseListener {
         } else {
             Cellule.turn = "B";
         }
-        if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()){
+        if (Bot.colorBot != null && Bot.colorBot != "" &&  ifMooveBot && Bot.colorBot == getTurn()){
             Bot.mooveBot();
         }
         
@@ -248,7 +249,22 @@ public class Cellule extends JPanel implements MouseListener {
     public static void setTurn(String turn) {
         Cellule.turn = turn;
     }
-
+    public static int getMooveWhiteY(int y){
+        y -= 1;
+        return y;
+    }
+    public static int getTakeWhiteY(int y){
+        y -= 2;
+        return y;
+    }
+    public static int getMooveBlackY(int y){
+        y += 1;
+        return y;
+    }
+    public static int getTakeBlackY(int y){
+        y += 2;
+        return y;
+    }
     @Override
     public void mousePressed(MouseEvent e) { }
     @Override

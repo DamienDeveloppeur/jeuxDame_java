@@ -8,6 +8,7 @@ public class Piece {
     protected int y;
     static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<ArrayList<Integer>>();
     protected String colorPieceTaked;
+    public int counter;
 
     public Piece(int x, int y, String couleur){
         this.x = x;
@@ -229,7 +230,7 @@ public class Piece {
         String error = "erreur";
         int tempX = getX();
         int tempY = getY();
-        String vallueReturn = "";
+        String vallueReturn;
         switch (color) {
             case "PB":
                 arrayPiece = Cellule.pionBlanc;
@@ -267,25 +268,37 @@ public class Piece {
         return error;
     }
 
+    /**
+     *
+     * @param X
+     * @param Y
+     * @param color "PB/PN"
+     * @return
+     */
     public String ifOneCanTake(int X, int Y, String color){
+        int mooveY;
+        String vallueReturn;
         String error = "erreur";
-        if (color.equals("PB")){
-            error = verifPrise(X + 2,Y - 2);
-        }else {
-            error = verifPrise(X + 2,Y + 2);
+        if(color.substring(1,2).equals("N")) {
+            mooveY = Cellule.getMooveBlackY(Y);
+        } else {
+            mooveY = Cellule.getTakeWhiteY(Y);
         }
+        error = verifPrise(X + 2,mooveY);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
-            return "prise";
+            vallueReturn = "" + X+Y;
+            return vallueReturn;
         }
-        if (color.equals("PB")){
-            error = verifPrise(X - 2,Y - 2);
-        }else {
-            error = verifPrise(X - 2,Y + 2);
-        }
+        error = verifPrise(X - 2,mooveY);
         if((error.equals("PRISE_PB_G") || error.equals("PRISE_PB_D") || error.equals("PRISE_PN_G") || error.equals("PRISE_PN_D"))){
-            return "prise";
+            vallueReturn = "" + X+Y;
+            return vallueReturn;
         }
         return error;
+    }
+
+    public String ifOneCantBeTaked(){
+        return "";
     }
 
     public int getX() {
