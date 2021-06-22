@@ -206,7 +206,7 @@ public class Cellule extends JPanel implements MouseListener {
      * @return The type of square (white/black pion/queen, void or error)
      */
     static String verifCaseValide(int x, int y){
-        String valueReturn = "";
+        String valueReturn;
         ArrayList<ArrayList<Integer>> verif = new ArrayList<ArrayList<Integer> >();
         verif.add(new ArrayList<Integer>());
         verif.get(0).add(0, x);

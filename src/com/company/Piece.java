@@ -8,7 +8,7 @@ public class Piece {
     protected int y;
     static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<ArrayList<Integer>>();
     protected String colorPieceTaked;
-    public int counter;
+    public int counter = 0;
 
     public Piece(int x, int y, String couleur){
         this.x = x;
@@ -277,10 +277,10 @@ public class Piece {
      */
     public String ifOneCanTake(int X, int Y, String color){
         int mooveY;
-        String vallueReturn;
+        String vallueReturn = "";
         String error = "erreur";
         if(color.substring(1,2).equals("N")) {
-            mooveY = Cellule.getMooveBlackY(Y);
+            mooveY = Cellule.getTakeBlackY(Y);
         } else {
             mooveY = Cellule.getTakeWhiteY(Y);
         }

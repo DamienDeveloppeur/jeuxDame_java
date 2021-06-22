@@ -24,8 +24,9 @@ public class Bot extends Cellule implements MouseListener {
      * Main method for moove the bot
      */
     public static void mooveBot(){
-        int mooveY;
-        int maxValue = -15;
+        int mooveY = 0;
+        int mooveYFinal = 0;
+        int maxValue = -1000;
         int pionToMooveX = 0,pionToMooveY = 0;
         String validCase;
         String actualColor = "P"+ getTurn();
@@ -37,36 +38,40 @@ public class Bot extends Cellule implements MouseListener {
         } else if (colorBot.equals("B")){
             arrayPieces = Cellule.pionBlanc;
         }
-        for (int i = arrayPieces.size() - 1; i > 1; i--){
+        for (int i = 0; i < arrayPieces.size(); i++){
             currentPion = new Piece(arrayPieces.get(i).get(0), arrayPieces.get(i).get(1),actualColor);
             String ifOneCanTake = currentPion.ifOneCanTake(arrayPieces.get(i).get(0),arrayPieces.get(i).get(1),actualColor);
             if(ifOneCanTake.equals("erreur") || ifOneCanTake.equals("VIDE")) {
-                // systéme à point
-                // shared
+                // point system
                 if (arrayPieces.get(i).get(0) == 0) {
                     currentPion.counter -= 5;
                 }else if (arrayPieces.get(i).get(0) == 9) {
                     currentPion.counter -= 5;
                 }
                 if(colorBot.equals("N")) {
-                    pionToMooveY = getMooveBlackY(arrayPieces.get(i).get(1));
+                    mooveY = getMooveBlackY(arrayPieces.get(i).get(1));
                     if(arrayPieces.get(i).get(1) == 0){
                         currentPion.counter -= 10;
-                    } else if (arrayPieces.get(i).get(1) >= 6) {
-                        currentPion.counter += 5;
                     }
+                    currentPion.counter += arrayPieces.get(i).get(1);
                 } else {
-                    pionToMooveY = getMooveWhiteY(arrayPieces.get(i).get(1));
+                    mooveY = getMooveWhiteY(arrayPieces.get(i).get(1));
                     if(arrayPieces.get(i).get(1) == 9){
                         currentPion.counter -= 10;
                     } else if (arrayPieces.get(i).get(1) <= 6) {
                         currentPion.counter += 5;
                     }
                 }
-                if(currentPion.counter >= maxValue) {
-                    maxValue = currentPion.counter;
-                    pionToMooveX = arrayPieces.get(i).get(0);
-                    pionToMooveY = arrayPieces.get(i).get(1);
+                String verifMooveLeft = verifCaseValide(arrayPieces.get(i).get(0) - 1, mooveY);
+                String verifMooveRight = verifCaseValide(arrayPieces.get(i).get(0) + 1, mooveY);
+//                System.out.println("max value : "+maxValue);
+                if (verifMooveLeft.equals("VIDE") || verifMooveRight.equals("VIDE")) {
+                    if(currentPion.counter >= maxValue) {
+                        maxValue = currentPion.counter;
+                        pionToMooveX = arrayPieces.get(i).get(0);
+                        pionToMooveY = arrayPieces.get(i).get(1);
+                        mooveYFinal = mooveY;
+                    }
                 }
             } else {
                 String tempX = ifOneCanTake.substring(0,1);
@@ -99,15 +104,25 @@ public class Bot extends Cellule implements MouseListener {
                     Piece.pieceTaked.clear();
                     swapTurn(true);
                 }
-                break;
+                return;
             }
         }
-        validCase = verifCaseValide(pionToMooveX - 1, pionToMooveY);
-        if(validCase.equals("VIDE")) {
-            verifPrise = currentPion.verifPrise(pionToMooveX - 1, pionToMooveY);
-            System.out.println("verifPrise : "+verifPrise);
-            if (verifPrise.equals("VIDE")) {
-                currentPion.deplacement(pionToMooveX - 1,pionToMooveY);
+        currentPion =  new Piece(pionToMooveX,pionToMooveY ,actualColor);
+        System.out.println("Pion : "+pionToMooveX+ " "+ pionToMooveY);
+        int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
+        if(random_int == 0) {
+            String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
+            if(verifMooveLeft.equals("VIDE")) {
+                currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
+            } else {
+                currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
+            }
+        } else {
+            String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
+            if(verifMooveRight.equals("VIDE")) {
+                currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
+            } else {
+                currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
             }
         }
     }
