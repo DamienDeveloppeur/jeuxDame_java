@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class plateau extends JFrame  {
-    public JFrame frame = new JFrame();;
+    public JFrame frame = new JFrame();
     public plateau(){
         // first frame let the choice to the player
         JFrame f=new JFrame("Choix mode de jeu");

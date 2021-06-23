@@ -102,7 +102,6 @@ public class Piece {
         setY(initY);
 
         String ifOneCanTake = ifOneCanTake(initX, initY, getCouleur());
-        System.out.print("PIECE TAKED ifOneCanTake" + ifOneCanTake);
         if(ifOneCanTake.equals("VIDE") || ifOneCanTake.equals("erreur")){
             setX(tempX);
             setY(tempY);

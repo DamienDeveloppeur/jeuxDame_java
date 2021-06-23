@@ -25,10 +25,14 @@ public class Cellule extends JPanel implements MouseListener {
     static String turn = "B";
     static boolean initialized, botMooved;
     static Piece currentPion;
-    public static Bot Bot;
+    static Bot Bot;
 
     public Cellule(){
         addMouseListener(this);
+        if(this.Bot == null) {
+            System.out.print("SINGLETON");
+            this.Bot = Bot;
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -189,7 +193,6 @@ public class Cellule extends JPanel implements MouseListener {
                 currentPion.deplacement(pt.x,pt.y);
             }
             if (taked) {
-                System.out.print("TAKED TAKED TAKED");
                 Piece.pieceTaked.clear();
                 swapTurn(false);
             }
@@ -238,7 +241,7 @@ public class Cellule extends JPanel implements MouseListener {
         } else {
             Cellule.turn = "B";
         }
-        if (Bot.colorBot != null && Bot.colorBot != "" &&  ifMooveBot && Bot.colorBot == getTurn()){
+        if (Bot.colorBot != null && Bot.colorBot != "" && ifMooveBot && Bot.colorBot == getTurn()){
             Bot.mooveBot();
         }
         

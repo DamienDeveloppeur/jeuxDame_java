@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,7 +13,6 @@ public class Bot extends Cellule implements MouseListener {
      * @param color Color choosed by the player
      */
     public Bot(String color){
-        System.out.println("color : "+ color);
         if(color.equals("N")){
             this.colorBot = "B";
         }else {
@@ -24,19 +24,26 @@ public class Bot extends Cellule implements MouseListener {
      * Main method for moove the bot
      */
     public static void mooveBot(){
-        int mooveY = 0;
-        int mooveYFinal = 0;
-        int maxValue = -1000;
-        int pionToMooveX = 0,pionToMooveY = 0;
-        String validCase;
+        int mooveY = 0,mooveYFinal = 0,maxValue = -1000,pionToMooveX = 0,pionToMooveY = 0;
         String actualColor = "P"+ getTurn();
         boolean taked = false;
-        String verifPrise;
         ArrayList<ArrayList<Integer>> arrayPieces = new ArrayList<ArrayList<Integer> >();
+        ArrayList<ArrayList<Integer>> arrayPiecesQueen = new ArrayList<ArrayList<Integer> >();
+        ArrayList<ArrayList<Integer>> arrayPiecesHuman = new ArrayList<ArrayList<Integer> >();
         if(colorBot.equals("N")) {
             arrayPieces = Cellule.pionNoir;
+            arrayPiecesHuman = Cellule.pionBlanc;
         } else if (colorBot.equals("B")){
             arrayPieces = Cellule.pionBlanc;
+            arrayPiecesHuman = Cellule.pionNoir;
+        }
+        if(arrayPieces.size() == 0) {
+            endGame("Victory");
+            return;
+        }
+        if (arrayPiecesHuman.size() == 0) {
+            endGame("Defeat");
+            return;
         }
         for (int i = 0; i < arrayPieces.size(); i++){
             currentPion = new Piece(arrayPieces.get(i).get(0), arrayPieces.get(i).get(1),actualColor);
@@ -64,7 +71,6 @@ public class Bot extends Cellule implements MouseListener {
                 }
                 String verifMooveLeft = verifCaseValide(arrayPieces.get(i).get(0) - 1, mooveY);
                 String verifMooveRight = verifCaseValide(arrayPieces.get(i).get(0) + 1, mooveY);
-//                System.out.println("max value : "+maxValue);
                 if (verifMooveLeft.equals("VIDE") || verifMooveRight.equals("VIDE")) {
                     if(currentPion.counter >= maxValue) {
                         maxValue = currentPion.counter;
@@ -108,17 +114,23 @@ public class Bot extends Cellule implements MouseListener {
                 return;
             }
         }
+        // if no one pion can moove
+        if(maxValue == -1000) {
+            endGame("Victory");
+            return;
+        }
         currentPion =  new Piece(pionToMooveX,pionToMooveY ,actualColor);
         int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
-        if(random_int == 0) {
-            String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
+        String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
+        String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
+        System.out.print("RAMDOM INT" + random_int );
+        if(random_int == 1) {
             if(verifMooveLeft.equals("VIDE")) {
                 currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
             } else {
                 currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
             }
         } else {
-            String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
             if(verifMooveRight.equals("VIDE")) {
                 currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
             } else {
@@ -152,5 +164,14 @@ public class Bot extends Cellule implements MouseListener {
         return verifPrise;
     }
 
-
+    public static void endGame(String result){
+        JFrame f=new JFrame("End of the game");
+        f.setLayout(new FlowLayout());
+        JLabel labelText = new JLabel(result);
+        labelText.setFont(new Font("Serif", Font.PLAIN, 70));
+        f.add(labelText);
+        f.setSize(800,300);
+        //f.setLayout(null);
+        f.setVisible(true);
+    }
 }
