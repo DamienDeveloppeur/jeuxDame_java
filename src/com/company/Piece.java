@@ -177,7 +177,7 @@ public class Piece {
                             tempX = getX() - i;
                             tempY = getY() + i;
                         }
-                    // bas - gauche
+                        // bas - gauche
                     } else if(getX() < x && getY() > y) {
                         if(Cellule.verifCaseValide(getX() + i,getY() - i) != "VIDE" && Cellule.verifCaseValide(getX() + i,getY() - i) != "erreur") {
                             caseSelected = Cellule.verifCaseValide(getX() + i,getY() - i);
@@ -296,6 +296,14 @@ public class Piece {
             return vallueReturn;
         }
         return error;
+    }
+
+    /**
+     * Verify if queen can take for bot and human
+     * @return
+     */
+    public String ifQueenCanBeTake(int x, int y) {
+       return "";
     }
 
     public String ifOneCantBeTaked(){
