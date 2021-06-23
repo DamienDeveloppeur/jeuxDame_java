@@ -143,9 +143,6 @@ public class Cellule extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-//        if (Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot == getTurn()) {
-//            return;
-//        }
         boolean taked = false;
         Point pt = e.getPoint();
         pt.x/=ech.width;
@@ -155,7 +152,6 @@ public class Cellule extends JPanel implements MouseListener {
             if(currentPion == null && caseVerif.substring(1,2).equals(getTurn())){
                 currentPion = new Piece(pt.x, pt.y,caseVerif);
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
-                System.out.println(errorOne);
                 if(errorOne.equals("erreur") || errorOne.equals("VIDE")){
                     String error = currentPion.ifCanTake(caseVerif);
                     if(!(error.equals("erreur") || error.equals("VIDE"))){
@@ -193,6 +189,7 @@ public class Cellule extends JPanel implements MouseListener {
                 currentPion.deplacement(pt.x,pt.y);
             }
             if (taked) {
+                System.out.print("TAKED TAKED TAKED");
                 Piece.pieceTaked.clear();
                 swapTurn(false);
             }

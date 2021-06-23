@@ -80,20 +80,21 @@ public class Bot extends Cellule implements MouseListener {
                 int InttempX = Integer.parseInt(tempX);
                 int InttempY = Integer.parseInt(tempY);
 
-                currentPion =  new Piece(InttempX,InttempY ,actualColor);
+                currentPion = new Piece(InttempX,InttempY ,actualColor);
                 String verifPriseBot = Bot.verifPriseBot(InttempX,InttempY);
                 if (verifPriseBot.equals("PRISE_PB_G")){
-                    taked = currentPion.prise(InttempX + 1, InttempY - 1,InttempX, InttempY);
-                    currentPion.deplacement(InttempX,InttempY);
+                    taked = currentPion.prise(InttempX - 1, InttempY - 1,InttempX - 2, InttempY - 2);
+                    currentPion.deplacement(InttempX - 2,InttempY - 2);
                 } else if (verifPriseBot.equals("PRISE_PB_D")){
-                    taked = currentPion.prise(InttempX - 1, InttempY - 1,InttempX, InttempY);
-                    currentPion.deplacement(InttempX,InttempY);
+                    taked = currentPion.prise(InttempX + 1, InttempY - 1,InttempX + 2, InttempY - 2);
+                    currentPion.deplacement(InttempX + 2,InttempY - 2);
                 } else if (verifPriseBot.equals("PRISE_PN_G")){
-                    taked = currentPion.prise(InttempX - 1, InttempY + 1,InttempX, InttempY);
+                    taked = currentPion.prise(InttempX - 1, InttempY + 1,InttempX - 2, InttempY + 2);
                     currentPion.deplacement(InttempX - 2,InttempY + 2);
                 } else if (verifPriseBot.equals("PRISE_PN_D")){
-                    taked = currentPion.prise(InttempX + 1, InttempY + 1,InttempX, InttempY);
+                    taked = currentPion.prise(InttempX + 1, InttempY + 1,InttempX + 2, InttempY + 2);
                     currentPion.deplacement(InttempX + 2,InttempY + 2);
+                    // management of queen in comming
                 }else if (verifPriseBot.equals("PRISE_D")){
                     taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1),InttempX, InttempY);
                     currentPion.deplacement(InttempX,InttempY);
@@ -108,7 +109,6 @@ public class Bot extends Cellule implements MouseListener {
             }
         }
         currentPion =  new Piece(pionToMooveX,pionToMooveY ,actualColor);
-        System.out.println("Pion : "+pionToMooveX+ " "+ pionToMooveY);
         int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
         if(random_int == 0) {
             String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);

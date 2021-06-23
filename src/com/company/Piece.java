@@ -95,21 +95,22 @@ public class Piece {
             pos=Cellule.dameNoir.indexOf(temp.get(0));
             Cellule.dameNoir.remove(pos);
         }
-
         int tempX = getX();
         int tempY = getY();
 
         setX(initX);
         setY(initY);
 
-        if(ifOneCanTake(initX, initY, getCouleur()).equals("prise")){
-            setX(tempX);
-            setY(tempY);
-            return true;
-        } else {
+        String ifOneCanTake = ifOneCanTake(initX, initY, getCouleur());
+        System.out.print("PIECE TAKED ifOneCanTake" + ifOneCanTake);
+        if(ifOneCanTake.equals("VIDE") || ifOneCanTake.equals("erreur")){
             setX(tempX);
             setY(tempY);
             return false;
+        } else {
+            setX(tempX);
+            setY(tempY);
+            return true;
         }
     }
     /**
