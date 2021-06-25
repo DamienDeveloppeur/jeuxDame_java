@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Piece {
     protected String couleur = "";
@@ -159,7 +161,6 @@ public class Piece {
                 String caseSelected = "erreur";
                 int tempX = 0;
                 int tempY = 0;
-
                 for (int i=1; i<Math.abs(getY() - y); i++) {
                     caseSelected = "erreur";
                     // haut - gauche
@@ -307,6 +308,82 @@ public class Piece {
 
     public String ifOneCantBeTaked(){
         return "";
+    }
+
+    public Map<String, Integer> ifQueenCanTake(){
+        Map<String, Integer> map = new HashMap<String, Integer>();
+            String caseSelected = "erreur";
+            int varOneX = 1, varOneY = 1;
+            // haut - gauche
+            while (Cellule.verifCaseValide(getX() - varOneX,getY() - varOneY) != "erreur"){
+                caseSelected =  Cellule.verifCaseValide(getX() - varOneX,getY() - varOneY);
+                if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
+                    break;
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() - (varOneY + 1)).equals("VIDE")) {
+                    map.put("pieceTakedX", getX() - varOneX);
+                    map.put("pieceTakedY", getY() - varOneY);
+                    map.put("arrivalSquareX", getX() - (varOneX + 1));
+                    map.put("arrivalSquareY", getY() - (varOneY + 1));
+                    return map;
+                }
+                varOneX++;
+                varOneY++;
+            }
+            varOneX = 1;
+            varOneY = 1;
+            pieceTaked.clear();
+            // haut - droite
+            while (Cellule.verifCaseValide(getX() + varOneX,getY() - varOneY) != "erreur"){
+                caseSelected =  Cellule.verifCaseValide(getX() + varOneX,getY() - varOneY);
+                if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
+                    break;
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() - (varOneY + 1)).equals("VIDE")) {
+                    map.put("pieceTakedX", getX() + varOneX);
+                    map.put("pieceTakedY", getY() - varOneY);
+                    map.put("arrivalSquareX", getX() + (varOneX + 1));
+                    map.put("arrivalSquareY", getY() - (varOneY + 1));
+                    return map;
+                }
+                varOneX++;
+                varOneY++;
+            }
+            varOneX = getX();
+            varOneY = getY();
+            pieceTaked.clear();
+            // bas - gauche
+            while (Cellule.verifCaseValide(getX() - varOneX,getY() + varOneY) != "erreur"){
+                caseSelected =  Cellule.verifCaseValide(getX() - varOneX,getY() + varOneY);
+                if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
+                    break;
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")) {
+                    map.put("pieceTakedX", getX() - varOneX);
+                    map.put("pieceTakedY", getY() + varOneY);
+                    map.put("arrivalSquareX", getX() - (varOneX + 1));
+                    map.put("arrivalSquareY", getY() + (varOneY + 1));
+                    return map;
+                }
+                varOneX++;
+                varOneY++;
+            }
+            varOneX = getX();
+            varOneY = getY();
+            pieceTaked.clear();
+            // bas - droite
+            while (Cellule.verifCaseValide(getX() + varOneX,getY() + varOneY) != "erreur"){
+                caseSelected =  Cellule.verifCaseValide(getX() + varOneX,getY() + varOneY);
+                if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
+                    break;
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() + (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")) {
+                    map.put("pieceTakedX", getX() + varOneX);
+                    map.put("pieceTakedY", getY() + varOneY);
+                    map.put("arrivalSquareX", getX() - (varOneX + 1));
+                    map.put("arrivalSquareY", getY() - (varOneY + 1));
+                    return map;
+                }
+                varOneX++;
+                varOneY++;
+            }
+        return map;
     }
 
     public int getX() {

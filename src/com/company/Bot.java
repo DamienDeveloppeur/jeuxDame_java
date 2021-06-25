@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Random;
 
 public class Bot extends Cellule implements MouseListener {
     static String colorBot;
@@ -29,22 +31,44 @@ public class Bot extends Cellule implements MouseListener {
         boolean taked = false;
         ArrayList<ArrayList<Integer>> arrayPieces = new ArrayList<ArrayList<Integer> >();
         ArrayList<ArrayList<Integer>> arrayPiecesQueen = new ArrayList<ArrayList<Integer> >();
-        ArrayList<ArrayList<Integer>> arrayPiecesHuman = new ArrayList<ArrayList<Integer> >();
         if(colorBot.equals("N")) {
             arrayPieces = Cellule.pionNoir;
-            arrayPiecesHuman = Cellule.pionBlanc;
+            arrayPiecesQueen = Cellule.dameNoir;
         } else if (colorBot.equals("B")){
             arrayPieces = Cellule.pionBlanc;
-            arrayPiecesHuman = Cellule.pionNoir;
+            arrayPiecesQueen = Cellule.dameBlanc;
         }
-        if(arrayPieces.size() == 0) {
+        if(arrayPieces.size() == 0 && arrayPiecesQueen.size() == 0) {
             endGame("Victory");
             return;
         }
-        if (arrayPiecesHuman.size() == 0) {
-            endGame("Defeat");
-            return;
+
+        // buckle on queen and check if one on them can take
+        if (arrayPiecesQueen.size() > 0) {
+            for(int i = 0; i < arrayPiecesQueen.size(); i++){
+                currentPion = new Piece(arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1),"D"+ getTurn());
+                Map<String, Integer> map = currentPion.ifQueenCanTake();
+                System.out.print(map.get("pieceTakedX"));
+               if(map.get("pieceTakedX") != null) {
+                   System.out.print(map.get("pieceTakedX"));
+                   taked = currentPion.prise(map.get("pieceTakedX"), map.get("pieceTakedY"),arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1));
+                   currentPion.deplacement(map.get("arrivalSquareX"),map.get("arrivalSquareY"));
+                   Piece.pieceTaked.clear();
+                   if (taked) {
+                       Piece.pieceTaked.clear();
+                       swapTurn(true);
+                   }
+                   return;
+               }
+            }
+            // 4 in 5 chance to moove a queen
+            if(Bot.generateRamdomInt(4) != 2){
+                // moove a queen
+
+            }
+
         }
+        // buckle on all pion
         for (int i = 0; i < arrayPieces.size(); i++){
             currentPion = new Piece(arrayPieces.get(i).get(0), arrayPieces.get(i).get(1),actualColor);
             String ifOneCanTake = currentPion.ifOneCanTake(arrayPieces.get(i).get(0),arrayPieces.get(i).get(1),actualColor);
@@ -101,10 +125,6 @@ public class Bot extends Cellule implements MouseListener {
                     taked = currentPion.prise(InttempX + 1, InttempY + 1,InttempX + 2, InttempY + 2);
                     currentPion.deplacement(InttempX + 2,InttempY + 2);
                     // management of queen in comming
-                }else if (verifPriseBot.equals("PRISE_D")){
-                    taked = currentPion.prise(Piece.getPieceTaked().get(0).get(0), Piece.getPieceTaked().get(0).get(1),InttempX, InttempY);
-                    currentPion.deplacement(InttempX,InttempY);
-                    Piece.pieceTaked.clear();
                 }
                 // many take in a row
                 if (taked) {
@@ -123,7 +143,6 @@ public class Bot extends Cellule implements MouseListener {
         int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
         String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
         String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
-        System.out.print("RAMDOM INT" + random_int );
         if(random_int == 1) {
             if(verifMooveLeft.equals("VIDE")) {
                 currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
@@ -173,5 +192,11 @@ public class Bot extends Cellule implements MouseListener {
         f.setSize(800,300);
         //f.setLayout(null);
         f.setVisible(true);
+    }
+
+    static int generateRamdomInt(int maxValue){
+        Random rand = new Random();
+        int int_random = rand.nextInt(maxValue);
+        return int_random;
     }
 }

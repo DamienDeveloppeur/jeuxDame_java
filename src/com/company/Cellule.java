@@ -29,10 +29,6 @@ public class Cellule extends JPanel implements MouseListener {
 
     public Cellule(){
         addMouseListener(this);
-        if(this.Bot == null) {
-            System.out.print("SINGLETON");
-            this.Bot = Bot;
-        }
     }
 
     public void paintComponent(Graphics g) {
@@ -158,6 +154,9 @@ public class Cellule extends JPanel implements MouseListener {
                 String errorOne = currentPion.ifOneCanTake(pt.x, pt.y,caseVerif);
                 if(errorOne.equals("erreur") || errorOne.equals("VIDE")){
                     String error = currentPion.ifCanTake(caseVerif);
+                    // verif if queen can take
+
+
                     if(!(error.equals("erreur") || error.equals("VIDE"))){
                         currentPion = null;
                     } else {
@@ -241,6 +240,7 @@ public class Cellule extends JPanel implements MouseListener {
         } else {
             Cellule.turn = "B";
         }
+        Bot botbot = new Bot("n");
         if (Bot.colorBot != null && Bot.colorBot != "" && ifMooveBot && Bot.colorBot == getTurn()){
             Bot.mooveBot();
         }
