@@ -42,15 +42,13 @@ public class Bot extends Cellule implements MouseListener {
             endGame("Victory");
             return;
         }
-
         // buckle on queen and check if one on them can take
         if (arrayPiecesQueen.size() > 0) {
             for(int i = 0; i < arrayPiecesQueen.size(); i++){
                 currentPion = new Piece(arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1),"D"+ getTurn());
-                Map<String, Integer> map = currentPion.ifQueenCanTake();
+                Map<String, Integer> map = currentPion.ifQueenCanTake(false);
                 System.out.print(map.get("pieceTakedX"));
                if(map.get("pieceTakedX") != null) {
-                   System.out.print(map.get("pieceTakedX"));
                    taked = currentPion.prise(map.get("pieceTakedX"), map.get("pieceTakedY"),arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1));
                    currentPion.deplacement(map.get("arrivalSquareX"),map.get("arrivalSquareY"));
                    Piece.pieceTaked.clear();
@@ -61,12 +59,6 @@ public class Bot extends Cellule implements MouseListener {
                    return;
                }
             }
-            // 4 in 5 chance to moove a queen
-            if(Bot.generateRamdomInt(4) != 2){
-                // moove a queen
-
-            }
-
         }
         // buckle on all pion
         for (int i = 0; i < arrayPieces.size(); i++){
@@ -93,6 +85,11 @@ public class Bot extends Cellule implements MouseListener {
                         currentPion.counter += 5;
                     }
                 }
+//                if(!currentPion.ifOneCanBeTaked(arrayPieces.get(i).get(0) - 1, mooveY) || !currentPion.ifOneCanBeTaked(arrayPieces.get(i).get(0) + 1, mooveY)) {
+//                    currentPion.counter += 70;
+//                } else {
+//                    currentPion.counter -= 70;
+//                }
                 String verifMooveLeft = verifCaseValide(arrayPieces.get(i).get(0) - 1, mooveY);
                 String verifMooveRight = verifCaseValide(arrayPieces.get(i).get(0) + 1, mooveY);
                 if (verifMooveLeft.equals("VIDE") || verifMooveRight.equals("VIDE")) {
@@ -139,23 +136,36 @@ public class Bot extends Cellule implements MouseListener {
             endGame("Victory");
             return;
         }
-        currentPion =  new Piece(pionToMooveX,pionToMooveY ,actualColor);
-        int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
-        String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
-        String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
-        if(random_int == 1) {
-            if(verifMooveLeft.equals("VIDE")) {
-                currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
-            } else {
-                currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
-            }
+        // 4 in 5 chance to moove a queen
+        //
+        if(Bot.generateRamdomInt(4) != 2 && arrayPiecesQueen.size() > 0){
+            currentPion = new Piece(arrayPiecesQueen.get(0).get(0), arrayPiecesQueen.get(0).get(1),"D"+ getTurn());
+            Map<String, Integer> map = currentPion.ifQueenCanTake(true);
+            // moove a queen
+            System.out.print("Arrival X : "+map.get("arrivalSquareX")+"Arrival Y : "+map.get("arrivalSquareY"));
+            System.out.print("LE TABLO AVEC UN O: " + map);
+            currentPion.deplacement(map.get("arrivalSquareX"),map.get("arrivalSquareY"));
+            return;
         } else {
-            if(verifMooveRight.equals("VIDE")) {
-                currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
+            currentPion =  new Piece(pionToMooveX,pionToMooveY ,actualColor);
+            int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
+            String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
+            String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
+            if(random_int == 1) {
+                if(verifMooveLeft.equals("VIDE")) {
+                    currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
+                } else {
+                    currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
+                }
             } else {
-                currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
+                if(verifMooveRight.equals("VIDE")) {
+                    currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
+                } else {
+                    currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
+                }
             }
         }
+
     }
     /**
      *

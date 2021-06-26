@@ -306,11 +306,27 @@ public class Piece {
        return "";
     }
 
-    public String ifOneCantBeTaked(){
-        return "";
+    public boolean ifOneCanBeTaked(int x, int y){
+        if(this.couleur.substring(1,2).equals("B")) {
+            if(verifPrise(x+1, y - 1).substring(1,2).equals("N") && verifPrise(x - 1, y + 1).equals("VIDE")) {
+                return true;
+            } else if (verifPrise(x - 1, y - 1).substring(1,2).equals("N") && verifPrise(x + 1, y + 1).equals("VIDE")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if(verifPrise(x+1, y + 1).substring(1,2).equals("B") && verifPrise(x - 1, y - 1).equals("VIDE")) {
+                return true;
+            } else if (verifPrise(x - 1, y + 1).substring(1,2).equals("B") && verifPrise(x + 1, y - 1).equals("VIDE")) {
+              return true;
+            } else {
+                return false;
+            }
+        }
     }
 
-    public Map<String, Integer> ifQueenCanTake(){
+    public Map<String, Integer> ifQueenCanTake(boolean moove){
         Map<String, Integer> map = new HashMap<String, Integer>();
             String caseSelected = "erreur";
             int varOneX = 1, varOneY = 1;
@@ -319,11 +335,17 @@ public class Piece {
                 caseSelected =  Cellule.verifCaseValide(getX() - varOneX,getY() - varOneY);
                 if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
                     break;
-                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() - (varOneY + 1)).equals("VIDE")) {
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() - (varOneY + 1)).equals("VIDE") && !moove) {
                     map.put("pieceTakedX", getX() - varOneX);
                     map.put("pieceTakedY", getY() - varOneY);
                     map.put("arrivalSquareX", getX() - (varOneX + 1));
                     map.put("arrivalSquareY", getY() - (varOneY + 1));
+                    return map;
+                } else if (Cellule.verifCaseValide(getX() - (varOneX),getY() - (varOneY)).equals("VIDE")&& moove) {
+                    map.clear();
+                    map.put("arrivalSquareX", getX() - (varOneX));
+                    map.put("arrivalSquareY", getY() - (varOneY));
+                }else if (Cellule.verifCaseValide(getX() - (varOneX + 1),getY() - (varOneY + 1)).equals("erreur") && moove) {
                     return map;
                 }
                 varOneX++;
@@ -337,11 +359,17 @@ public class Piece {
                 caseSelected =  Cellule.verifCaseValide(getX() + varOneX,getY() - varOneY);
                 if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
                     break;
-                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() - (varOneY + 1)).equals("VIDE")) {
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() + (varOneX + 1),getY() - (varOneY + 1)).equals("VIDE")&& !moove) {
                     map.put("pieceTakedX", getX() + varOneX);
                     map.put("pieceTakedY", getY() - varOneY);
                     map.put("arrivalSquareX", getX() + (varOneX + 1));
                     map.put("arrivalSquareY", getY() - (varOneY + 1));
+                    return map;
+                } else if (Cellule.verifCaseValide(getX() + (varOneX),getY() - (varOneY)).equals("VIDE") && moove) {
+                    map.clear();
+                    map.put("arrivalSquareX", getX() + (varOneX));
+                    map.put("arrivalSquareY", getY() - (varOneY));
+                } else if (Cellule.verifCaseValide(getX() + (varOneX + 1),getY() - (varOneY + 1)).equals("erreur") && moove) {
                     return map;
                 }
                 varOneX++;
@@ -358,8 +386,14 @@ public class Piece {
                 } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")) {
                     map.put("pieceTakedX", getX() - varOneX);
                     map.put("pieceTakedY", getY() + varOneY);
-                    map.put("arrivalSquareX", getX() - (varOneX + 1));
-                    map.put("arrivalSquareY", getY() + (varOneY + 1));
+                    map.put("arrivalSquareX", getX() - (varOneX));
+                    map.put("arrivalSquareY", getY() + (varOneY));
+                    return map;
+                } else if (Cellule.verifCaseValide(getX() - (varOneX),getY() + (varOneY)).equals("VIDE") && moove) {
+                    map.clear();
+                    map.put("arrivalSquareX", getX() - (varOneX));
+                    map.put("arrivalSquareY", getY() + (varOneY));
+                } else if (Cellule.verifCaseValide(getX() - (varOneX + 1),getY() + (varOneY + 1)).equals("erreur") && moove) {
                     return map;
                 }
                 varOneX++;
@@ -376,8 +410,14 @@ public class Piece {
                 } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() + (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")) {
                     map.put("pieceTakedX", getX() + varOneX);
                     map.put("pieceTakedY", getY() + varOneY);
-                    map.put("arrivalSquareX", getX() - (varOneX + 1));
-                    map.put("arrivalSquareY", getY() - (varOneY + 1));
+                    map.put("arrivalSquareX", getX() + (varOneX));
+                    map.put("arrivalSquareY", getY() + (varOneY));
+                    return map;
+                } else if (Cellule.verifCaseValide(getX() + (varOneX),getY() + (varOneY)).equals("VIDE") && moove) {
+                    map.clear();
+                    map.put("arrivalSquareX", getX() + (varOneX));
+                    map.put("arrivalSquareY", getY() + (varOneY));
+                } else if (Cellule.verifCaseValide(getX() + (varOneX + 1),getY() + (varOneY + 1)).equals("erreur") && moove) {
                     return map;
                 }
                 varOneX++;
