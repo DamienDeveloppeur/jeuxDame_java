@@ -85,14 +85,15 @@ public class Bot extends Cellule implements MouseListener {
                         currentPion.counter += 5;
                     }
                 }
-//                if(!currentPion.ifOneCanBeTaked(arrayPieces.get(i).get(0) - 1, mooveY) || !currentPion.ifOneCanBeTaked(arrayPieces.get(i).get(0) + 1, mooveY)) {
-//                    currentPion.counter += 70;
-//                } else {
-//                    currentPion.counter -= 70;
-//                }
+
                 String verifMooveLeft = verifCaseValide(arrayPieces.get(i).get(0) - 1, mooveY);
                 String verifMooveRight = verifCaseValide(arrayPieces.get(i).get(0) + 1, mooveY);
                 if (verifMooveLeft.equals("VIDE") || verifMooveRight.equals("VIDE")) {
+                    if((!currentPion.ifOneCanBeTaked(arrayPieces.get(i).get(0) - 1, mooveY) && verifMooveLeft.equals("VIDE")) || (!currentPion.ifOneCanBeTaked(arrayPieces.get(i).get(0) + 1, mooveY) && verifMooveRight.equals("VIDE"))) {
+                        currentPion.counter += 70;
+                    } else {
+                        currentPion.counter -= 70;
+                    }
                     if(currentPion.counter >= maxValue) {
                         maxValue = currentPion.counter;
                         pionToMooveX = arrayPieces.get(i).get(0);
@@ -147,7 +148,14 @@ public class Bot extends Cellule implements MouseListener {
             currentPion.deplacement(map.get("arrivalSquareX"),map.get("arrivalSquareY"));
             return;
         } else {
+
             currentPion =  new Piece(pionToMooveX,pionToMooveY ,actualColor);
+//            System.out.print(" left : " + currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal));
+//            System.out.print(" right : " + currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal));
+//            currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal);
+//            currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal);
+//            System.out.print("FINAL RESULT : "+currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal));
+//            System.out.print("FINAL RESULT : "+currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal));
             int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
             String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
             String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
@@ -158,14 +166,14 @@ public class Bot extends Cellule implements MouseListener {
                     currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
                 }
             } else {
-                if(verifMooveRight.equals("VIDE")) {
+                //&& !currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal)
+                if(verifMooveRight.equals("VIDE") ) {
                     currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
                 } else {
                     currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
                 }
             }
         }
-
     }
     /**
      *

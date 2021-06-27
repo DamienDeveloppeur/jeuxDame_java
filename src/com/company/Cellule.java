@@ -240,7 +240,6 @@ public class Cellule extends JPanel implements MouseListener {
         } else {
             Cellule.turn = "B";
         }
-        Bot botbot = new Bot("n");
         if (Bot.colorBot != null && Bot.colorBot != "" && ifMooveBot && Bot.colorBot == getTurn()){
             Bot.mooveBot();
         }

@@ -306,19 +306,30 @@ public class Piece {
        return "";
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public boolean ifOneCanBeTaked(int x, int y){
+        System.out.print("Couleur : " + this.couleur.substring(1,2));
+        System.out.print("2 : " + Cellule.verifCaseValide(x-1, y + 1));
+        System.out.print("3 : " + Cellule.verifCaseValide(x - 1, y - 1));
+        System.out.print("4 : " + Cellule.verifCaseValide(x + 1, y - 1));
+//        System.out.print("Couleur : " + x + " " + y);
         if(this.couleur.substring(1,2).equals("B")) {
-            if(verifPrise(x+1, y - 1).substring(1,2).equals("N") && verifPrise(x - 1, y + 1).equals("VIDE")) {
+            if(Cellule.verifCaseValide(x+1, y - 1).substring(1,2).equals("N") && Cellule.verifCaseValide(x - 1, y + 1).equals("VIDE")) {
                 return true;
-            } else if (verifPrise(x - 1, y - 1).substring(1,2).equals("N") && verifPrise(x + 1, y + 1).equals("VIDE")) {
+            } else if (Cellule.verifCaseValide(x - 1, y - 1).substring(1,2).equals("N") && Cellule.verifCaseValide(x + 1, y + 1).equals("VIDE")) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            if(verifPrise(x+1, y + 1).substring(1,2).equals("B") && verifPrise(x - 1, y - 1).equals("VIDE")) {
+            if(Cellule.verifCaseValide(x+1, y + 1).substring(1,2).equals("B") && Cellule.verifCaseValide(x - 1, y - 1).equals("VIDE")) {
                 return true;
-            } else if (verifPrise(x - 1, y + 1).substring(1,2).equals("B") && verifPrise(x + 1, y - 1).equals("VIDE")) {
+            } else if (Cellule.verifCaseValide(x - 1, y + 1).substring(1,2).equals("B") && Cellule.verifCaseValide(x + 1, y - 1).equals("VIDE")) {
               return true;
             } else {
                 return false;
