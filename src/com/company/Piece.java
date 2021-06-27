@@ -299,29 +299,16 @@ public class Piece {
     }
 
     /**
-     * Verify if queen can take for bot and human
-     * @return
-     */
-    public String ifQueenCanBeTake(int x, int y) {
-       return "";
-    }
-
-    /**
      *
      * @param x
      * @param y
      * @return
      */
     public boolean ifOneCanBeTaked(int x, int y){
-//        System.out.print("Couleur : " + this.couleur.substring(1,2));
-//        System.out.print("2 : " + Cellule.verifCaseValide(x-1, y + 1));
-//        System.out.print("3 : " + Cellule.verifCaseValide(x - 1, y - 1));
-//        System.out.print("4 : " + Cellule.verifCaseValide(x + 1, y - 1));
-//        System.out.print("Couleur : " + x + " " + y);
         if(this.couleur.substring(1,2).equals("B")) {
-            if(Cellule.verifCaseValide(x+1, y - 1).substring(1,2).equals("N") && Cellule.verifCaseValide(x - 1, y + 1).equals("VIDE")) {
+            if(Cellule.verifCaseValide(x + 1, y - 1).substring(1,2).equals("N") && Cellule.verifCaseValide(x - 1, y + 1).equals("VIDE") || ((getX() == x - 1 && getY() == y + 1) && Cellule.verifCaseValide(x + 1, y - 1).substring(1,2).equals("N"))) {
                 return true;
-            } else if (Cellule.verifCaseValide(x - 1, y - 1).substring(1,2).equals("N") && Cellule.verifCaseValide(x + 1, y + 1).equals("VIDE")) {
+            } else if (Cellule.verifCaseValide(x - 1, y - 1).substring(1,2).equals("N") && Cellule.verifCaseValide(x + 1, y + 1).equals("VIDE")|| ((getX() == x + 1 && getY() == y + 1) && Cellule.verifCaseValide(x - 1, y - 1).substring(1,2).equals("N"))) {
                 return true;
             } else {
                 return false;

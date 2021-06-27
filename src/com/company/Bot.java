@@ -85,7 +85,6 @@ public class Bot extends Cellule implements MouseListener {
                         currentPion.counter += 5;
                     }
                 }
-
                 String verifMooveLeft = verifCaseValide(arrayPieces.get(i).get(0) - 1, mooveY);
                 String verifMooveRight = verifCaseValide(arrayPieces.get(i).get(0) + 1, mooveY);
                 if (verifMooveLeft.equals("VIDE") || verifMooveRight.equals("VIDE")) {
@@ -145,43 +144,33 @@ public class Bot extends Cellule implements MouseListener {
             currentPion = new Piece(arrayPiecesQueen.get(0).get(0), arrayPiecesQueen.get(0).get(1),"D"+ getTurn());
             Map<String, Integer> map = currentPion.ifQueenCanTake(true);
             // moove a queen
-            System.out.print("Arrival X : "+map.get("arrivalSquareX")+"Arrival Y : "+map.get("arrivalSquareY"));
-            System.out.print("LE TABLO AVEC UN O: " + map);
             currentPion.deplacement(map.get("arrivalSquareX"),map.get("arrivalSquareY"));
             return;
         } else {
             currentPion = new Piece(pionToMooveX,pionToMooveY ,actualColor);
-//            System.out.print(" left : " + currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal));
-//            System.out.print(" right : " + currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal));
-//            currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal);
-//            currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal);
-            System.out.print("FINAL RESULT : "+currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal));
-            System.out.print("FINAL RESULT : "+currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal));
-            int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
+//            int random_int = (int)Math.floor(Math.random()*(1-0+1)+1);
             String verifMooveLeft = verifCaseValide(pionToMooveX - 1, mooveYFinal);
             String verifMooveRight = verifCaseValide(pionToMooveX + 1, mooveYFinal);
+
             if(verifMooveLeft.equals("VIDE") && currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal) == false) {
-                System.out.print(" UNO ");
                 currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
             } else if (verifMooveRight.equals("VIDE") && currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal) == false) {
-                System.out.print(" DOS ");
                 currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
             } else if (verifMooveLeft.equals("VIDE")) {
-                System.out.print(" TTRES ");
                 currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
             } else {
-                System.out.print(" QUATRO ");
                 currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
             }
+
 //            if(random_int == 1) {
-//                if(verifMooveLeft.equals("VIDE")) {
+//                if(verifMooveLeft.equals("VIDE") && !currentPion.ifOneCanBeTaked(pionToMooveX - 1,mooveYFinal)) {
 //                    currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
 //                } else {
 //                    currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
 //                }
 //            } else {
 //                //&&
-//                if(verifMooveRight.equals("VIDE") ) {
+//                if(verifMooveRight.equals("VIDE") && !currentPion.ifOneCanBeTaked(pionToMooveX + 1,mooveYFinal) ) {
 //                    currentPion.deplacement(pionToMooveX + 1,mooveYFinal);
 //                } else {
 //                    currentPion.deplacement(pionToMooveX - 1,mooveYFinal);
