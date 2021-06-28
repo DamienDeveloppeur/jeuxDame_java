@@ -3,7 +3,6 @@ package com.company;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 public class Piece {
     protected String couleur = "";
     protected int x;

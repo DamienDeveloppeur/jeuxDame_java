@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import sonar.java.binaries;
 
 public class Cellule extends JPanel implements MouseListener {
     Cellule[][] grille = new Cellule [10][10];
