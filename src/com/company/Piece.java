@@ -379,9 +379,9 @@ public class Piece {
             // bas - gauche
             while (Cellule.verifCaseValide(getX() - varOneX,getY() + varOneY) != "erreur"){
                 caseSelected =  Cellule.verifCaseValide(getX() - varOneX,getY() + varOneY);
-                if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
+                if((this.couleur == "DN" && caseSelected.substring(1,2).equals("N")) || (this.couleur == "DB" && caseSelected.substring(1,2).equals("B"))) {
                     break;
-                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")) {
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() - (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")&& !moove) {
                     map.put("pieceTakedX", getX() - varOneX);
                     map.put("pieceTakedY", getY() + varOneY);
                     map.put("arrivalSquareX", getX() - (varOneX));
@@ -403,9 +403,9 @@ public class Piece {
             // bas - droite
             while (Cellule.verifCaseValide(getX() + varOneX,getY() + varOneY) != "erreur"){
                 caseSelected =  Cellule.verifCaseValide(getX() + varOneX,getY() + varOneY);
-                if(this.couleur == "DN" && caseSelected.substring(1,2).equals("N") || this.couleur == "DB" && caseSelected.substring(1,2).equals("B")) {
+                if((this.couleur == "DN" && caseSelected.substring(1,2).equals("N")) || (this.couleur == "DB" && caseSelected.substring(1,2).equals("B"))) {
                     break;
-                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() + (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")) {
+                } else if (!caseSelected.equals("VIDE") && Cellule.verifCaseValide(getX() + (varOneX + 1),getY() + (varOneY + 1)).equals("VIDE")&& !moove) {
                     map.put("pieceTakedX", getX() + varOneX);
                     map.put("pieceTakedY", getY() + varOneY);
                     map.put("arrivalSquareX", getX() + (varOneX));
