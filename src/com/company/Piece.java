@@ -7,7 +7,7 @@ public class Piece {
     protected String couleur = "";
     protected int x;
     protected int y;
-    static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<ArrayList<Integer>>();
+    static ArrayList<ArrayList<Integer>> pieceTaked = new ArrayList<>();
     protected String colorPieceTaked;
     public int counter = 0;
 
@@ -120,79 +120,77 @@ public class Piece {
      * @return if a piece is taked and witch piece exactly
      */
     public String verifPrise(int x, int y){
-        String valueReturn = "";
+        String valueReturn = "", error = "erreur", validSquare = "VIDE";
         if(this.couleur.equals("PB")){
             if(getY() == y + 1 && Math.abs(getX() - x) == 1  ) {
-                valueReturn = "VIDE";
+                valueReturn = validSquare;
             } else if (getY()== y + 2 || Math.abs(getX()- x) == 2) {
                 // manger à gauche
-                // il manque la gestion des cases vides
-                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == "VIDE") {
+                if((getX() - x) == 2 && Cellule.verifCaseValide(getX() -1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == validSquare) {
                     valueReturn = "PRISE_PB_G";
-                    //
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == "VIDE") {
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() +1,getY()- 1) == "PN" && Cellule.verifCaseValide(x,y) == validSquare) {
                     valueReturn = "PRISE_PB_D";
                 } else {
-                    valueReturn = "erreur";
+                    valueReturn = error;
                 }
             } else {
-                valueReturn = "erreur";
+                valueReturn = error;
             }
         } else if (this.couleur.equals("PN")){
             if(getY()== y - 1 && Math.abs(getX() - x) == 1) {
-                valueReturn = "VIDE";
+                valueReturn = validSquare;
             } else if (getY()== y - 2 || Math.abs(getX() + x) == 2) {
                 // manger à gauche
-                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
+                if(getX() - x == 2 && Cellule.verifCaseValide(getX() - 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == validSquare) {
                     valueReturn = "PRISE_PN_G";
                     // manger à droite
-                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == "VIDE") {
+                }else if (getX() - x == -2 && Cellule.verifCaseValide(getX() + 1,getY() + 1) == "PB" && Cellule.verifCaseValide(x,y) == validSquare) {
                     valueReturn = "PRISE_PN_D";
                 } else {
-                    valueReturn = "erreur";
+                    valueReturn = error;
                 }
             } else {
-                valueReturn = "erreur";
+                valueReturn = error;
             }
         } else if (this.couleur.equals("DB") || this.couleur.equals("DN")){
             // le pion se trouve sur la diagonale
             if(Math.abs(getY() - y) == Math.abs(getX() - x)){
-                String caseSelected = "erreur";
+                String caseSelected = error;
                 int tempX = 0;
                 int tempY = 0;
                 for (int i=1; i<Math.abs(getY() - y); i++) {
-                    caseSelected = "erreur";
+                    caseSelected = error;
                     // haut - gauche
                     if(getX() > x && getY() > y){
-                        if(Cellule.verifCaseValide(getX() - i,getY() - i) != "VIDE" && Cellule.verifCaseValide(getX() - i,getY() - i) != "erreur") {
+                        if(Cellule.verifCaseValide(getX() - i,getY() - i) != validSquare && Cellule.verifCaseValide(getX() - i,getY() - i) != error) {
                             caseSelected =  Cellule.verifCaseValide(getX() - i,getY() - i);
                             tempX = getX() - i;
                             tempY = getY() - i;
                         }
                         //bas - droite
                     } else if(getX() > x && getY() < y) {
-                        if(Cellule.verifCaseValide(getX() - i,getY() + i) != "VIDE" && Cellule.verifCaseValide(getX() - i,getY() + i) != "erreur") {
+                        if(Cellule.verifCaseValide(getX() - i,getY() + i) != validSquare && Cellule.verifCaseValide(getX() - i,getY() + i) != error) {
                             caseSelected =  Cellule.verifCaseValide(getX() - i,getY() + i);
                             tempX = getX() - i;
                             tempY = getY() + i;
                         }
                         // bas - gauche
                     } else if(getX() < x && getY() > y) {
-                        if(Cellule.verifCaseValide(getX() + i,getY() - i) != "VIDE" && Cellule.verifCaseValide(getX() + i,getY() - i) != "erreur") {
+                        if(Cellule.verifCaseValide(getX() + i,getY() - i) != validSquare && Cellule.verifCaseValide(getX() + i,getY() - i) != error) {
                             caseSelected = Cellule.verifCaseValide(getX() + i,getY() - i);
                             tempX = getX() + i;
                             tempY = getY() - i;
                         }
                         // bas - droite
                     } else if(getX() < x && getY() < y) {
-                        if(Cellule.verifCaseValide(getX() + i,getY() + i) != "VIDE" && Cellule.verifCaseValide(getX() + i,getY() + i) != "erreur") {
+                        if(Cellule.verifCaseValide(getX() + i,getY() + i) != validSquare && Cellule.verifCaseValide(getX() + i,getY() + i) != error) {
                             caseSelected =  Cellule.verifCaseValide(getX() + i,getY() + i);
                             tempX = getX() + i;
                             tempY = getY() + i;
                         }
                     }
                     // ajouter chaque case selectionnée dans un array list
-                    if(caseSelected != "VIDE" && caseSelected != "erreur") {
+                    if(caseSelected != validSquare && caseSelected != error) {
                         pieceTaked.add(new ArrayList<Integer>());
                         pieceTaked.get(0).add(0, tempX);
                         pieceTaked.get(0).add(1, tempY);
@@ -200,21 +198,21 @@ public class Piece {
                     }
                 }
                 if(pieceTaked.size() > 1) {
-                    valueReturn = "erreur";
+                    valueReturn = error;
                 } else if(this.couleur == "DB" && (colorPieceTaked == "PN" || colorPieceTaked == "DN") && pieceTaked.size() == 1){
                     valueReturn = "PRISE_D";
                 }else if(this.couleur == "DN" && (colorPieceTaked == "PB" || colorPieceTaked == "DB") && pieceTaked.size() == 1){
                     valueReturn = "PRISE_D";
                 } else if (pieceTaked.size() == 0) {
-                    valueReturn = "VIDE";
+                    valueReturn = validSquare;
                 } else {
-                    valueReturn = "erreur";
+                    valueReturn = error;
                 }
             } else {
-                valueReturn = "erreur";
+                valueReturn = error;
             }
         } else {
-            valueReturn = "VIDE";
+            valueReturn = validSquare;
         }
         colorPieceTaked = "";
         return valueReturn;
@@ -323,6 +321,11 @@ public class Piece {
         }
     }
 
+    /**
+     *
+     * @param moove true if method called for simply moove a queen, false if we check if a queen can take in this turn
+     * @return
+     */
     public Map<String, Integer> ifQueenCanTake(boolean moove){
         Map<String, Integer> map = new HashMap<String, Integer>();
             String caseSelected = "erreur";

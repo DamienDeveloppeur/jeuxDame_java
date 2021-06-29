@@ -9,19 +9,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import sonar.java.binaries;
 
 public class Cellule extends JPanel implements MouseListener {
     Cellule[][] grille = new Cellule [10][10];
     Dimension ech = new Dimension();
     // Array list des pions et des cases
     // first number : X
-    public static ArrayList<ArrayList<Integer>> pionBlanc = new ArrayList<ArrayList<Integer> >();
-    public static ArrayList<ArrayList<Integer>> pionNoir = new ArrayList<ArrayList<Integer> >();
-    public static ArrayList<ArrayList<Integer>> dameBlanc = new ArrayList<ArrayList<Integer> >();
-    public static ArrayList<ArrayList<Integer>> dameNoir = new ArrayList<ArrayList<Integer> >();
-    public static ArrayList<ArrayList<Integer>> caseValide = new ArrayList<ArrayList<Integer> >();
-    public static ArrayList<ArrayList<Integer>> caseShow = new ArrayList<ArrayList<Integer> >();
+    public static ArrayList<ArrayList<Integer>> pionBlanc = new ArrayList<>();
+    public static ArrayList<ArrayList<Integer>> pionNoir = new ArrayList<>();
+    public static ArrayList<ArrayList<Integer>> dameBlanc = new ArrayList<>();
+    public static ArrayList<ArrayList<Integer>> dameNoir = new ArrayList<>();
+    public static ArrayList<ArrayList<Integer>> caseValide = new ArrayList<>();
+    public static ArrayList<ArrayList<Integer>> caseShow = new ArrayList<>();
     static int pionBlancIndex = 0, pionNoirIndex = 0, index = 0;
     static String turn = "B";
     static boolean initialized, botMooved;

@@ -2,7 +2,6 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,9 +15,9 @@ public class Bot extends Cellule implements MouseListener {
      */
     public Bot(String color){
         if(color.equals("N")){
-            this.colorBot = "B";
+            colorBot = "B";
         }else {
-            this.colorBot = "N";
+            colorBot = "N";
         }
     }
 
@@ -26,11 +25,11 @@ public class Bot extends Cellule implements MouseListener {
      * Main method for moove the bot
      */
     public static void mooveBot(){
-        int mooveY = 0,mooveYFinal = 0,maxValue = -1000,pionToMooveX = 0,pionToMooveY = 0, mooveX = 0;
+        int mooveY = 0,mooveYFinal = 0,maxValue = -1000,pionToMooveX = 0,pionToMooveY = 0;
         String actualColor = "P"+ getTurn();
         boolean taked = false;
-        ArrayList<ArrayList<Integer>> arrayPieces = new ArrayList<ArrayList<Integer> >();
-        ArrayList<ArrayList<Integer>> arrayPiecesQueen = new ArrayList<ArrayList<Integer> >();
+        ArrayList<ArrayList<Integer>> arrayPieces = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> arrayPiecesQueen = new ArrayList<>();
         if(colorBot.equals("N")) {
             arrayPieces = Cellule.pionNoir;
             arrayPiecesQueen = Cellule.dameNoir;
@@ -38,18 +37,18 @@ public class Bot extends Cellule implements MouseListener {
             arrayPieces = Cellule.pionBlanc;
             arrayPiecesQueen = Cellule.dameBlanc;
         }
-        if(arrayPieces.size() == 0 && arrayPiecesQueen.size() == 0) {
+        if(arrayPieces.isEmpty() && arrayPiecesQueen.isEmpty()) {
             endGame("Victory");
             return;
         }
         // buckle on queen and check if one on them can take
-        if (arrayPiecesQueen.size() > 0) {
+        if (arrayPiecesQueen.isEmpty()) {
             for(int i = 0; i < arrayPiecesQueen.size(); i++){
                 currentPion = new Piece(arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1),"D"+ getTurn());
                 Map<String, Integer> map = currentPion.ifQueenCanTake(false);
-                System.out.print(map.get("pieceTakedX"));
+                int pieceTakedX = map.get("pieceTakedX");
                if(map.get("pieceTakedX") != null) {
-                   taked = currentPion.prise(map.get("pieceTakedX"), map.get("pieceTakedY"),arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1));
+                   taked = currentPion.prise(pieceTakedX, pieceTakedX,arrayPiecesQueen.get(i).get(0), arrayPiecesQueen.get(i).get(1));
                    currentPion.deplacement(map.get("arrivalSquareX"),map.get("arrivalSquareY"));
                    Piece.pieceTaked.clear();
                    if (taked) {
