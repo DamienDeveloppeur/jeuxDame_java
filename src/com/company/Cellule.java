@@ -38,35 +38,28 @@ public class Cellule extends JPanel implements MouseListener {
             for(int y=0; y<grille[x].length; y++){
                 grille[x][y] = new Cellule();
                 try {
-                    grille[x][y].dessineToi(g,x,y, ech);
+                    grille[x][y].goDraw(g,x,y, ech);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
         initialized = true;
     }
-    public void dessineToi(Graphics g, int x, int y, Dimension ech) throws IOException {
-        if (Cellule.index == 100){
-            Cellule.index = 0;
-        }
+    public void goDraw(Graphics g, int x, int y, Dimension ech) throws IOException {
+        if (Cellule.index == 100) Cellule.index = 0;
         //let's draw square
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
-        // add red case
+        // add all case
         if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
                 BufferedImage IMAGE = null;
                 String value = verifCaseValide(x,y);
-                System.out.println(value);
                 if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                     IMAGE = ImageIO.read(new File("img\\"+value+"Select.png"));
-                } else {
-                    IMAGE = ImageIO.read(new File("img\\"+value+".png"));
-                }
+                } else IMAGE = ImageIO.read(new File("img\\"+value+".png"));
 
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-
                  if(Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
                     botMooved = true;
                     Bot.mooveBot();
@@ -104,7 +97,7 @@ public class Cellule extends JPanel implements MouseListener {
     }
     public void calculerEchelle() {
         ech.width = getWidth()/grille.length;
-        ech.height=getHeight()/grille[0].length;
+        ech.height = getHeight()/grille[0].length;
     }
 
     @Override
@@ -121,7 +114,6 @@ public class Cellule extends JPanel implements MouseListener {
                 if(errorOne.equals("erreur") || errorOne.equals("VIDE")){
                     String error = currentPion.ifCanTake(caseVerif);
                     // verif if queen can take
-
 
                     if(!(error.equals("erreur") || error.equals("VIDE"))){
                         currentPion = null;
@@ -201,16 +193,11 @@ public class Cellule extends JPanel implements MouseListener {
      * @param ifMooveBot
      */
     public static void swapTurn(boolean ifMooveBot) {
-        if(turn.equals("B")){
-            Cellule.turn = "N";
-        } else {
-            Cellule.turn = "B";
-        }
-        if (Bot.colorBot != null && Bot.colorBot != "" && ifMooveBot && Bot.colorBot == getTurn()){
-            Bot.mooveBot();
-        }
-        
+        if(turn.equals("B")) Cellule.turn = "N";
+        else Cellule.turn = "B";
+        if (Bot.colorBot != null && Bot.colorBot != "" && ifMooveBot && Bot.colorBot == getTurn()) Bot.mooveBot();
     }
+
     public static void setTurn(String turn) {
         Cellule.turn = turn;
     }
