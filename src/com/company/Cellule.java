@@ -37,9 +37,11 @@ public class Cellule extends JPanel implements MouseListener {
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
                 grille[x][y] = new Cellule();
-
+                try {
                     grille[x][y].dessineToi(g,x,y, ech);
-
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         }
@@ -56,14 +58,13 @@ public class Cellule extends JPanel implements MouseListener {
             if(initialized){
                 BufferedImage IMAGE = null;
                 String value = verifCaseValide(x,y);
+                System.out.println(value);
                 if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
-                    IMAGE = ImageIO.read(new File("img\\"+value+"Selected.png"));
+                    IMAGE = ImageIO.read(new File("img\\"+value+"Select.png"));
                 } else {
                     IMAGE = ImageIO.read(new File("img\\"+value+".png"));
                 }
-                System.out.println(IMAGE);
-                System.out.println("img\\"+value+"Selected.png");
-                System.exit(0);
+
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
 
                  if(Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
@@ -79,7 +80,7 @@ public class Cellule extends JPanel implements MouseListener {
                 }
                 if (y >= 6 ){
                     if(Cellule.pionBlancIndex < 20){
-
+                        pionBlanc.add(new ArrayList<Integer>());
                         pionBlanc.get(Cellule.pionBlancIndex).add(0, x);
                         pionBlanc.get(Cellule.pionBlancIndex).add(1, y);
                         Cellule.pionBlancIndex++;
