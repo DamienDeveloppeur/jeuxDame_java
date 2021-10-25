@@ -37,73 +37,30 @@ public class Cellule extends JPanel implements MouseListener {
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
                 grille[x][y] = new Cellule();
-                grille[x][y].dessineToi(g,x,y, ech);
+                try {
+                    grille[x][y].goDraw(g,x,y, ech);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         initialized = true;
     }
-    public void dessineToi(Graphics g, int x, int y, Dimension ech) {
-        BufferedImage PB = null;
-        BufferedImage PBSELECT = null;
-        BufferedImage PN = null;
-        BufferedImage PNSELECT = null;
-        BufferedImage DB = null;
-        BufferedImage DBSELECT = null;
-        BufferedImage DN = null;
-        BufferedImage DNSELECT = null;
-        BufferedImage VIDE = null;
-        BufferedImage SHOW = null;
-
-        if (Cellule.index == 100){
-            Cellule.index = 0;
-        }
-        try {
-            PB = ImageIO.read(new File("img\\pionBlanc10.png"));
-            PBSELECT = ImageIO.read(new File("img\\pionBlanc10Select.png"));
-            PN = ImageIO.read(new File("img\\pionNoir10.png"));
-            PNSELECT = ImageIO.read(new File("img\\pionNoir10Select.png"));
-            DB = ImageIO.read(new File("img\\dameBlanche10.png"));
-            DBSELECT = ImageIO.read(new File("img\\dameBlanche10Select.png"));
-            DN = ImageIO.read(new File("img\\dameNoire10.png"));
-            DNSELECT = ImageIO.read(new File("img\\dameNoire10Select.png"));
-            VIDE = ImageIO.read(new File("img\\caseVide10.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void goDraw(Graphics g, int x, int y, Dimension ech) throws IOException {
+        if (Cellule.index == 100) Cellule.index = 0;
         //let's draw square
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
-        // add red case
+        // add all case
         if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
+                BufferedImage IMAGE = null;
                 String value = verifCaseValide(x,y);
-                if(value.equals("PB")){
-                    if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
-                        g.drawImage(PBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }else {
-                        g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }
-                } else if (value.equals("PN")){
-                    if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
-                        g.drawImage(PNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }else {
-                        g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }
-                }else if (value.equals("DB")){
-                    if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
-                        g.drawImage(DBSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }else {
-                        g.drawImage(DB,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }
-                }else if (value.equals("DN")){
-                    if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
-                        g.drawImage(DNSELECT,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }else {
-                        g.drawImage(DN,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                    }
-                } else if(value.equals("VIDE")) {
-                    g.drawImage(VIDE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                }
-                 if(Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
+                if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
+                    IMAGE = ImageIO.read(new File("img\\"+value+"Select.png"));
+                } else IMAGE = ImageIO.read(new File("img\\"+value+".png"));
+
+                g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                if(Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
                     botMooved = true;
                     Bot.mooveBot();
                 }
@@ -121,7 +78,8 @@ public class Cellule extends JPanel implements MouseListener {
                         pionBlanc.get(Cellule.pionBlancIndex).add(1, y);
                         Cellule.pionBlancIndex++;
                     }
-                    g.drawImage(PB,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    BufferedImage IMAGE = ImageIO.read(new File("img\\PB.png"));
+                    g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
                 else if(y <= 3){
                     if(Cellule.pionNoirIndex < 20){
@@ -130,7 +88,8 @@ public class Cellule extends JPanel implements MouseListener {
                         pionNoir.get(Cellule.pionNoirIndex).add(1, y);
                         Cellule.pionNoirIndex++;
                     }
-                    g.drawImage(PN,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    BufferedImage IMAGE = ImageIO.read(new File("img\\PN.png"));
+                    g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
                 }
                 Cellule.index ++;
             }
