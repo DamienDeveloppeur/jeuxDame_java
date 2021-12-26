@@ -17,9 +17,9 @@ public class Cell extends JPanel implements MouseListener {
     // first number : X
     public static ArrayList<Piece> pionBlanc = new ArrayList<>();
     public static ArrayList<Piece> pionNoir = new ArrayList<>();
-    public static ArrayList<Cell> caseValide = new ArrayList<>();
+    public static ArrayList<ValidCell> caseValide = new ArrayList<>();
     static int pionBlancIndex = 0, pionNoirIndex = 0, index = 0;
-    static String turn = "B";
+    static Boolean turn = true;
     static boolean initialized, botMooved;
     static Piece currentPion;
     static Bot Bot;
@@ -52,27 +52,29 @@ public class Cell extends JPanel implements MouseListener {
             if(initialized){
                 BufferedImage IMAGE = null;
                 String value = verifCaseValide(x,y);
+                System.out.println(pionBlanc);
+                System.out.println("~~~~~~~~~~~~~~");
+                System.out.println(value);
                 if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
                     IMAGE = ImageIO.read(new File("img\\"+value+"Select.png"));
                 } else IMAGE = ImageIO.read(new File("img\\"+value+".png"));
 
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                if(Bot.colorBot != null && Bot.colorBot != "" && Bot.colorBot.equals("B") && !botMooved) {
+                if(Bot.colorBot != null  && Bot.colorBot && !botMooved) {
                     botMooved = true;
                     Bot.mooveBot();
                 }
             }else {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                 if(caseValide.size() < 50){
-                    caseValide.add(new ArrayList<Integer>());
-                    caseValide.get(Cell.index).add(0, x);
-                    caseValide.get(Cell.index).add(1, y);
+                    caseValide.add(new ValidCell(x,y,false));
+//                    caseValide.add(new ArrayList<Integer>());
+//                    caseValide.get(Cell.index).add(0, x);
+//                    caseValide.get(Cell.index).add(1, y);
                 }
                 if (y >= 6 ){
                     if(Cell.pionBlancIndex < 20){
-                        pionBlanc.add(new ArrayList<Integer>());
-                        pionBlanc.get(Cell.pionBlancIndex).add(0, x);
-                        pionBlanc.get(Cell.pionBlancIndex).add(1, y);
+                        pionBlanc.add(new Pawn(x,y,true));
                         Cell.pionBlancIndex++;
                     }
                     BufferedImage IMAGE = ImageIO.read(new File("img\\PB.png"));
@@ -80,9 +82,7 @@ public class Cell extends JPanel implements MouseListener {
                 }
                 else if(y <= 3){
                     if(Cell.pionNoirIndex < 20){
-                        pionNoir.add(new ArrayList<Integer>());
-                        pionNoir.get(Cell.pionNoirIndex).add(0, x);
-                        pionNoir.get(Cell.pionNoirIndex).add(1, y);
+                        pionNoir.add(new Pawn(x,y,false));
                         Cell.pionNoirIndex++;
                     }
                     BufferedImage IMAGE = ImageIO.read(new File("img\\PN.png"));
@@ -108,24 +108,20 @@ public class Cell extends JPanel implements MouseListener {
      * @return The type of square (white/black pion/queen, void or error)
      */
     static String verifCaseValide(int x, int y){
-        String valueReturn;
-        ArrayList<ArrayList<Integer>> verif = new ArrayList<ArrayList<Integer> >();
-        verif.add(new ArrayList<Integer>());
-        verif.get(0).add(0, x);
-        verif.get(0).add(1, y);
-        if(pionBlanc.contains(verif.get(0))){
-            valueReturn = "PB";
-        }else if(pionNoir.contains(verif.get(0))){
-            valueReturn = "PN";
-        }else if(caseValide.contains(verif.get(0))){
-            valueReturn = "VIDE";
-        } else{
-            valueReturn = "erreur";
+        Piece verif = new Pawn(x,y,true);
+        for (Piece piece : pionBlanc){
+            if(piece.equals(verif)) return "PB";
         }
-        return valueReturn;
+        for (Piece piece : pionNoir){
+            if(piece.equals(verif)) return "PN";
+        }
+        for (Piece piece : caseValide){
+            if(piece.equals(verif)) return "VIDE";
+        }
+        return "erreur";
     }
 
-    public static String getTurn() {
+    public static Boolean getTurn() {
         return turn;
     }
 
@@ -134,17 +130,15 @@ public class Cell extends JPanel implements MouseListener {
      * @param ifMooveBot
      */
     public static void swapTurn(boolean ifMooveBot) {
-        if(turn.equals("B")){
-            Cell.turn = "N";
-        } else {
-            Cell.turn = "B";
-        }
-        if (Bot.colorBot != null && Bot.colorBot != "" && ifMooveBot && Bot.colorBot == getTurn()){
+        if(turn) Cell.turn = false;
+        else Cell.turn = true;
+
+        if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()){
             Bot.mooveBot();
         }
         
     }
-    public static void setTurn(String turn) {
+    public static void setTurn(Boolean turn) {
         Cell.turn = turn;
     }
     public static int getMooveWhiteY(int y){

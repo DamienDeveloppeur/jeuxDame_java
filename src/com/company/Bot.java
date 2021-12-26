@@ -8,17 +8,13 @@ import java.util.Map;
 import java.util.Random;
 
 public class Bot extends Cell implements MouseListener {
-    static String colorBot;
+    static Boolean colorBot;
     /**
      *
      * @param color Color choosed by the player
      */
-    public Bot(String color){
-        if(color.equals("N")){
-            colorBot = "B";
-        }else {
-            colorBot = "N";
-        }
+    public Bot(Boolean color){
+        this.colorBot = color;
     }
 
     /**
