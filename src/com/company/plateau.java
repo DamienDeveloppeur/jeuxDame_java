@@ -33,7 +33,7 @@ public class plateau extends JFrame  {
                 f.setVisible(false);
                 frame.setVisible(true);
                 frame.setContentPane(Human);
-                SwingUtilities.updateComponentTreeUI(frame);
+                //SwingUtilities.updateComponentTreeUI(frame);
             }
         });
 
@@ -59,7 +59,7 @@ public class plateau extends JFrame  {
                         colorChoice.setVisible(false);
                         frame.setVisible(true);
                         frame.setContentPane(Bot);
-                        SwingUtilities.updateComponentTreeUI(frame);
+                        //SwingUtilities.updateComponentTreeUI(frame);
                     }
                 });
 
@@ -69,10 +69,10 @@ public class plateau extends JFrame  {
                         colorChoice.setVisible(false);
                         frame.setVisible(true);
                         frame.setContentPane(Bot);
-                        SwingUtilities.updateComponentTreeUI(frame);
+                        //SwingUtilities.updateComponentTreeUI(frame);
                     }
                 });
-                SwingUtilities.updateComponentTreeUI(frame);
+                //SwingUtilities.updateComponentTreeUI(frame);
             }
         });
     }

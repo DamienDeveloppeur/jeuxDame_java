@@ -15,14 +15,17 @@ public class Cell extends JPanel implements MouseListener {
     Dimension ech = new Dimension();
     // Array list des pions et des cases
     // first number : X
-    public static ArrayList<Piece> pionBlanc = new ArrayList<>();
-    public static ArrayList<Piece> pionNoir = new ArrayList<>();
-    public static ArrayList<ValidCell> caseValide = new ArrayList<>();
+    public static ArrayList<Piece> whitePiece = new ArrayList<>();
+    public static ArrayList<Piece> blackPiece = new ArrayList<>();
+    public static ArrayList<Piece> whitePawn = new ArrayList<>();
+    public static ArrayList<Piece> blackPawn = new ArrayList<>();
+    public static ArrayList<Piece> caseValide = new ArrayList<>();
     static int pionBlancIndex = 0, pionNoirIndex = 0, index = 0;
     static Boolean turn = true;
     static boolean initialized, botMooved;
-    static Piece currentPion;
+    static Piece currentPiece;
     static Bot Bot;
+    public Point pt;
 
     public Cell(){
         addMouseListener(this);
@@ -44,51 +47,49 @@ public class Cell extends JPanel implements MouseListener {
         initialized = true;
     }
     public void goDraw(Graphics g, int x, int y, Dimension ech) throws IOException {
-        if (Cell.index == 100) Cell.index = 0;
         //let's draw square
         g.drawRect(x*ech.width, y*ech.height, ech.width, ech.height);
         // add all case
-        if (((x % 2) == 0 && (y % 2) == 0 ) || (x % 2) != 0 && (y % 2) != 0){
+        if (((x % 2) == 0 && (y % 2) == 0  ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
                 BufferedImage IMAGE = null;
-                String value = verifCaseValide(x,y);
-                System.out.println(pionBlanc);
-                System.out.println("~~~~~~~~~~~~~~");
-                System.out.println(value);
-                if(currentPion != null && x == currentPion.getX() && currentPion.getY() == y ){
-                    IMAGE = ImageIO.read(new File("img\\"+value+"Select.png"));
-                } else IMAGE = ImageIO.read(new File("img\\"+value+".png"));
+                Piece value = verifObjectInCase(x,y);
 
+                //if(value.isColor()) System.out.println(value.toString());
+                String imageToDraw = "";
+                if(value != null){
+                    if(value instanceof Pawn) {
+                        if(value.isColor()) imageToDraw = "PB";
+                        else imageToDraw = "PN";
+                    } else if(value instanceof Queen) {
+                        if(value.isColor()) imageToDraw = "DB";
+                        else imageToDraw = "DN";
+                    } else {
+                        imageToDraw = "VIDE";
+                    }
+                }
+                //System.out.println(imageToDraw);
+                if(this.currentPiece != null && x == this.currentPiece.getX() && this.currentPiece.getY() == y){
+                    IMAGE = ImageIO.read(new File("img\\"+imageToDraw+"Select.png"));
+                } else IMAGE = ImageIO.read(new File("img\\"+imageToDraw+".png"));
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                if(Bot.colorBot != null  && Bot.colorBot && !botMooved) {
+                if(Bot.colorBot != null && Bot.colorBot && !botMooved) {
                     botMooved = true;
                     Bot.mooveBot();
                 }
             }else {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
-                if(caseValide.size() < 50){
-                    caseValide.add(new ValidCell(x,y,false));
-//                    caseValide.add(new ArrayList<Integer>());
-//                    caseValide.get(Cell.index).add(0, x);
-//                    caseValide.get(Cell.index).add(1, y);
-                }
+                if(caseValide.size() < 50) caseValide.add(new ValidCell(x,y,false));
                 if (y >= 6 ){
-                    if(Cell.pionBlancIndex < 20){
-                        pionBlanc.add(new Pawn(x,y,true));
-                        Cell.pionBlancIndex++;
-                    }
-                    BufferedImage IMAGE = ImageIO.read(new File("img\\PB.png"));
-                    g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
+                    whitePawn.add(new Pawn(x,y,true));
+                    whitePiece.add(new Pawn(x,y,true));
+                    g.drawImage(ImageIO.read(new File("img\\PB.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
                 }
                 else if(y <= 3){
-                    if(Cell.pionNoirIndex < 20){
-                        pionNoir.add(new Pawn(x,y,false));
-                        Cell.pionNoirIndex++;
-                    }
-                    BufferedImage IMAGE = ImageIO.read(new File("img\\PN.png"));
-                    g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                }
-                Cell.index ++;
+                    blackPawn.add(new Pawn(x,y,false));
+                    blackPiece.add(new Pawn(x,y,false));
+                    g.drawImage(ImageIO.read(new File("img\\PN.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
+                } else g.drawImage(ImageIO.read(new File("img\\VIDE.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
             }
         }
     }
@@ -99,7 +100,34 @@ public class Cell extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        this.pt = e.getPoint();
+        pt.x/=ech.width;
+        pt.y/=ech.height;
+        System.out.println("x : " + pt.x);
+        System.out.println("y : " + pt.y);
+        if(this.currentPiece != null){
+            // on doit forcément cliquer sur une case vide
+            Piece pieceClicked = verifObjectInCase(pt.x, pt.y);
+            if(pieceClicked == null) return;
+            if(this.currentPiece.equals(pieceClicked)) {this.currentPiece = null;repaint();return;}
+            if((pieceClicked instanceof Pawn || pieceClicked instanceof Queen) && pieceClicked.isColor() == this.turn) this.currentPiece = pieceClicked;
+            if(pieceClicked instanceof ValidCell){
+                this.currentPiece.tryingMoove(pieceClicked);
+            }
+        } else {
+            Piece current = this.ifPieceExist(whitePiece);
+            if(current != null && turn) {this.currentPiece = current;repaint();return;}
+            current = this.ifPieceExist(blackPiece);
+            if(current != null && !turn) {this.currentPiece = current;}
+        }
         repaint();
+    }
+
+    public Piece ifPieceExist(ArrayList<Piece> listPawn){
+        for(Piece p : listPawn){
+            if(new Pawn(pt.x,pt.y,true).equals(p)) {return p;}
+        }
+        return null;
     }
     /**
      * Verify what does this square contain
@@ -107,23 +135,23 @@ public class Cell extends JPanel implements MouseListener {
      * @param y abscisse of square to test
      * @return The type of square (white/black pion/queen, void or error)
      */
-    static String verifCaseValide(int x, int y){
+    static Piece verifObjectInCase(int x, int y){
         Piece verif = new Pawn(x,y,true);
-        for (Piece piece : pionBlanc){
-            if(piece.equals(verif)) return "PB";
+        for (Piece p : whitePiece){
+            if(p.equals(verif)) return p;
         }
-        for (Piece piece : pionNoir){
-            if(piece.equals(verif)) return "PN";
+        verif = new Pawn(x,y,false);
+        for (Piece p : blackPiece){
+            if(p.equals(verif)) return p;
         }
-        for (Piece piece : caseValide){
-            if(piece.equals(verif)) return "VIDE";
+        for (Piece p : caseValide){
+            if(p.equals(verif)) return p;
         }
-        return "erreur";
+        return null;
     }
 
-    public static Boolean getTurn() {
-        return turn;
-    }
+
+    public static Boolean getTurn() {return turn;}
 
     /**
      *
@@ -132,11 +160,7 @@ public class Cell extends JPanel implements MouseListener {
     public static void swapTurn(boolean ifMooveBot) {
         if(turn) Cell.turn = false;
         else Cell.turn = true;
-
-        if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()){
-            Bot.mooveBot();
-        }
-        
+        if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()) Bot.mooveBot();
     }
     public static void setTurn(Boolean turn) {
         Cell.turn = turn;
