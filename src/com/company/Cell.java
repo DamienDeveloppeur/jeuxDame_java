@@ -13,14 +13,11 @@ import java.util.ArrayList;
 public class Cell extends JPanel implements MouseListener {
     Cell[][] grille = new Cell[10][10];
     Dimension ech = new Dimension();
-    // Array list des pions et des cases
-    // first number : X
     public static ArrayList<Piece> whitePiece = new ArrayList<>();
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
     public static ArrayList<Piece> whitePawn = new ArrayList<>();
     public static ArrayList<Piece> blackPawn = new ArrayList<>();
     public static ArrayList<Piece> caseValide = new ArrayList<>();
-    static int pionBlancIndex = 0, pionNoirIndex = 0, index = 0;
     static Boolean turn = true;
     static boolean initialized, botMooved;
     static Piece currentPiece;
@@ -124,8 +121,9 @@ public class Cell extends JPanel implements MouseListener {
     }
 
     public Piece ifPieceExist(ArrayList<Piece> listPawn){
+        Piece p2 = new Pawn(pt.x,pt.y,true);
         for(Piece p : listPawn){
-            if(new Pawn(pt.x,pt.y,true).equals(p)) {return p;}
+            if(p2.equals(p)) {return p;}
         }
         return null;
     }
