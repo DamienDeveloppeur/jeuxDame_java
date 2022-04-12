@@ -52,10 +52,11 @@ public abstract class Piece {
             // si la case entre les deux target est une pièce de l'autre couleur
             if(this.isColor() && this.getY() - o.getY() > 0){
                 // on prend donc à gauche
-                if(this.getX() - o.getY() > 0) {
+                if(this.getX() - o.getX() > 0) {
                     Piece objectToCheck = Cell.verifObjectInCase(this.getX() -1,this.getY() -1);
                     if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
                         // go delete the piece and moove
+                        System.out.println("MIAM MIAM MIAM");
                         deleteAnPiece(objectToCheck);
                         this.moove(o);
                     }
@@ -68,8 +69,27 @@ public abstract class Piece {
                         this.moove(o);
                     }
                 }
+            } else if (!this.isColor() && this.getY() - o.getY() < 0) {
+                System.out.println("ON MANGE BLACK");
+                if(this.getX() - o.getX() > 0) {
+                    Piece objectToCheck = Cell.verifObjectInCase(this.getX() -1,this.getY() +1);
+                    if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
+                        // go delete the piece and moove
+                        System.out.println("MIAM MIAM MIAM BLACK");
+                        deleteAnPiece(objectToCheck);
+                        this.moove(o);
+                    }
+                    // on prend donc à droite
+                } else {
+                    Piece objectToCheck = Cell.verifObjectInCase(this.getX() + 1,this.getY() +1);
+                    if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
+                        // go delete the piece and moove
+                        deleteAnPiece(objectToCheck);
+                        this.moove(o);
+                    }
+                }
             }
-            System.out.println("ON MANGE");
+
         }
     }
     public void deleteAnPiece(Piece o){
