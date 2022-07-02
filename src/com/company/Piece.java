@@ -20,7 +20,7 @@ public abstract class Piece extends Case {
     private int coeffY;
     public abstract void ifThisCanTake(ValidCell o);
 
-    public void moove (ValidCell p, Boolean ifSwapTurn) {
+    public void moove (ValidCell p) {
         this.setX(p.getX());
         this.setY(p.getY());
         Cell.currentPiece = null;
@@ -34,7 +34,7 @@ public abstract class Piece extends Case {
             // test if piece can eat again with valid cell
             deleteAnPiece((Piece) objectToCheck);
             this.moove(o);
-
+            System.out.println();
         }
     }
 
@@ -46,25 +46,25 @@ public abstract class Piece extends Case {
         // si on se contente de bouger
         //System.out.println("get heuristic : "+getHeuristic(this,o));
         if(getHeuristic(this,o) == 2 && this.getX() != o.getX()) {
-            this.moove(o, true);
+            this.moove(o);
         } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() && (Math.abs(this.getX() - o.getX()) == 2 && Math.abs(this.getY() - o.getY()) == 2)){
-            if (this.getX() - o.getX() > 0 && this.getY() - o.getY() > 0) {
-                this.eat(o, -1, -1);
-            }
-            if (this.getX() - o.getX() < 0 && this.getY() - o.getY() > 0) this.eat(o, 1, -1);
-            if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) this.eat(o, 1, 1);
-            if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) this.eat(o, -1, 1);
+            int[] arr = this.tryingToEat(o);
+            System.out.println("ARRAY : " + arr[0]);
+            if(arr != null) this.eat(o, arr[0], arr[1]);
         }
     }
+
+    /**
+     *
+     * @param o
+     * @return
+     */
     public int[] tryingToEat(ValidCell o){
-        if (this.getX() - o.getX() > 0 && this.getY() - o.getY() > 0) {
-            this.eat(o, -1, -1);
-            return new int[]{-1, -1};
-        }
-        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() > 0) this.eat(o, 1, -1);
-        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) this.eat(o, 1, 1);
-        else if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) this.eat(o, -1, 1);
-        else
+        if (this.getX() - o.getX() > 0 && this.getY() - o.getY() > 0) return new int[]{-1, -1};
+        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() > 0) return new int[]{1, -1};
+        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) return new int[]{1, -1};
+        else if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) return new int[]{1, 1};
+        else return null;
     }
     /**
      *
@@ -102,5 +102,4 @@ public abstract class Piece extends Case {
     public int hashCode() {
         return Objects.hash(getX(), getY());
     }
-
 }

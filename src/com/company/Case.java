@@ -51,4 +51,13 @@ public abstract class Case {
     public boolean isColor() {
         return color;
     }
+
+    @Override
+    public String toString() {
+        return "Case{" +
+                "x=" + x +
+                ", y=" + y +
+                ", color=" + color +
+                '}';
+    }
 }
