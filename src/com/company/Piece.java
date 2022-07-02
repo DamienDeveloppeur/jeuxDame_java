@@ -18,24 +18,13 @@ public abstract class Piece extends Case {
     };
     private int coeffX;
     private int coeffY;
-    public abstract void ifThisCanTake(ValidCell o);
+    public abstract Boolean ifThisCanTake(Piece p);
 
     public void moove (ValidCell p) {
         this.setX(p.getX());
         this.setY(p.getY());
         Cell.currentPiece = null;
         Cell.swapTurn(false);
-    }
-    public void eat(ValidCell o,int x, int y){
-        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
-        if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
-            // go delete the piece and moove
-            System.out.println("MIAM MIAM MIAM");
-            // test if piece can eat again with valid cell
-            deleteAnPiece((Piece) objectToCheck);
-            this.moove(o);
-            System.out.println();
-        }
     }
 
     /**
@@ -47,10 +36,12 @@ public abstract class Piece extends Case {
         //System.out.println("get heuristic : "+getHeuristic(this,o));
         if(getHeuristic(this,o) == 2 && this.getX() != o.getX()) {
             this.moove(o);
-        } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() && (Math.abs(this.getX() - o.getX()) == 2 && Math.abs(this.getY() - o.getY()) == 2)){
+        } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() &&
+                (Math.abs(this.getX() - o.getX()) == 2 && Math.abs(this.getY() - o.getY()) == 2)){
             int[] arr = this.tryingToEat(o);
-            System.out.println("ARRAY : " + arr[0]);
-            if(arr != null) this.eat(o, arr[0], arr[1]);
+            if(arr != null && verifForEat(arr[0], arr[1])){
+                this.eat(o, arr[0], arr[1]);
+            }
         }
     }
 
@@ -62,9 +53,30 @@ public abstract class Piece extends Case {
     public int[] tryingToEat(ValidCell o){
         if (this.getX() - o.getX() > 0 && this.getY() - o.getY() > 0) return new int[]{-1, -1};
         else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() > 0) return new int[]{1, -1};
-        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) return new int[]{1, -1};
-        else if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) return new int[]{1, 1};
+        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) return new int[]{1, 1};
+        else if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) return new int[]{-1, 1};
         else return null;
+    }
+    public Boolean verifForEat(int x, int y){
+        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
+        if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) return true;
+        return false;
+
+    }
+    public void eat(ValidCell o,int x, int y){
+        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
+        // go delete the piece and moove
+        System.out.println("MIAM MIAM MIAM");
+        // test if piece can eat again with valid cell
+        deleteAnPiece((Piece) objectToCheck);
+        this.moove(o);
+        // launch ifThisCanTake
+        if(this.ifThisCanTake(this)) {
+            Cell.swapTurn(false);
+            Cell.currentPiece = this;
+        }
+        System.out.println();
+
     }
     /**
      *

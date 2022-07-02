@@ -8,12 +8,20 @@ public class Pawn extends Piece{
     }
     // surcharge de méthode
     @Override
-    public void ifThisCanTake(ValidCell o) {
-        Case objectToCheck = Cell.verifObjectInCase(this.getX() + 1,this.getY() + 1);
+    public Boolean ifThisCanTake(Piece p) {
+        if(verifForEat(1,1) &&
+                Cell.verifObjectInCase(this.getX() + 2, this.getY() + 2) instanceof ValidCell)
+            return true;
+        if (verifForEat(-1,-1) &&
+                Cell.verifObjectInCase(this.getX() - 2, this.getY() - 2) instanceof ValidCell)
+            return true;
+        if (verifForEat(1,-1) &&
+                Cell.verifObjectInCase(this.getX() + 2, this.getY() - 2) instanceof ValidCell)
+            return true;
+        if (verifForEat(-1,1) &&
+                Cell.verifObjectInCase(this.getX() - 2, this.getY() + 2) instanceof ValidCell)
+            return true;
 
-    }
-
-    public void ifTaked(){
-
+        return false;
     }
 }
