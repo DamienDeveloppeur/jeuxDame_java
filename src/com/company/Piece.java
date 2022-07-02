@@ -1,8 +1,5 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public abstract class Piece extends Case {
@@ -16,25 +13,28 @@ public abstract class Piece extends Case {
 
     public void ifOneCanTake(){
         // check pawn
+
         // check queen
     };
     private int coeffX;
     private int coeffY;
-    public abstract void ifThisCanTake();
+    public abstract void ifThisCanTake(ValidCell o);
 
-    public void moove (ValidCell p) {
+    public void moove (ValidCell p, Boolean ifSwapTurn) {
         this.setX(p.getX());
         this.setY(p.getY());
         Cell.currentPiece = null;
         Cell.swapTurn(false);
     }
     public void eat(ValidCell o,int x, int y){
-        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + this.coeffY);
+        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
         if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
             // go delete the piece and moove
             System.out.println("MIAM MIAM MIAM");
+            // test if piece can eat again with valid cell
             deleteAnPiece((Piece) objectToCheck);
             this.moove(o);
+
         }
     }
 
@@ -46,26 +46,26 @@ public abstract class Piece extends Case {
         // si on se contente de bouger
         //System.out.println("get heuristic : "+getHeuristic(this,o));
         if(getHeuristic(this,o) == 2 && this.getX() != o.getX()) {
-            this.moove(o);
+            this.moove(o, true);
         } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() && (Math.abs(this.getX() - o.getX()) == 2 && Math.abs(this.getY() - o.getY()) == 2)){
-            // si la case entre les deux target est une pièce de l'autre couleur
-            if(this.isColor() && this.getY() - o.getY() > 0){
-                // on prend donc à gauche
-                if(this.getX() - o.getX() > 0) {
-                    this.eat(o, -1,-1);
-                    // on prend donc à droite
-                } else this.eat(o, 1,-1);
-            } else if (!this.isColor() && this.getY() - o.getY() < 0) {
-                System.out.println("ON MANGE BLACK");
-                if(this.getX() - o.getX() > 0) {
-                    this.eat(o, -1,1);
-                    // on prend donc à droite
-                } else this.eat(o, 1,1);
+            if (this.getX() - o.getX() > 0 && this.getY() - o.getY() > 0) {
+                this.eat(o, -1, -1);
             }
-
+            if (this.getX() - o.getX() < 0 && this.getY() - o.getY() > 0) this.eat(o, 1, -1);
+            if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) this.eat(o, 1, 1);
+            if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) this.eat(o, -1, 1);
         }
     }
-
+    public int[] tryingToEat(ValidCell o){
+        if (this.getX() - o.getX() > 0 && this.getY() - o.getY() > 0) {
+            this.eat(o, -1, -1);
+            return new int[]{-1, -1};
+        }
+        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() > 0) this.eat(o, 1, -1);
+        else if (this.getX() - o.getX() < 0 && this.getY() - o.getY() < 0) this.eat(o, 1, 1);
+        else if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) this.eat(o, -1, 1);
+        else
+    }
     /**
      *
      * @param o

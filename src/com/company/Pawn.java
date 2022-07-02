@@ -8,10 +8,9 @@ public class Pawn extends Piece{
     }
     // surcharge de méthode
     @Override
-    public void ifThisCanTake() {
-        if(this.isColor()){
+    public void ifThisCanTake(ValidCell o) {
+        Case objectToCheck = Cell.verifObjectInCase(this.getX() + 1,this.getY() + 1);
 
-        }
     }
 
     public void ifTaked(){
