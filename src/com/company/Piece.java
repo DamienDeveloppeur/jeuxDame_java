@@ -5,45 +5,44 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class Piece {
-    private int x;
-    private int y;
-    private boolean color;
+public abstract class Piece extends Case {
 
     public Piece(int x, int y, boolean color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
+        super(x,y,color);
+        if(color) this.coeffY = -1;
+        else coeffY = 1;
     }
 
-    @Override
-    public String toString() {
-        return "Piece{" +
-                "x=" + x +
-                ", y=" + y +
-                ", color=" + color +
-                '}';
-    }
 
-    public boolean isColor() {
-        return color;
-    }
+    public void ifOneCanTake(){
+        // check pawn
+        // check queen
+    };
+    private int coeffX;
+    private int coeffY;
+    public abstract void ifThisCanTake();
 
-    public void setColor(boolean color) {
-        this.color = color;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void moove (Piece p) {
+    public void moove (ValidCell p) {
         this.setX(p.getX());
         this.setY(p.getY());
         Cell.currentPiece = null;
         Cell.swapTurn(false);
     }
-    public void tryingMoove(Piece o) {
+    public void eat(ValidCell o,int x, int y){
+        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + this.coeffY);
+        if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
+            // go delete the piece and moove
+            System.out.println("MIAM MIAM MIAM");
+            deleteAnPiece((Piece) objectToCheck);
+            this.moove(o);
+        }
+    }
+
+    /**
+     *
+     * @param o Case to check
+     */
+    public void tryingMoove(ValidCell o) {
         // si on se contente de bouger
         //System.out.println("get heuristic : "+getHeuristic(this,o));
         if(getHeuristic(this,o) == 2 && this.getX() != o.getX()) {
@@ -53,54 +52,41 @@ public abstract class Piece {
             if(this.isColor() && this.getY() - o.getY() > 0){
                 // on prend donc à gauche
                 if(this.getX() - o.getX() > 0) {
-                    Piece objectToCheck = Cell.verifObjectInCase(this.getX() -1,this.getY() -1);
-                    if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
-                        // go delete the piece and moove
-                        System.out.println("MIAM MIAM MIAM");
-                        deleteAnPiece(objectToCheck);
-                        this.moove(o);
-                    }
+                    this.eat(o, -1,-1);
                     // on prend donc à droite
-                } else {
-                    Piece objectToCheck = Cell.verifObjectInCase(this.getX() + 1,this.getY() -1);
-                    if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
-                        // go delete the piece and moove
-                        deleteAnPiece(objectToCheck);
-                        this.moove(o);
-                    }
-                }
+                } else this.eat(o, 1,-1);
             } else if (!this.isColor() && this.getY() - o.getY() < 0) {
                 System.out.println("ON MANGE BLACK");
                 if(this.getX() - o.getX() > 0) {
-                    Piece objectToCheck = Cell.verifObjectInCase(this.getX() -1,this.getY() +1);
-                    if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
-                        // go delete the piece and moove
-                        System.out.println("MIAM MIAM MIAM BLACK");
-                        deleteAnPiece(objectToCheck);
-                        this.moove(o);
-                    }
+                    this.eat(o, -1,1);
                     // on prend donc à droite
-                } else {
-                    Piece objectToCheck = Cell.verifObjectInCase(this.getX() + 1,this.getY() +1);
-                    if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) {
-                        // go delete the piece and moove
-                        deleteAnPiece(objectToCheck);
-                        this.moove(o);
-                    }
-                }
+                } else this.eat(o, 1,1);
             }
 
         }
     }
+
+    /**
+     *
+     * @param o
+     */
     public void deleteAnPiece(Piece o){
         if(o.isColor()) Cell.whitePiece.remove(o);
         else Cell.blackPiece.remove(o);
     }
-    public abstract void ifOneCanTake();
 
-    public int getHeuristic(Piece startMoove, Piece finalMoove) {
+
+    /**
+     *
+     * @param startMoove
+     * @param finalMoove
+     * @return
+     */
+    public int getHeuristic(Piece startMoove, Case finalMoove) {
         return Math.abs(startMoove.getX() - finalMoove.getX()) + Math.abs(startMoove.getY() - finalMoove.getY());
     }
+
+
 
     //public void
 
@@ -117,15 +103,4 @@ public abstract class Piece {
         return Objects.hash(getX(), getY());
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
 }

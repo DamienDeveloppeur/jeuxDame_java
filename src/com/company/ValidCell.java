@@ -1,12 +1,8 @@
 package com.company;
 
-public class ValidCell extends Piece {
-    ValidCell(int x, int y, Boolean color){
-        super(x,y,color);
+public class ValidCell extends Case {
+    ValidCell(int x, int y){
+        super(x,y,false);
     }
 
-    @Override
-    public void ifOneCanTake() {
-
-    }
 }

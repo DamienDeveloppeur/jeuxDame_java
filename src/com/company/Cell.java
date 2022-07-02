@@ -17,7 +17,7 @@ public class Cell extends JPanel implements MouseListener {
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
     public static ArrayList<Piece> whitePawn = new ArrayList<>();
     public static ArrayList<Piece> blackPawn = new ArrayList<>();
-    public static ArrayList<Piece> caseValide = new ArrayList<>();
+    public static ArrayList<Case> caseValide = new ArrayList<>();
     static Boolean turn = true;
     static boolean initialized, botMooved;
     static Piece currentPiece;
@@ -50,7 +50,7 @@ public class Cell extends JPanel implements MouseListener {
         if (((x % 2) == 0 && (y % 2) == 0  ) || (x % 2) != 0 && (y % 2) != 0){
             if(initialized){
                 BufferedImage IMAGE = null;
-                Piece value = verifObjectInCase(x,y);
+                Case value = verifObjectInCase(x,y);
 
                 //if(value.isColor()) System.out.println(value.toString());
                 String imageToDraw = "";
@@ -65,7 +65,6 @@ public class Cell extends JPanel implements MouseListener {
                         imageToDraw = "VIDE";
                     }
                 }
-                //System.out.println(imageToDraw);
                 if(this.currentPiece != null && x == this.currentPiece.getX() && this.currentPiece.getY() == y){
                     IMAGE = ImageIO.read(new File("img\\"+imageToDraw+"Select.png"));
                 } else IMAGE = ImageIO.read(new File("img\\"+imageToDraw+".png"));
@@ -76,7 +75,7 @@ public class Cell extends JPanel implements MouseListener {
                 }
             }else {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
-                if(caseValide.size() < 50) caseValide.add(new ValidCell(x,y,false));
+                if(caseValide.size() < 50) caseValide.add(new ValidCell(x,y));
                 if (y >= 6 ){
                     whitePawn.add(new Pawn(x,y,true));
                     whitePiece.add(new Pawn(x,y,true));
@@ -104,18 +103,18 @@ public class Cell extends JPanel implements MouseListener {
         System.out.println("y : " + pt.y);
         if(this.currentPiece != null){
             // on doit forcément cliquer sur une case vide
-            Piece pieceClicked = verifObjectInCase(pt.x, pt.y);
+            Case pieceClicked = verifObjectInCase(pt.x, pt.y);
             if(pieceClicked == null) return;
             if(this.currentPiece.equals(pieceClicked)) {this.currentPiece = null;repaint();return;}
-            if((pieceClicked instanceof Pawn || pieceClicked instanceof Queen) && pieceClicked.isColor() == this.turn) this.currentPiece = pieceClicked;
+            if((pieceClicked instanceof Piece) && pieceClicked.isColor() == this.turn) this.currentPiece = (Piece) pieceClicked;
             if(pieceClicked instanceof ValidCell){
-                this.currentPiece.tryingMoove(pieceClicked);
+                this.currentPiece.tryingMoove((ValidCell) pieceClicked);
             }
         } else {
             Piece current = this.ifPieceExist(whitePiece);
             if(current != null && turn) {this.currentPiece = current;repaint();return;}
             current = this.ifPieceExist(blackPiece);
-            if(current != null && !turn) {this.currentPiece = current;}
+            if(current != null && !turn) this.currentPiece = current;
         }
         repaint();
     }
@@ -133,8 +132,8 @@ public class Cell extends JPanel implements MouseListener {
      * @param y abscisse of square to test
      * @return The type of square (white/black pion/queen, void or error)
      */
-    static Piece verifObjectInCase(int x, int y){
-        Piece verif = new Pawn(x,y,true);
+    static Case verifObjectInCase(int x, int y){
+        Case verif = new Pawn(x,y,true);
         for (Piece p : whitePiece){
             if(p.equals(verif)) return p;
         }
@@ -142,7 +141,8 @@ public class Cell extends JPanel implements MouseListener {
         for (Piece p : blackPiece){
             if(p.equals(verif)) return p;
         }
-        for (Piece p : caseValide){
+        verif = new ValidCell(x,y);
+        for (Case p : caseValide){
             if(p.equals(verif)) return p;
         }
         return null;

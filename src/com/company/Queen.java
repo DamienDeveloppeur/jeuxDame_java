@@ -6,7 +6,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public void ifOneCanTake() {
+    public void ifThisCanTake() {
 
     }
 }
