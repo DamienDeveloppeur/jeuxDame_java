@@ -9,4 +9,11 @@ public class Queen extends Piece {
     public Boolean ifThisCanTake(Piece p) {
         return true;
     }
+
+    @Override
+    public void tryingMoove(ValidCell o) {
+        // on doit rester sur une diagonale
+        // on boucle sur toutes les cases de cette dernière
+
+    }
 }

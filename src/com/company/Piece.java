@@ -21,8 +21,21 @@ public abstract class Piece extends Case {
     public abstract Boolean ifThisCanTake(Piece p);
 
     public void moove (ValidCell p) {
+        // verif if a queen is made
         this.setX(p.getX());
         this.setY(p.getY());
+        if(this.isColor() && p.getY() == 0 && this instanceof Pawn) {
+            // make queen
+            Queen queen = new Queen(this.getX(), this.getY(), true);
+            Cell.whitePiece.remove(this);
+            Cell.whitePiece.add(queen);
+        }
+        if(!this.isColor() && p.getY() == 9 && this instanceof Pawn) {
+            // make queen
+            Queen queen = new Queen(this.getX(), this.getY(), false);
+            Cell.blackPiece.remove(this);
+            Cell.blackPiece.add(queen);
+        }
         Cell.currentPiece = null;
         Cell.swapTurn(false);
     }
@@ -31,19 +44,7 @@ public abstract class Piece extends Case {
      *
      * @param o Case to check
      */
-    public void tryingMoove(ValidCell o) {
-        // si on se contente de bouger
-        //System.out.println("get heuristic : "+getHeuristic(this,o));
-        if(getHeuristic(this,o) == 2 && this.getX() != o.getX()) {
-            this.moove(o);
-        } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() &&
-                (Math.abs(this.getX() - o.getX()) == 2 && Math.abs(this.getY() - o.getY()) == 2)){
-            int[] arr = this.tryingToEat(o);
-            if(arr != null && verifForEat(arr[0], arr[1])){
-                this.eat(o, arr[0], arr[1]);
-            }
-        }
-    }
+    public abstract void tryingMoove(ValidCell o);
 
     /**
      *
@@ -57,12 +58,25 @@ public abstract class Piece extends Case {
         else if (this.getX() - o.getX() > 0 && this.getY() - o.getY() < 0) return new int[]{-1, 1};
         else return null;
     }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Boolean verifForEat(int x, int y){
         Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
         if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) return true;
         return false;
-
     }
+
+    /**
+     *
+     * @param o
+     * @param x
+     * @param y
+     */
     public void eat(ValidCell o,int x, int y){
         Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
         // go delete the piece and moove
@@ -75,8 +89,6 @@ public abstract class Piece extends Case {
             Cell.swapTurn(false);
             Cell.currentPiece = this;
         }
-        System.out.println();
-
     }
     /**
      *

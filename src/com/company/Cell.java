@@ -15,8 +15,8 @@ public class Cell extends JPanel implements MouseListener {
     Dimension ech = new Dimension();
     public static ArrayList<Piece> whitePiece = new ArrayList<>();
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
-    public static ArrayList<Piece> whitePawn = new ArrayList<>();
-    public static ArrayList<Piece> blackPawn = new ArrayList<>();
+//    public static ArrayList<Piece> whitePawn = new ArrayList<>();
+//    public static ArrayList<Piece> blackPawn = new ArrayList<>();
     public static ArrayList<Case> caseValide = new ArrayList<>();
     static Boolean turn = true;
     static boolean initialized, botMooved;
@@ -65,7 +65,7 @@ public class Cell extends JPanel implements MouseListener {
                         imageToDraw = "VIDE";
                     }
                 }
-                if(this.currentPiece != null && x == this.currentPiece.getX() && this.currentPiece.getY() == y){
+                if(currentPiece != null && x == currentPiece.getX() && currentPiece.getY() == y){
                     IMAGE = ImageIO.read(new File("img\\"+imageToDraw+"Select.png"));
                 } else IMAGE = ImageIO.read(new File("img\\"+imageToDraw+".png"));
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
@@ -77,12 +77,12 @@ public class Cell extends JPanel implements MouseListener {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                 if(caseValide.size() < 50) caseValide.add(new ValidCell(x,y));
                 if (y >= 6 ){
-                    whitePawn.add(new Pawn(x,y,true));
+//                    whitePawn.add(new Pawn(x,y,true));
                     whitePiece.add(new Pawn(x,y,true));
                     g.drawImage(ImageIO.read(new File("img\\PB.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
                 }
                 else if(y <= 3){
-                    blackPawn.add(new Pawn(x,y,false));
+//                    blackPawn.add(new Pawn(x,y,false));
                     blackPiece.add(new Pawn(x,y,false));
                     g.drawImage(ImageIO.read(new File("img\\PN.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
                 } else g.drawImage(ImageIO.read(new File("img\\VIDE.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
@@ -94,6 +94,10 @@ public class Cell extends JPanel implements MouseListener {
         ech.height=getHeight()/grille[0].length;
     }
 
+    /**
+     *
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         this.pt = e.getPoint();
@@ -101,24 +105,29 @@ public class Cell extends JPanel implements MouseListener {
         pt.y/=ech.height;
         System.out.println("x : " + pt.x);
         System.out.println("y : " + pt.y);
-        if(this.currentPiece != null){
+        if(currentPiece != null){
             // on doit forcément cliquer sur une case vide
             Case pieceClicked = verifObjectInCase(pt.x, pt.y);
             if(pieceClicked == null) return;
-            if(this.currentPiece.equals(pieceClicked)) {this.currentPiece = null;repaint();return;}
-            if((pieceClicked instanceof Piece) && pieceClicked.isColor() == this.turn) this.currentPiece = (Piece) pieceClicked;
+            if(currentPiece.equals(pieceClicked)) {currentPiece = null;repaint();return;}
+            if((pieceClicked instanceof Piece) && pieceClicked.isColor() == turn) currentPiece = (Piece) pieceClicked;
             if(pieceClicked instanceof ValidCell){
-                this.currentPiece.tryingMoove((ValidCell) pieceClicked);
+                currentPiece.tryingMoove((ValidCell) pieceClicked);
             }
         } else {
             Piece current = this.ifPieceExist(whitePiece);
-            if(current != null && turn) {this.currentPiece = current;repaint();return;}
+            if(current != null && turn) {currentPiece = current;repaint();return;}
             current = this.ifPieceExist(blackPiece);
-            if(current != null && !turn) this.currentPiece = current;
+            if(current != null && !turn) currentPiece = current;
         }
         repaint();
     }
 
+    /**
+     *
+     * @param listPawn
+     * @return
+     */
     public Piece ifPieceExist(ArrayList<Piece> listPawn){
         Piece p2 = new Pawn(pt.x,pt.y,true);
         for(Piece p : listPawn){
