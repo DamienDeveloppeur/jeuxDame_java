@@ -71,25 +71,7 @@ public abstract class Piece extends Case {
         return false;
     }
 
-    /**
-     *
-     * @param o
-     * @param x
-     * @param y
-     */
-    public void eat(ValidCell o,int x, int y){
-        Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
-        // go delete the piece and moove
-        System.out.println("MIAM MIAM MIAM");
-        // test if piece can eat again with valid cell
-        deleteAnPiece((Piece) objectToCheck);
-        this.moove(o);
-        // launch ifThisCanTake
-        if(this.ifThisCanTake(this)) {
-            Cell.swapTurn(false);
-            Cell.currentPiece = this;
-        }
-    }
+
     /**
      *
      * @param o

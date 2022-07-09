@@ -111,9 +111,9 @@ public class Cell extends JPanel implements MouseListener {
             if(pieceClicked == null) return;
             if(currentPiece.equals(pieceClicked)) {currentPiece = null;repaint();return;}
             if((pieceClicked instanceof Piece) && pieceClicked.isColor() == turn) currentPiece = (Piece) pieceClicked;
-            if(pieceClicked instanceof ValidCell){
+            if(pieceClicked instanceof ValidCell)
                 currentPiece.tryingMoove((ValidCell) pieceClicked);
-            }
+
         } else {
             Piece current = this.ifPieceExist(whitePiece);
             if(current != null && turn) {currentPiece = current;repaint();return;}
@@ -142,7 +142,7 @@ public class Cell extends JPanel implements MouseListener {
      * @return The type of square (white/black pion/queen, void or error)
      */
     static Case verifObjectInCase(int x, int y){
-        Case verif = new Pawn(x,y,true);
+        Piece verif = new Pawn(x,y,true);
         for (Piece p : whitePiece){
             if(p.equals(verif)) return p;
         }
@@ -150,9 +150,9 @@ public class Cell extends JPanel implements MouseListener {
         for (Piece p : blackPiece){
             if(p.equals(verif)) return p;
         }
-        verif = new ValidCell(x,y);
+        ValidCell verifCase = new ValidCell(x,y);
         for (Case p : caseValide){
-            if(p.equals(verif)) return p;
+            if(p.equals(verifCase)) return p;
         }
         return null;
     }
