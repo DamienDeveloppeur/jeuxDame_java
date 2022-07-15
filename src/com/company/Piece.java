@@ -18,7 +18,8 @@ public abstract class Piece extends Case {
     };
     private int coeffX;
     private int coeffY;
-    public abstract Boolean ifThisCanTake(Piece p);
+
+    public abstract boolean ifThisCanTake();
 
     public void moove (ValidCell p) {
         // verif if a queen is made

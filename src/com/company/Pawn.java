@@ -6,9 +6,8 @@ public class Pawn extends Piece{
     Pawn(int x, int y, Boolean color){
         super(x,y,color);
     }
-    // surcharge de méthode
     @Override
-    public Boolean ifThisCanTake(Piece p) {
+    public boolean ifThisCanTake() {
         if(verifForEat(1,1) &&
                 Cell.verifObjectInCase(this.getX() + 2, this.getY() + 2) instanceof ValidCell)
             return true;
@@ -24,6 +23,7 @@ public class Pawn extends Piece{
 
         return false;
     }
+    // surcharge de méthode
     @Override
     public void tryingMoove(ValidCell o) {
         // si on se contente de bouger
@@ -55,7 +55,7 @@ public class Pawn extends Piece{
         deleteAnPiece((Piece) objectToCheck);
         this.moove(o);
         // launch ifThisCanTake
-        if(this.ifThisCanTake(this)) {
+        if(this.ifThisCanTake()) {
             Cell.swapTurn(false);
             Cell.currentPiece = this;
         }

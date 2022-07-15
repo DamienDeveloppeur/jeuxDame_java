@@ -15,14 +15,15 @@ public class Cell extends JPanel implements MouseListener {
     Dimension ech = new Dimension();
     public static ArrayList<Piece> whitePiece = new ArrayList<>();
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
-//    public static ArrayList<Piece> whitePawn = new ArrayList<>();
-//    public static ArrayList<Piece> blackPawn = new ArrayList<>();
     public static ArrayList<Case> caseValide = new ArrayList<>();
+    public static ArrayList<Piece> pieceWhoCanMoove = new ArrayList<>();
+
     static Boolean turn = true;
     static boolean initialized, botMooved;
     static Piece currentPiece;
     static Bot Bot;
     public Point pt;
+    static Piece pieceMustMoove;
 
     public Cell(){
         addMouseListener(this);
