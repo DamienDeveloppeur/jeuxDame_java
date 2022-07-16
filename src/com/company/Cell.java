@@ -119,6 +119,7 @@ public class Cell extends JPanel implements MouseListener {
         pt.y/=ech.height;
         System.out.println("x : " + pt.x);
         System.out.println("y : " + pt.y);
+        System.out.println("PieceMustMoove : " + pieceMustMoove);
         if(currentPiece != null){
             // on doit forcément cliquer sur une case vide
             Case pieceClicked = verifObjectInCase(pt.x, pt.y);
