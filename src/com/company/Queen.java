@@ -19,7 +19,7 @@ public class Queen extends Piece {
         if(this.ifThisCanTake()) {
             Cell.swapTurn(false);
             Cell.currentPiece = this;
-        }
+        } else Cell.pieceMustMoove = null;
     }
     public boolean ifNotSameColor(Case p){
         if(p == null) return false;
@@ -58,6 +58,7 @@ public class Queen extends Piece {
      */
     @Override
     public void tryingMoove(ValidCell o) {
+        Cell.piecesWhoCanMoove.clear();
         // on doit rester sur une diagonale
         if(Math.abs(this.getX() - o.getX()) == Math.abs(this.getY() - o.getY())){
             ArrayList<Case> caseChecked = new ArrayList<>();
@@ -82,8 +83,7 @@ public class Queen extends Piece {
             long count = caseChecked.stream().filter(ctn -> ctn instanceof Piece).count();
             Case piece = (count == 0) ? null :  caseChecked.stream().filter(ctn -> ctn instanceof Piece).findFirst().get();
             System.out.println("count : "+ count);
-            if(count == 0) {
-
+            if(count == 0 && Cell.pieceMustMoove == null) {
                 this.moove(o);
                 System.out.println(ifThisCanTake());
             }
@@ -98,5 +98,6 @@ public class Queen extends Piece {
                 return;
             }
         }
+
     }
 }

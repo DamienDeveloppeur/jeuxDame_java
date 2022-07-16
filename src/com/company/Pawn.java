@@ -26,10 +26,11 @@ public class Pawn extends Piece{
     // surcharge de méthode
     @Override
     public void tryingMoove(ValidCell o) {
-        // si on se contente de bouger
-        //System.out.println("get heuristic : "+getHeuristic(this,o));
+        Cell.piecesWhoCanMoove.clear();
+        // On doit obligatoirement manger si pieceMustMoove != null
         if(getHeuristic(this,o) == 2 && this.getX() != o.getX() &&
-                ((this.isColor() && this.getY() - o.getY() > 0) || (!this.isColor() && this.getY() - o.getY() < 0))
+                ((this.isColor() && this.getY() - o.getY() > 0) || (!this.isColor() && this.getY() - o.getY() < 0)) &&
+                Cell.pieceMustMoove == null
         ) {
             this.moove(o);
         } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() &&
@@ -58,6 +59,7 @@ public class Pawn extends Piece{
         if(this.ifThisCanTake()) {
             Cell.swapTurn(false);
             Cell.currentPiece = this;
-        }
+            Cell.pieceMustMoove = this;
+        } else Cell.pieceMustMoove = null;
     }
 }

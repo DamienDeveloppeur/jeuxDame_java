@@ -16,7 +16,7 @@ public class Cell extends JPanel implements MouseListener {
     public static ArrayList<Piece> whitePiece = new ArrayList<>();
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
     public static ArrayList<Case> caseValide = new ArrayList<>();
-    public static ArrayList<Piece> pieceWhoCanMoove = new ArrayList<>();
+    public static ArrayList<Piece> piecesWhoCanMoove = new ArrayList<>();
 
     static Boolean turn = true;
     static boolean initialized, botMooved;
@@ -94,6 +94,18 @@ public class Cell extends JPanel implements MouseListener {
         ech.width = getWidth()/grille.length;
         ech.height=getHeight()/grille[0].length;
     }
+    /**
+     *
+     */
+    public static void ifOneCanTake(){
+        for(Piece p : Cell.whitePiece){
+            if(p.ifThisCanTake() && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
+        }
+
+        for(Piece p : Cell.blackPiece){
+            if(p.ifThisCanTake() && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
+        }
+    }
 
     /**
      *
@@ -101,6 +113,7 @@ public class Cell extends JPanel implements MouseListener {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
+        ifOneCanTake();
         this.pt = e.getPoint();
         pt.x/=ech.width;
         pt.y/=ech.height;
@@ -110,20 +123,28 @@ public class Cell extends JPanel implements MouseListener {
             // on doit forcément cliquer sur une case vide
             Case pieceClicked = verifObjectInCase(pt.x, pt.y);
             if(pieceClicked == null) return;
-            if(currentPiece.equals(pieceClicked)) {currentPiece = null;repaint();return;}
-            if((pieceClicked instanceof Piece) && pieceClicked.isColor() == turn) currentPiece = (Piece) pieceClicked;
+            if(currentPiece.equals(pieceClicked) && pieceMustMoove == null) {currentPiece = null;repaint();return;}
+            if((pieceClicked instanceof Piece) && pieceClicked.isColor() == turn && pieceMustMoove == null) currentPiece = (Piece) pieceClicked;
             if(pieceClicked instanceof ValidCell)
                 currentPiece.tryingMoove((ValidCell) pieceClicked);
-
         } else {
-            Piece current = this.ifPieceExist(whitePiece);
-            if(current != null && turn) {currentPiece = current;repaint();return;}
-            current = this.ifPieceExist(blackPiece);
-            if(current != null && !turn) currentPiece = current;
+            System.out.println(piecesWhoCanMoove);
+            // si il faut jouer une pièce parmis une liste
+            if(piecesWhoCanMoove.isEmpty()) {
+                Piece current = this.ifPieceExist(whitePiece);
+                if(current != null && turn) {currentPiece = current;repaint();return;}
+                current = this.ifPieceExist(blackPiece);
+                if(current != null && !turn) currentPiece = current;
+            } else {
+                Piece current = this.ifPieceExist(whitePiece);
+                if(current != null && turn && piecesWhoCanMoove.contains(current)) {currentPiece = current;repaint();return;}
+                current = this.ifPieceExist(blackPiece);
+                if(current != null && !turn && piecesWhoCanMoove.contains(current)) currentPiece = current;
+            }
+
         }
         repaint();
     }
-
     /**
      *
      * @param listPawn

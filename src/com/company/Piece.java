@@ -10,17 +10,21 @@ public abstract class Piece extends Case {
         else coeffY = 1;
     }
 
-
-    public void ifOneCanTake(){
-        // check pawn
-
-        // check queen
-    };
     private int coeffX;
     private int coeffY;
 
     public abstract boolean ifThisCanTake();
 
+    /**
+     *
+     * @param o Case to check
+     */
+    public abstract void tryingMoove(ValidCell o);
+
+    /**
+     *
+     * @param p
+     */
     public void moove (ValidCell p) {
         // verif if a queen is made
         this.setX(p.getX());
@@ -41,11 +45,7 @@ public abstract class Piece extends Case {
         Cell.swapTurn(false);
     }
 
-    /**
-     *
-     * @param o Case to check
-     */
-    public abstract void tryingMoove(ValidCell o);
+
 
     /**
      *
