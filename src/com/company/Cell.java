@@ -15,6 +15,10 @@ public class Cell extends JPanel implements MouseListener {
     Dimension ech = new Dimension();
     public static ArrayList<Piece> whitePiece = new ArrayList<>();
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
+
+    public static ArrayList<Piece> whiteQueen = new ArrayList<>();
+    public static ArrayList<Piece> blackQueen = new ArrayList<>();
+
     public static ArrayList<Case> caseValide = new ArrayList<>();
     public static ArrayList<Piece> piecesWhoCanMoove = new ArrayList<>();
 
@@ -70,10 +74,10 @@ public class Cell extends JPanel implements MouseListener {
                     IMAGE = ImageIO.read(new File("img\\"+imageToDraw+"Select.png"));
                 } else IMAGE = ImageIO.read(new File("img\\"+imageToDraw+".png"));
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-                if(Bot.colorBot != null && Bot.colorBot && !botMooved) {
-                    botMooved = true;
-                    Bot.mooveBot();
-                }
+//                if(Bot.colorBot != null && Bot.colorBot && !botMooved) {
+//                    botMooved = true;
+//                    Bot.mooveBot();
+//                }
             }else {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                 if(caseValide.size() < 50) caseValide.add(new ValidCell(x,y));
@@ -189,7 +193,7 @@ public class Cell extends JPanel implements MouseListener {
     public static void swapTurn(boolean ifMooveBot) {
         if(turn) Cell.turn = false;
         else Cell.turn = true;
-        if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()) Bot.mooveBot();
+        //if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()) Bot.mooveBot();
     }
     public static void setTurn(Boolean turn) {
         Cell.turn = turn;

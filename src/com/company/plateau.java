@@ -55,7 +55,7 @@ public class plateau extends JFrame  {
 
                 bt_white.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
-                        Bot Bot = new Bot(true);
+                        Bot Bot = new Bot(false);
                         colorChoice.setVisible(false);
                         frame.setVisible(true);
                         frame.setContentPane(Bot);
@@ -65,7 +65,7 @@ public class plateau extends JFrame  {
 
                 bt_black.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
-                        Bot Bot = new Bot(false);
+                        Bot Bot = new Bot(true);
                         colorChoice.setVisible(false);
                         frame.setVisible(true);
                         frame.setContentPane(Bot);
