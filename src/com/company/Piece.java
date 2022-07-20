@@ -13,8 +13,9 @@ public abstract class Piece extends Case {
     private int coeffX;
     private int coeffY;
 
-    public abstract boolean ifThisCanTake();
+    public abstract Case ifThisCanTake();
 
+    public abstract void eat(ValidCell o,Piece p);
     /**
      *
      * @param o Case to check
@@ -26,26 +27,32 @@ public abstract class Piece extends Case {
      * @param p
      */
     public void moove (ValidCell p) {
+        System.out.println("TURN : " + Cell.getTurn());
+        System.out.println("CURRENT PIECE BEFORE MOOVE : " + Cell.currentPiece);
         // verif if a queen is made
         this.setX(p.getX());
         this.setY(p.getY());
-        if(this.isColor() && p.getY() == 0 && this instanceof Pawn) {
+        if(this.isColor() &&
+                p.getY() == 0 &&
+                this instanceof Pawn
+        ) {
             // make queen
             Queen queen = new Queen(this.getX(), this.getY(), true);
             Cell.whitePiece.remove(this);
-            Cell.whitePiece.add(queen);
+            if(Bot.colorBot == null) Cell.whitePiece.add(queen);
+            else if (Bot.colorBot) Cell.arrayPiecesQueen.add(queen);
         }
         if(!this.isColor() && p.getY() == 9 && this instanceof Pawn) {
             // make queen
             Queen queen = new Queen(this.getX(), this.getY(), false);
             Cell.blackPiece.remove(this);
-            Cell.blackPiece.add(queen);
+            if(Bot.colorBot == null) Cell.blackPiece.add(queen);
+            else if (!Bot.colorBot) Cell.arrayPiecesQueen.add(queen);
         }
         Cell.currentPiece = null;
-        Cell.swapTurn(false);
+        System.out.println("CURRENT PIECE AFTER MOOVE : " + Cell.currentPiece);
+        Cell.swapTurn();
     }
-
-
 
     /**
      *
@@ -61,15 +68,15 @@ public abstract class Piece extends Case {
     }
 
     /**
-     *
+     * Permet de vérifier si on peut manger une pièce
      * @param x
      * @param y
-     * @return
+     * @return La piece qui va être prise
      */
-    public Boolean verifForEat(int x, int y){
+    public Case verifForEat(int x, int y){
         Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
-        if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) return true;
-        return false;
+        if(objectToCheck instanceof Piece && objectToCheck.isColor() != this.isColor()) return objectToCheck;
+        return null;
     }
 
 

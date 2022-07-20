@@ -16,8 +16,7 @@ public class Cell extends JPanel implements MouseListener {
     public static ArrayList<Piece> whitePiece = new ArrayList<>();
     public static ArrayList<Piece> blackPiece = new ArrayList<>();
 
-    public static ArrayList<Piece> whiteQueen = new ArrayList<>();
-    public static ArrayList<Piece> blackQueen = new ArrayList<>();
+    public static ArrayList<Piece> arrayPiecesQueen = new ArrayList<>();
 
     public static ArrayList<Case> caseValide = new ArrayList<>();
     public static ArrayList<Piece> piecesWhoCanMoove = new ArrayList<>();
@@ -33,9 +32,18 @@ public class Cell extends JPanel implements MouseListener {
         addMouseListener(this);
     }
 
+    /**
+     * CREATE PLATEAU
+     */
+
+    /**
+     *
+     * @param g
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         calculerEchelle();
+        System.out.println("currentPiece : " + currentPiece);
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
                 grille[x][y] = new Cell();
@@ -44,6 +52,11 @@ public class Cell extends JPanel implements MouseListener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+        if(!initialized){
+            if(Bot.colorBot != null && Bot.colorBot) {
+                Bot.mooveBot();
             }
         }
         initialized = true;
@@ -56,7 +69,7 @@ public class Cell extends JPanel implements MouseListener {
             if(initialized){
                 BufferedImage IMAGE = null;
                 Case value = verifObjectInCase(x,y);
-
+                //System.out.println(value);
                 //if(value.isColor()) System.out.println(value.toString());
                 String imageToDraw = "";
                 if(value != null){
@@ -70,14 +83,11 @@ public class Cell extends JPanel implements MouseListener {
                         imageToDraw = "VIDE";
                     }
                 }
-                if(currentPiece != null && x == currentPiece.getX() && currentPiece.getY() == y){
+
+                if(currentPiece != null && x == currentPiece.getX() && currentPiece.getY() == y)
                     IMAGE = ImageIO.read(new File("img\\"+imageToDraw+"Select.png"));
-                } else IMAGE = ImageIO.read(new File("img\\"+imageToDraw+".png"));
+                else IMAGE = ImageIO.read(new File("img\\"+imageToDraw+".png"));
                 g.drawImage(IMAGE,x*ech.width, y*ech.height, ech.width, ech.height,null );
-//                if(Bot.colorBot != null && Bot.colorBot && !botMooved) {
-//                    botMooved = true;
-//                    Bot.mooveBot();
-//                }
             }else {
                 g.fillRect(x*ech.width, y*ech.height, ech.width, ech.height);
                 if(caseValide.size() < 50) caseValide.add(new ValidCell(x,y));
@@ -91,6 +101,8 @@ public class Cell extends JPanel implements MouseListener {
                     blackPiece.add(new Pawn(x,y,false));
                     g.drawImage(ImageIO.read(new File("img\\PN.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
                 } else g.drawImage(ImageIO.read(new File("img\\VIDE.png")),x*ech.width, y*ech.height, ech.width, ech.height,null);
+
+
             }
         }
     }
@@ -98,17 +110,27 @@ public class Cell extends JPanel implements MouseListener {
         ech.width = getWidth()/grille.length;
         ech.height=getHeight()/grille[0].length;
     }
+
+    /**
+     * RULES
+     */
+
     /**
      *
      */
     public static void ifOneCanTake(){
-        for(Piece p : Cell.whitePiece){
-            if(p.ifThisCanTake() && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
+        if(getTurn()) {
+            for(Piece p : Cell.whitePiece){
+                if(p.ifThisCanTake() != null && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
+            }
+        } else {
+            for(Piece p : Cell.blackPiece){
+                if(p.ifThisCanTake() != null && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
+            }
         }
 
-        for(Piece p : Cell.blackPiece){
-            if(p.ifThisCanTake() && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
-        }
+
+
     }
 
     /**
@@ -132,7 +154,7 @@ public class Cell extends JPanel implements MouseListener {
             if(pieceClicked instanceof ValidCell)
                 currentPiece.tryingMoove((ValidCell) pieceClicked);
         } else {
-            System.out.println(piecesWhoCanMoove);
+            //System.out.println("piecesWhoCanMoove : "+ piecesWhoCanMoove);
             // si il faut jouer une pièce parmis une liste
             if(piecesWhoCanMoove.isEmpty()) {
                 Piece current = this.ifPieceExist(whitePiece);
@@ -188,13 +210,15 @@ public class Cell extends JPanel implements MouseListener {
 
     /**
      *
-     * @param ifMooveBot
      */
-    public static void swapTurn(boolean ifMooveBot) {
-        if(turn) Cell.turn = false;
-        else Cell.turn = true;
-        //if (Bot.colorBot != null && ifMooveBot && Bot.colorBot == getTurn()) Bot.mooveBot();
+    public static void swapTurn() {
+        System.out.println("SWAP TURN : "+ turn);
+        Cell.turn = !turn;
+        if (Bot.colorBot != null &&
+                Bot.colorBot == getTurn())
+            Bot.mooveBot();
     }
+
     public static void setTurn(Boolean turn) {
         Cell.turn = turn;
     }

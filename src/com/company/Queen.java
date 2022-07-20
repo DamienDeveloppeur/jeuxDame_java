@@ -1,8 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class Queen extends Piece {
     Queen(int x, int y, Boolean color){
@@ -12,12 +10,12 @@ public class Queen extends Piece {
      *
      * @param o case d'arrivée
      */
+    @Override
     public void eat(ValidCell o, Piece pieceToEat){
         deleteAnPiece((Piece) pieceToEat);
         this.moove(o);
-        // launch ifThisCanTake
-        if(this.ifThisCanTake()) {
-            Cell.swapTurn(false);
+        if(this.ifThisCanTake() != null) {
+            Cell.swapTurn();
             Cell.currentPiece = this;
         } else Cell.pieceMustMoove = null;
     }
@@ -26,32 +24,43 @@ public class Queen extends Piece {
         if(this.isColor() == p.isColor()) return false;
         else return true;
     }
-    public boolean testDiago(int coefX, int coefY){
+
+    public Case testDiago(int coefX, int coefY){
         boolean flagBotRight = false;
+        Piece pieceToEat = null;
         for(int i = 1; i < 10; i++){
+            Case c = Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY);
             //caseChecked.add(Cell.verifObjectInCase(this.getX()+i, this.getY()+i));
-            if(flagBotRight && Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY) instanceof ValidCell)
-                return true;
-            if (flagBotRight && Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY) instanceof Piece)
-                return false;
+            if(flagBotRight && c instanceof ValidCell)
+                return pieceToEat;
+            if (flagBotRight && c instanceof Piece)
+                return null;
 
-            if(Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY) instanceof Piece &&
-                    ifNotSameColor( Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY)))
+            if(c instanceof Piece &&
+                    ifNotSameColor(c)) {
                 flagBotRight = true;
+                pieceToEat = (Piece) c;
+            }
 
-            if(Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY) == null) break;
+
+            if(c == null) break;
         }
-        return false;
+        return null;
     }
 
+    /**
+     * Vérifie qu'une game peut prendre après avoir pris
+     * @return
+     */
     @Override
-    public boolean ifThisCanTake(){
-        if(testDiago(1,1)) return true;
-        else if (testDiago(-1,1)) return true;
-        else if (testDiago(1,-1)) return true;
-        else if (testDiago(-1,-1)) return true;
-        else return false;
+    public Case ifThisCanTake(){
+        if(testDiago(1,1) != null) return testDiago(1,1);
+        else if (testDiago(-1,1) != null) return testDiago(-1,1);
+        else if (testDiago(1,-1) != null) return testDiago(1,-1);
+        else if (testDiago(-1,-1) != null) return testDiago(-1,-1);
+        else return null;
     }
+
     /**
      *
      * @param o Case to check
@@ -85,14 +94,12 @@ public class Queen extends Piece {
             System.out.println("count : "+ count);
             if(count == 0 && Cell.pieceMustMoove == null) {
                 this.moove(o);
-                System.out.println(ifThisCanTake());
             }
             if(count == 1 &&
                     ((piece.isColor() && !this.isColor()) ||
                     (!piece.isColor() && this.isColor()))) {
                 System.out.println(piece);
                 this.eat(o, (Piece) piece);
-                System.out.println(ifThisCanTake());
             }
             if(count > 1){
                 return;
