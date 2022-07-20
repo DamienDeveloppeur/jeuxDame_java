@@ -43,7 +43,7 @@ public class Cell extends JPanel implements MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         calculerEchelle();
-        System.out.println("currentPiece : " + currentPiece);
+        //System.out.println("currentPiece : " + currentPiece);
         for(int x = 0; x < grille.length; x++){
             for(int y=0; y<grille[x].length; y++){
                 grille[x][y] = new Cell();
@@ -212,7 +212,7 @@ public class Cell extends JPanel implements MouseListener {
      *
      */
     public static void swapTurn() {
-        System.out.println("SWAP TURN : "+ turn);
+        //System.out.println("SWAP TURN : "+ turn);
         Cell.turn = !turn;
         if (Bot.colorBot != null &&
                 Bot.colorBot == getTurn())

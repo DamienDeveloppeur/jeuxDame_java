@@ -64,7 +64,6 @@ public class Bot extends Cell implements MouseListener {
         ArrayList<Piece> arrayPieces = null;
         int countMax = 0;
         Piece pieceToMoove = null;
-        ValidCell caseToMoove = null;
 
         if(colorBot) arrayPieces = Cell.whitePiece;
         else arrayPieces = Cell.blackPiece;
@@ -74,28 +73,32 @@ public class Bot extends Cell implements MouseListener {
         for(Piece p : arrayPieces){
             int count = 0;
             if(p.ifThisCanTake() != null){
-                count += 400;
+                count += 1000;
             }
-            if(findCaseForMoove(p, 1) != null) {
-                count += 20;
+            if(p instanceof Pawn){
+                if(findCaseForMoove(p, 1) != null) {
+                    count += 20;
+                }
+                if(findCaseForMoove(p, -1) != null) {
+                    count += 20;
+                }
+            } else {
+
             }
-            if(findCaseForMoove(p, -1) != null) {
-                count += 20;
-            }
+
             if(count > countMax){
                 countMax = count;
                 pieceToMoove = p;
-
             }
         }
-
+        if(Cell.pieceMustMoove != null) pieceToMoove = Cell.pieceMustMoove;
         if(pieceToMoove.ifThisCanTake() == null){
             if(findCaseForMoove(pieceToMoove, 1) != null) {
-                pieceToMoove.moove(findCaseForMoove(pieceToMoove, 1));
-            } else pieceToMoove.moove(findCaseForMoove(pieceToMoove, -1));
+                pieceToMoove.moove(findCaseForMoove(pieceToMoove, 1), true);
+            } else pieceToMoove.moove(findCaseForMoove(pieceToMoove, -1), true);
         } else {
             Case cell = findCell((Piece) pieceToMoove.ifThisCanTake(),pieceToMoove);
-            System.out.println("CELL : "+ cell);
+            //System.out.println("CELL : "+ cell);
 //            System.out.println("Piece to moove: "+ pieceToMoove);
 //            System.out.println("Piece to Take: "+ pieceToMoove.ifThisCanTake());
             pieceToMoove.eat((ValidCell) cell, (Piece) pieceToMoove.ifThisCanTake());

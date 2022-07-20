@@ -13,7 +13,7 @@ public class Queen extends Piece {
     @Override
     public void eat(ValidCell o, Piece pieceToEat){
         deleteAnPiece((Piece) pieceToEat);
-        this.moove(o);
+        this.moove(o, true);
         if(this.ifThisCanTake() != null) {
             Cell.swapTurn();
             Cell.currentPiece = this;
@@ -93,7 +93,7 @@ public class Queen extends Piece {
             Case piece = (count == 0) ? null :  caseChecked.stream().filter(ctn -> ctn instanceof Piece).findFirst().get();
             System.out.println("count : "+ count);
             if(count == 0 && Cell.pieceMustMoove == null) {
-                this.moove(o);
+                this.moove(o, true);
             }
             if(count == 1 &&
                     ((piece.isColor() && !this.isColor()) ||

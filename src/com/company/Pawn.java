@@ -33,7 +33,7 @@ public class Pawn extends Piece{
                 ((this.isColor() && this.getY() - o.getY() > 0) || (!this.isColor() && this.getY() - o.getY() < 0)) &&
                 Cell.pieceMustMoove == null
         ) {
-            this.moove(o);
+            this.moove(o, true);
         } else if(getHeuristic(this,o) == 4 && this.getX() != o.getX() &&
                 (Math.abs(this.getX() - o.getX()) == 2 && Math.abs(this.getY() - o.getY()) == 2)){
             int[] arr = this.tryingToEat(o);
@@ -51,6 +51,7 @@ public class Pawn extends Piece{
      */
 
     public void eat(ValidCell o,int x, int y){
+        System.out.println("THIS : " + this);
         Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
         // go delete the piece and moove
 //        System.out.println("MIAM MIAM MIAM");
@@ -58,33 +59,47 @@ public class Pawn extends Piece{
 //        System.out.println("objectToCheck : "+ objectToCheck);
         // test if piece can eat again with valid cell
         deleteAnPiece((Piece) objectToCheck);
-        this.moove(o);
+        System.out.println("ALERTE, this.ifThisCanTake() : " + this.ifThisCanTake());
         // launch ifThisCanTake
+        this.moove(o, false);
         if(this.ifThisCanTake() != null) {
-//            System.out.println("ALERTE, this : " + this);
-//            System.out.println("ALERTE, this.ifThisCanTake() : " + this.ifThisCanTake());
-
-            Cell.swapTurn();
-            Cell.currentPiece = this;
-            Cell.pieceMustMoove = this;
-        } else Cell.pieceMustMoove = null;
-    }
-
-    @Override
-    public void eat(ValidCell o,Piece p){
-        // go delete the piece and moove
-        //System.out.println("MIAM MIAM MIAM");
-        // test if piece can eat again with valid cell
-        //System.out.println("THIS: "+ this);
-        deleteAnPiece((Piece) p);
-        this.moove(o);
-        // launch ifThisCanTake
-        if(this.ifThisCanTake() != null) {
-            Cell.swapTurn();
+            System.out.println("ALERTE, this : " + this);
+            //Cell.swapTurn();
             Cell.currentPiece = this;
             Cell.pieceMustMoove = this;
         } else {
             Cell.pieceMustMoove = null;
+            Cell.swapTurn();
+        }
+    }
+
+    /**
+     *
+     * Used by the bot
+     * @param o
+     * @param p
+     */
+    @Override
+    public void eat(ValidCell o,Piece p){
+        System.out.println("THIS : "+ this);
+        // go delete the piece and moove
+        System.out.println("MIAM MIAM MIAM 2");
+        // test if piece can eat again with valid cell
+        //System.out.println("THIS: "+ this);
+        deleteAnPiece((Piece) p);
+
+        System.out.println("ALERTE, this.ifThisCanTake() : " + this.ifThisCanTake());
+        // launch ifThisCanTake
+        this.moove(o, false);
+        if(this.ifThisCanTake() != null) {
+            System.out.println("ALERTE IL DEVRAIT PRENDRE ");
+            //Cell.swapTurn();
+            Cell.currentPiece = this;
+            Cell.pieceMustMoove = this;
+            Bot.mooveBot();
+        } else {
+            Cell.pieceMustMoove = null;
+            Cell.swapTurn();
         }
     }
 

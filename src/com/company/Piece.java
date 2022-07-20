@@ -26,9 +26,8 @@ public abstract class Piece extends Case {
      *
      * @param p
      */
-    public void moove (ValidCell p) {
-        System.out.println("TURN : " + Cell.getTurn());
-        System.out.println("CURRENT PIECE BEFORE MOOVE : " + Cell.currentPiece);
+    public void moove (ValidCell p, boolean swapturn) {
+
         // verif if a queen is made
         this.setX(p.getX());
         this.setY(p.getY());
@@ -40,18 +39,24 @@ public abstract class Piece extends Case {
             Queen queen = new Queen(this.getX(), this.getY(), true);
             Cell.whitePiece.remove(this);
             if(Bot.colorBot == null) Cell.whitePiece.add(queen);
-            else if (Bot.colorBot) Cell.arrayPiecesQueen.add(queen);
+            else if (Bot.colorBot) {
+                Cell.arrayPiecesQueen.add(queen);
+                Cell.whitePiece.add(queen);
+            }
         }
         if(!this.isColor() && p.getY() == 9 && this instanceof Pawn) {
             // make queen
             Queen queen = new Queen(this.getX(), this.getY(), false);
             Cell.blackPiece.remove(this);
             if(Bot.colorBot == null) Cell.blackPiece.add(queen);
-            else if (!Bot.colorBot) Cell.arrayPiecesQueen.add(queen);
+            else if (!Bot.colorBot) {
+                Cell.arrayPiecesQueen.add(queen);
+                Cell.blackPiece.add(queen);
+            }
         }
         Cell.currentPiece = null;
-        System.out.println("CURRENT PIECE AFTER MOOVE : " + Cell.currentPiece);
-        Cell.swapTurn();
+
+        if(swapturn) Cell.swapTurn();
     }
 
     /**
