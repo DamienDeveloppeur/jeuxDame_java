@@ -98,9 +98,6 @@ public class Bot extends Cell implements MouseListener {
             } else pieceToMoove.moove(findCaseForMoove(pieceToMoove, -1), true);
         } else {
             Case cell = findCell((Piece) pieceToMoove.ifThisCanTake(),pieceToMoove);
-            //System.out.println("CELL : "+ cell);
-//            System.out.println("Piece to moove: "+ pieceToMoove);
-//            System.out.println("Piece to Take: "+ pieceToMoove.ifThisCanTake());
             pieceToMoove.eat((ValidCell) cell, (Piece) pieceToMoove.ifThisCanTake());
         }
         //
@@ -120,21 +117,6 @@ public class Bot extends Cell implements MouseListener {
 //
 //            }
 //        }
-//        if(!piecesWhoCanMoove.isEmpty()) {
-////          Piece pieceToMoove = piecesWhoCanMoove.stream()
-////                    .filter(p -> p.isColor() == colorBot)
-////                    .findFirst()
-////                    .get();
-//          //pieceToMoove.tr
-//        } else {
-//            for (Piece p : arrayPieces){
-//                if(!(p instanceof Queen)){
-//
-//
-//                }
-//            }
-//        }
-
 
     }
 

@@ -41,8 +41,6 @@ public class Queen extends Piece {
                 flagBotRight = true;
                 pieceToEat = (Piece) c;
             }
-
-
             if(c == null) break;
         }
         return null;
