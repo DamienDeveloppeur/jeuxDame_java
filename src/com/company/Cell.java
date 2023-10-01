@@ -119,7 +119,7 @@ public class Cell extends JPanel implements MouseListener {
      *
      */
     public static void ifOneCanTake(){
-        if(getTurn()) {
+        if(Boolean.TRUE.equals(getTurn())) {
             for(Piece p : Cell.whitePiece){
                 if(p.ifThisCanTake() != null && !piecesWhoCanMoove.contains(p)) Cell.piecesWhoCanMoove.add(p);
             }
