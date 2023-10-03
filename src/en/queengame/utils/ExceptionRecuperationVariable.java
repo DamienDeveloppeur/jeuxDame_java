@@ -1,4 +1,4 @@
-package com.company.utils;
+package en.queengame.utils;
 
 public class ExceptionRecuperationVariable extends Throwable {
 }

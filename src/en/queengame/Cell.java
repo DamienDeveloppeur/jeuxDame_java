@@ -1,4 +1,4 @@
-package com.company;
+package en.queengame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

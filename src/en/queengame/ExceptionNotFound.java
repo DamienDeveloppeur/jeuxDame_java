@@ -1,4 +1,4 @@
-package com.company;
+package en.queengame;
 
 public class ExceptionNotFound {
 }

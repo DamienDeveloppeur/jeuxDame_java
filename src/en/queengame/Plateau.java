@@ -1,8 +1,8 @@
-package com.company;
+package en.queengame;
 
-import com.company.configurationjframe.boutton.ConfigurationDimensionFrame;
-import com.company.configurationjframe.boutton.ConfigurerBouttonJframeBas;
-import com.company.configurationjframe.boutton.ConfigurerBouttonJframeHaut;
+import en.queengame.configurationjframe.boutton.ConfigurationDimensionFrame;
+import en.queengame.configurationjframe.boutton.ConfigurerBouttonJframeBas;
+import en.queengame.configurationjframe.boutton.ConfigurerBouttonJframeHaut;
 
 import javax.swing.*;
 

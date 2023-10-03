@@ -1,6 +1,6 @@
-package com.company.configurationjframe.boutton;
+package en.queengame.configurationjframe.boutton;
 
-import com.company.ConfigManager;
+import en.queengame.ConfigManager;
 
 import javax.swing.*;
 

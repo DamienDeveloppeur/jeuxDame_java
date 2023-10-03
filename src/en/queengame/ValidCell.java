@@ -1,4 +1,4 @@
-package com.company;
+package en.queengame;
 
 public class ValidCell extends Case {
     ValidCell(int x, int y){

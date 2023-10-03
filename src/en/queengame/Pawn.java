@@ -1,4 +1,4 @@
-package com.company;
+package en.queengame;
 
 public class Pawn extends Piece{
     Pawn(int x, int y, Boolean color){

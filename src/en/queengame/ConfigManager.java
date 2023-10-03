@@ -1,4 +1,4 @@
-package com.company;
+package en.queengame;
 
 import java.io.IOException;
 import java.io.InputStream;
