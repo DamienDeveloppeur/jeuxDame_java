@@ -6,12 +6,7 @@ public abstract class Piece extends Case {
 
     public Piece(int x, int y, boolean color) {
         super(x,y,color);
-        if(color) this.coeffY = -1;
-        else coeffY = 1;
     }
-
-    private int coeffX;
-    private int coeffY;
 
     public abstract Case ifThisCanTake();
 
@@ -120,5 +115,9 @@ public abstract class Piece extends Case {
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY());
+    }
+
+    public int getCoefficient(int actualPieceTryingToMoove, int pieceCheckedValue){
+        return Math.round(Math.signum(actualPieceTryingToMoove - pieceCheckedValue));
     }
 }

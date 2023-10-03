@@ -4,26 +4,24 @@ public class Pawn extends Piece{
     Pawn(int x, int y, Boolean color){
         super(x,y,color);
     }
+
     @Override
     public Case ifThisCanTake() {
-        if(verifForEat(1,1) != null &&
-                Cell.verifObjectInCase(this.getX() + 2, this.getY() + 2) instanceof ValidCell)
-            return verifForEat(1,1);
+        int[][] directions = {{1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
 
-        if (verifForEat(-1,-1) != null &&
-                Cell.verifObjectInCase(this.getX() - 2, this.getY() - 2) instanceof ValidCell)
-            return verifForEat(-1,-1);
+        for (int[] direction : directions) {
+            int xOffset = direction[0] * 2;
+            int yOffset = direction[1] * 2;
 
-        if (verifForEat(1,-1) != null &&
-                Cell.verifObjectInCase(this.getX() + 2, this.getY() - 2) instanceof ValidCell)
-            return verifForEat(1,-1);
-
-        if (verifForEat(-1,1) != null &&
-                Cell.verifObjectInCase(this.getX() - 2, this.getY() + 2) instanceof ValidCell)
-            return verifForEat(-1,1);
+            if (verifForEat(direction[0], direction[1]) != null &&
+                    Cell.verifObjectInCase(this.getX() + xOffset, this.getY() + yOffset) instanceof ValidCell) {
+                return verifForEat(direction[0], direction[1]);
+            }
+        }
 
         return null;
     }
+
     // surcharge de méthode
     @Override
     public void tryingMoove(ValidCell o) {
@@ -54,9 +52,6 @@ public class Pawn extends Piece{
         System.out.println("THIS : " + this);
         Case objectToCheck = Cell.verifObjectInCase(this.getX() + x,this.getY() + y);
         // go delete the piece and moove
-//        System.out.println("MIAM MIAM MIAM");
-//        System.out.println("THIS IN EAT : "+ this);
-//        System.out.println("objectToCheck : "+ objectToCheck);
         // test if piece can eat again with valid cell
         deleteAnPiece((Piece) objectToCheck);
         System.out.println("ALERTE, this.ifThisCanTake() : " + this.ifThisCanTake());
@@ -84,16 +79,11 @@ public class Pawn extends Piece{
         System.out.println("THIS : "+ this);
         // go delete the piece and moove
         System.out.println("MIAM MIAM MIAM 2");
-        // test if piece can eat again with valid cell
-        //System.out.println("THIS: "+ this);
-        deleteAnPiece((Piece) p);
-
-        System.out.println("ALERTE, this.ifThisCanTake() : " + this.ifThisCanTake());
+        deleteAnPiece(p);
         // launch ifThisCanTake
         this.moove(o, false);
         if(this.ifThisCanTake() != null) {
             System.out.println("ALERTE IL DEVRAIT PRENDRE ");
-            //Cell.swapTurn();
             Cell.currentPiece = this;
             Cell.pieceMustMoove = this;
             Bot.mooveBot();

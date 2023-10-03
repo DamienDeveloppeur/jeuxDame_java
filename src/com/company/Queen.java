@@ -66,8 +66,7 @@ public class Queen extends Piece {
     @Override
     public void tryingMoove(ValidCell o) {
         Cell.piecesWhoCanMoove.clear();
-        // on doit rester sur une diagonale
-        if(Math.abs(this.getX() - o.getX()) == Math.abs(this.getY() - o.getY())){
+        if(isOnADiagonal(o)){
             ArrayList<Case> caseChecked = new ArrayList<>();
             System.out.println("DIAGO");
             // Nbr case to check : this.getX() - o.getX()
@@ -104,5 +103,9 @@ public class Queen extends Piece {
             }
         }
 
+    }
+
+    private boolean isOnADiagonal(ValidCell o) {
+        return Math.abs(this.getX() - o.getX()) == Math.abs(this.getY() - o.getY());
     }
 }
