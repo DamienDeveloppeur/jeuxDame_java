@@ -1,4 +1,4 @@
-package en.queengame;
+package queengame;
 
 public class Start {
     public static void main(String[] args) throws Exception { new Plateau(); }

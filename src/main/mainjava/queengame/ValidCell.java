@@ -1,7 +1,7 @@
-package en.queengame;
+package queengame;
 
 public class ValidCell extends Case {
-    ValidCell(int x, int y){
+    public ValidCell(int x, int y){
         super(x,y,false);
     }
 

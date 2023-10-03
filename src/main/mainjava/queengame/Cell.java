@@ -1,4 +1,4 @@
-package en.queengame;
+package queengame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

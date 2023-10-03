@@ -1,4 +1,4 @@
-package en.queengame;
+package queengame;
 
 import java.util.Objects;
 
@@ -7,6 +7,8 @@ public abstract class Piece extends Case {
     public Piece(int x, int y, boolean color) {
         super(x,y,color);
     }
+
+    public Piece(){super(0,0,true);}
 
     public abstract Case ifThisCanTake();
 
@@ -118,6 +120,6 @@ public abstract class Piece extends Case {
     }
 
     public int getCoefficient(int actualPieceTryingToMoove, int pieceCheckedValue){
-        return Math.round(Math.signum(actualPieceTryingToMoove - pieceCheckedValue));
+        return Math.round(Math.signum(actualPieceTryingToMoove - pieceCheckedValue) * -1);
     }
 }

@@ -1,4 +1,4 @@
-package en.queengame.configurationjframe.boutton;
+package queengame.configurationjframe.boutton;
 
 import javax.swing.*;
 

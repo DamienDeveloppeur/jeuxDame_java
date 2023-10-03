@@ -1,4 +1,4 @@
-package en.queengame;
+package queengame;
 
 import java.util.Objects;
 

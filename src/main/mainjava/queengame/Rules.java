@@ -1,4 +1,4 @@
-package en.queengame;
+package queengame;
 
 public interface Rules {
 

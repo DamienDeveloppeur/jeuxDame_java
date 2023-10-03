@@ -1,8 +1,12 @@
-package en.queengame;
+package queengame;
 
 public class Pawn extends Piece{
     Pawn(int x, int y, Boolean color){
         super(x,y,color);
+    }
+
+    public Pawn() {
+        super(0,0,true);
     }
 
     @Override

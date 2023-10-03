@@ -1,24 +1,30 @@
-package en.queengame;
+package queengame;
 
 import java.util.ArrayList;
 
 public class Queen extends Piece {
-    Queen(int x, int y, Boolean color){
+    public Queen(int x, int y, Boolean color){
         super(x,y,color);
     }
+
+    public Queen() {
+        super(0, 0, true);
+    }
+
     /**
      *
      * @param o case d'arrivée
      */
     @Override
-    public void eat(ValidCell o, Piece pieceToEat){
-        deleteAnPiece((Piece) pieceToEat);
+    public void eat(ValidCell o, Piece pieceToEat) {
+        deleteAnPiece(pieceToEat);
         this.moove(o, true);
         if(this.ifThisCanTake() != null) {
             Cell.swapTurn();
             Cell.currentPiece = this;
         } else Cell.pieceMustMoove = null;
     }
+
     public boolean ifNotSameColor(Case p){
         if(p == null) return false;
         if(this.isColor() == p.isColor()) return false;
@@ -97,9 +103,6 @@ public class Queen extends Piece {
                     (!piece.isColor() && this.isColor()))) {
                 System.out.println(piece);
                 this.eat(o, (Piece) piece);
-            }
-            if(count > 1){
-                return;
             }
         }
 

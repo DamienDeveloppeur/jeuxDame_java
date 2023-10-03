@@ -1,10 +1,9 @@
-package en.queengame;
+package queengame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 public class Bot extends Cell implements MouseListener {
@@ -26,20 +25,20 @@ public class Bot extends Cell implements MouseListener {
      */
     public static ValidCell findCell(Piece pieceTaked, Piece pToMoove){
         if(pToMoove.getX() - pieceTaked.getX() > 0 && pToMoove.getY() - pieceTaked.getY() > 0) {
-            return(ValidCell) Cell.verifObjectInCase(pieceTaked.getX()-1, pieceTaked.getY()-1);
+            return(ValidCell) verifObjectInCase(pieceTaked.getX()-1, pieceTaked.getY()-1);
         }
         // bas droite
         if(pToMoove.getX() - pieceTaked.getX() < 0 && pToMoove.getY() - pieceTaked.getY() < 0) {
             // pieceTake.getX()+1
-            return(ValidCell) Cell.verifObjectInCase(pieceTaked.getX()+1, pieceTaked.getY()+1);
+            return(ValidCell) verifObjectInCase(pieceTaked.getX()+1, pieceTaked.getY()+1);
         }
         if(pToMoove.getX() - pieceTaked.getX() > 0 && pToMoove.getY() - pieceTaked.getY() < 0) {
             // pieceTake.getX()+1
-            return(ValidCell) Cell.verifObjectInCase(pieceTaked.getX()-1, pieceTaked.getY()+1);
+            return(ValidCell) verifObjectInCase(pieceTaked.getX()-1, pieceTaked.getY()+1);
         }
         if(pToMoove.getX() - pieceTaked.getX() < 0 && pToMoove.getY() - pieceTaked.getY() > 0) {
             // pieceTake.getX()+1
-            return(ValidCell) Cell.verifObjectInCase(pieceTaked.getX()+1, pieceTaked.getY()-1);
+            return(ValidCell) verifObjectInCase(pieceTaked.getX()+1, pieceTaked.getY()-1);
         }
         return null;
     }
@@ -51,8 +50,8 @@ public class Bot extends Cell implements MouseListener {
      * @return
      */
     public static ValidCell findCaseForMoove(Piece p, int x){
-        if(Cell.verifObjectInCase(p.getX() + x, p.getY() +coeffY) instanceof ValidCell){
-            return (ValidCell) Cell.verifObjectInCase(p.getX() + x, p.getY() +coeffY);
+        if(verifObjectInCase(p.getX() + x, p.getY() +coeffY) instanceof ValidCell){
+            return (ValidCell) verifObjectInCase(p.getX() + x, p.getY() +coeffY);
         } else return null;
     }
     /**
@@ -65,8 +64,8 @@ public class Bot extends Cell implements MouseListener {
         int countMax = 0;
         Piece pieceToMoove = null;
 
-        if(colorBot) arrayPieces = Cell.whitePiece;
-        else arrayPieces = Cell.blackPiece;
+        if(colorBot) arrayPieces = whitePiece;
+        else arrayPieces = blackPiece;
 
         // on check si un pion peut prendre, on le bouge le cas échéant
         // on boucle sur les piéces
@@ -91,7 +90,7 @@ public class Bot extends Cell implements MouseListener {
                 pieceToMoove = p;
             }
         }
-        if(Cell.pieceMustMoove != null) pieceToMoove = Cell.pieceMustMoove;
+        if(pieceMustMoove != null) pieceToMoove = pieceMustMoove;
         if(pieceToMoove.ifThisCanTake() == null){
             if(findCaseForMoove(pieceToMoove, 1) != null) {
                 pieceToMoove.moove(findCaseForMoove(pieceToMoove, 1), true);
