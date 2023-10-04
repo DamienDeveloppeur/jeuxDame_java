@@ -1,5 +1,6 @@
 package en.queengame;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,5 +71,25 @@ class QueenTest {
         sut.tryingMoove(validCell);
         verify(sut, times(0)).eat(validCell, whitePawn);
         verify(sut, times(0)).moove(validCell, true);
+    }
+    @Test
+    void testIfThisCanTakeOK(){
+        Piece whitePawn = new Pawn(3,5,false);
+        ValidCell validCell = new ValidCell(2,4);
+        Cell.blackPiece.add(whitePawn);
+        Cell.caseValide.add(validCell);
+        Case casePotential = sut.ifThisCanTake();
+
+        Assertions.assertNotNull(casePotential);
+    }
+    @Test
+    void testIfThisCanTakeNotOK(){
+        Piece whitePawn = new Pawn(3,5,false);
+        ValidCell validCell = new ValidCell(5,7);
+        Cell.blackPiece.add(whitePawn);
+        Cell.caseValide.add(validCell);
+        Case casePotential = sut.ifThisCanTake();
+
+        Assertions.assertNull(casePotential);
     }
 }

@@ -36,14 +36,9 @@ public class Queen extends Piece {
         Piece pieceToEat = null;
         for(int i = 1; i < 10; i++){
             Case c = Cell.verifObjectInCase(this.getX()+i * coefX, this.getY()+i * coefY);
-            //caseChecked.add(Cell.verifObjectInCase(this.getX()+i, this.getY()+i));
-            if(flagBotRight && c instanceof ValidCell)
-                return pieceToEat;
-            if (flagBotRight && c instanceof Piece)
-                return null;
-
-            if(c instanceof Piece &&
-                    ifNotSameColor(c)) {
+            if(flagBotRight && c instanceof ValidCell) return pieceToEat;
+            if (flagBotRight && c instanceof Piece) return null;
+            if(c instanceof Piece && ifNotSameColor(c)) {
                 flagBotRight = true;
                 pieceToEat = (Piece) c;
             }
@@ -58,11 +53,15 @@ public class Queen extends Piece {
      */
     @Override
     public Case ifThisCanTake(){
-        if(testDiago(1,1) != null) return testDiago(1,1);
-        else if (testDiago(-1,1) != null) return testDiago(-1,1);
-        else if (testDiago(1,-1) != null) return testDiago(1,-1);
-        else if (testDiago(-1,-1) != null) return testDiago(-1,-1);
-        else return null;
+        int[][] directions = {{1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+
+        for (int[] direction : directions) {
+            int coeffX = direction[0];
+            int coeffY = direction[1];
+            Case potentialCase = testDiago(coeffX,coeffY);
+            if(potentialCase != null) return potentialCase;
+        }
+        return null;
     }
 
     /**
@@ -75,8 +74,6 @@ public class Queen extends Piece {
         if(isOnADiagonal(o)){
             ArrayList<Case> caseChecked = new ArrayList<>();
             System.out.println("DIAGO");
-            // Nbr case to check : this.getX() - o.getX()
-            // haut gauche
             int coeffx = this.getCoefficient(this.getX(), o.getX());
             int coeffy = this.getCoefficient(this.getY(), o.getY());
             for(int i = 1; i < Math.abs(this.getX() - o.getX()) + 1; i++) {
