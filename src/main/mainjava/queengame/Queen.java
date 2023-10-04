@@ -77,30 +77,18 @@ public class Queen extends Piece {
             System.out.println("DIAGO");
             // Nbr case to check : this.getX() - o.getX()
             // haut gauche
-            for(int i = 1; i < Math.abs(this.getX() - o.getX()) + 1; i++){
-                if(this.getX() < o.getX() && this.getY() < o.getY()){
-                    caseChecked.add(Cell.verifObjectInCase(this.getX()+i, this.getY()+i));
-                }
-                if(this.getX() > o.getX() && this.getY() > o.getY()){
-                    caseChecked.add(Cell.verifObjectInCase(this.getX()-i, this.getY()-i));
-                }
-                if(this.getX() < o.getX() && this.getY() > o.getY()){
-                    caseChecked.add(Cell.verifObjectInCase(this.getX()+i, this.getY()-i));
-                }
-                if(this.getX() > o.getX() && this.getY() < o.getY()){
-                    caseChecked.add(Cell.verifObjectInCase(this.getX()-i, this.getY()+i));
-                }
-
+            int coeffx = this.getCoefficient(this.getX(), o.getX());
+            int coeffy = this.getCoefficient(this.getY(), o.getY());
+            for(int i = 1; i < Math.abs(this.getX() - o.getX()) + 1; i++) {
+                caseChecked.add(Cell.verifObjectInCase(this.getX()+i*coeffx, this.getY()+i*coeffy));
             }
             long count = caseChecked.stream().filter(ctn -> ctn instanceof Piece).count();
-            Case piece = (count == 0) ? null :  caseChecked.stream().filter(ctn -> ctn instanceof Piece).findFirst().get();
             System.out.println("count : "+ count);
             if(count == 0 && Cell.pieceMustMoove == null) {
                 this.moove(o, true);
             }
-            if(count == 1 &&
-                    ((piece.isColor() && !this.isColor()) ||
-                    (!piece.isColor() && this.isColor()))) {
+            Case piece = (count == 0) ? null : caseChecked.stream().filter(ctn -> ctn instanceof Piece).findFirst().get();
+            if(count == 1 && (piece.isColor() != this.isColor())) {
                 System.out.println(piece);
                 this.eat(o, (Piece) piece);
             }

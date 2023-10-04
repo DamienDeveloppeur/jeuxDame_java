@@ -9,9 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import queengame.Piece;
-import queengame.Queen;
-import queengame.ValidCell;
+import queengame.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -27,6 +25,9 @@ class QueenTest {
     @Spy
     private Queen queenMock;
 
+    @Mock
+    private Cell cell;
+
     @BeforeEach
     void setUp() {
         //sut = new Queen(4,6,true);
@@ -36,7 +37,7 @@ class QueenTest {
     }
 
     @Test
-    void testTryingMooveQueen(){
+    void testTryingMooveQueenOK(){
         ValidCell validCell = new ValidCell(2,4);
 
         sut.tryingMoove(validCell);
@@ -44,14 +45,30 @@ class QueenTest {
         verify(sut, times(1))
                 .moove(validCell, true);
     }
-}
+    @Test
+    void testTryingMooveQueenNotOk(){
+        ValidCell validCell = new ValidCell(4,4);
 
-//    @Test
-//    void testTryingMooveQueen2(){
-//        ValidCell validCell = new ValidCell(0,2);
-//
-//        sut.tryingMoove(validCell);
-//        verify(queenMock,
-//                times(1))
-//                .moove(any(), any());
-//    }
+        sut.tryingMoove(validCell);
+        //https://stackoverflow.com/questions/30774358/how-can-i-mock-methods-of-injectmocks-class
+        verify(sut, times(0))
+                .moove(validCell, true);
+    }
+    @Test
+    void testQueenEat(){
+        Piece pawnBlack = new Pawn(3,5,false);
+        ValidCell validCell = new ValidCell(2,4);
+        Cell.blackPiece.add(pawnBlack);
+        sut.tryingMoove(validCell);
+        verify(sut, times(1)).eat(validCell, pawnBlack);
+    }
+    @Test
+    void testQueenNotEat(){
+        Piece whitePawn = new Pawn(3,5,true);
+        ValidCell validCell = new ValidCell(2,4);
+        Cell.blackPiece.add(whitePawn);
+        sut.tryingMoove(validCell);
+        verify(sut, times(0)).eat(validCell, whitePawn);
+        verify(sut, times(0)).moove(validCell, true);
+    }
+}
