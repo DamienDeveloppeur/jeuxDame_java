@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Cell extends JPanel implements MouseListener {
     Cell[][] grille = new Cell[10][10];
@@ -191,19 +192,22 @@ public class Cell extends JPanel implements MouseListener {
      * @return The type of square (white/black pion/queen, void or error)
      */
     static Case verifObjectInCase(int x, int y){
-        Piece verif = new Pawn(x,y,true);
-        for (Piece p : whitePiece){
-            if(p.equals(verif)) return p;
-        }
-        verif = new Pawn(x,y,false);
-        for (Piece p : blackPiece){
-            if(p.equals(verif)) return p;
-        }
-        ValidCell verifCase = new ValidCell(x,y);
-        for (Case p : caseValide){
-            if(p.equals(verifCase)) return p;
-        }
-        return null;
+            Case casePotential = whitePiece.stream()
+                .filter(p -> p.getX() == x && p.getY() == y)
+                .findAny()
+                .orElse(null);
+            if(casePotential != null) return casePotential;
+
+             casePotential = blackPiece.stream()
+                .filter(p -> p.getX() == x && p.getY() == y)
+                .findAny()
+                .orElse(null);
+            if(casePotential != null) return casePotential;
+            casePotential = caseValide.stream()
+                .filter(p -> p.getX() == x && p.getY() == y)
+                .findAny()
+                .orElse(null);
+            return casePotential;
     }
 
 

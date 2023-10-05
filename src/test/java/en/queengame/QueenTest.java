@@ -35,6 +35,9 @@ class QueenTest {
         sut.setX(4);
         sut.setY(6);
         sut.setColor(true);
+        Cell.blackPiece.clear();
+        Cell.whitePiece.clear();
+        Cell.caseValide.clear();
     }
 
     @Test
